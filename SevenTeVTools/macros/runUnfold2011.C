@@ -10,7 +10,7 @@ using namespace std;
  gROOT->ProcessLine("UnfoldingVJets2011 a;");
  gROOT->ForceStyle();
  gROOT->LoadMacro("tdrStyle.C++");
- tdrStyle();	
+ //tdrStyle();	
  gROOT->SetStyle("Plain");
  gROOT->ProcessLine("a.Loop();");
  //gROOT->LoadMacro("/afs/infn.it/ts/user/marone/html/ZJets/Unfolding/diow.C++");
