@@ -361,7 +361,6 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
 	// ------------------------------------------------------------
 	// ------------------------------------------------------------
 
-
 	////////////
 	//Plot1
 	////////////
@@ -611,8 +610,12 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
 	      }
 	    }
 
-	    leadingRatioPlot1->SetPoint(ovo,dummyXvar,(dummyYvar/dummyNorm)/leadingSystematics->GetBinContent(ovo+1));
-	    leadingRatioPlot1Stat->SetPoint(ovo,dummyXvar,(dummyYvar/dummyNorm)/leadingSystematics->GetBinContent(ovo+1));
+	    // This will adapt the folded Rivet to the unfolded data distributions for eta.
+	    Int_t ovoCorrected=ovo;
+	    if (whichobservable==3) ovoCorrected=ovo+leadingSystematics->GetNbinsX()/2;
+
+	    leadingRatioPlot1->SetPoint(ovo,dummyXvar,(dummyYvar/dummyNorm)/leadingSystematics->GetBinContent(ovoCorrected+1));
+	    leadingRatioPlot1Stat->SetPoint(ovo,dummyXvar,(dummyYvar/dummyNorm)/leadingSystematics->GetBinContent(ovoCorrected+1));
 	    leadingRatioPlot1Stat->SetPointEYhigh(ovo,(leadingRatioPlot1->GetErrorYhigh(ovo))/(dummyYvar/dummyNorm));
 	    leadingRatioPlot1Stat->SetPointEYlow(ovo,(leadingRatioPlot1->GetErrorYlow(ovo))/(dummyYvar/dummyNorm));
 
@@ -625,18 +628,17 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
 	    leadingRatioPlot1->SetPointEYhigh(ovo,sqrt(pow((max(max(y1temp,y2temp),dummyYvar/dummyNorm)-dummyYvar/dummyNorm)/(dummyYvar/dummyNorm),2) + pow(leadingRatioPlot1Stat->GetErrorYhigh(ovo),2)));
 	    leadingRatioPlot1->SetPointEYlow(ovo, sqrt(pow((-min(min(y1temp,y2temp),dummyYvar/dummyNorm)+dummyYvar/dummyNorm)/(dummyYvar/dummyNorm),2) + pow(leadingRatioPlot1Stat->GetErrorYlow(ovo),2)));
 
-	    leadingRatio->SetBinContent(ovo+1,1.0);
-	    leadingRatio->SetBinError(ovo+1,leading->GetBinError(ovo+1)/leading->GetBinContent(ovo+1));
-	    
+	    leadingRatio->SetBinContent(ovoCorrected+1,1.0);
+	    leadingRatio->SetBinError(ovoCorrected+1,leading->GetBinError(ovoCorrected+1)/leading->GetBinContent(ovoCorrected+1));
 	    //Filling DeltaAsForTheOtherPDF
 	    DeltaAsUp_CT10_Ratio.push_back((max(max(y1temp,y2temp),dummyYvar/dummyNorm)-dummyYvar/dummyNorm)/(dummyYvar/dummyNorm));
 	    DeltaAsDown_CT10_Ratio.push_back(-min(min(y1temp,y2temp),dummyYvar/dummyNorm)+dummyYvar/dummyNorm);
 	    
-	    leadingRatioSystematics->SetBinContent(ovo+1,1.0);
-	    leadingRatioSystematics->SetBinError(ovo+1,leadingSystematics->GetBinError(ovo+1)/leadingSystematics->GetBinContent(ovo+1));
+	    leadingRatioSystematics->SetBinContent(ovoCorrected+1,1.0);
+	    leadingRatioSystematics->SetBinError(ovoCorrected+1,leadingSystematics->GetBinError(ovoCorrected+1)/leadingSystematics->GetBinContent(ovoCorrected+1));
 	  }
 	}
-	
+
 	// Q envelop for Plot1:
 	TGraphAsymmErrors *leadingRivetPlot1Q;
 	leadingRivetPlot1Q = (TGraphAsymmErrors *) leadingRivetPlot1->Clone ();
@@ -662,7 +664,7 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
 	  if (absoluteNormalization) {
 	    dummyNorm= (1.0);
 	    if (lepton ==3) {
-	      dummyNorm= dummyNorm*2.0;
+	      //dummyNorm= dummyNorm*2.0;
 	      y1temp=y1temp/2.0;	    
 	      y2temp=y2temp/2.0;
 	    }
@@ -670,10 +672,8 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
 
 	    leadingRivetPlot1Q->SetPointEYhigh(ovo,sqrt(pow(max(max(y1temp,y2temp),dummyYvar/dummyNorm)-dummyYvar/dummyNorm,2) + pow(leadingRivetPlot1->GetErrorYhigh(ovo),2)));
 	    leadingRivetPlot1Q->SetPointEYlow(ovo,sqrt(pow(-min(min(y1temp,y2temp),dummyYvar/dummyNorm)+dummyYvar/dummyNorm,2) + pow(leadingRivetPlot1->GetErrorYlow(ovo),2)));
-	    
-	    leadingRatioPlot1->GetPoint(ovo,r1temp,r2temp); 
-	    
-	    leadingRatioPlot1Q->SetPoint(ovo,r1temp,r2temp);
+            leadingRatioPlot1->GetPoint(ovo,r1temp,r2temp);
+            leadingRatioPlot1Q->SetPoint(ovo,r1temp,r2temp);
 	    leadingRatioPlot1Q->SetPointEYhigh(ovo,sqrt(pow((max(max(y1temp,y2temp),dummyYvar/dummyNorm)-dummyYvar/dummyNorm)/dummyYvar/dummyNorm,2) + pow(leadingRatioPlot1->GetErrorYhigh(ovo),2)));
 	    leadingRatioPlot1Q->SetPointEYlow(ovo, sqrt(pow((-min(min(y1temp,y2temp),dummyYvar/dummyNorm)+dummyYvar/dummyNorm)/dummyYvar/dummyNorm,2) + pow(leadingRatioPlot1->GetErrorYlow(ovo),2)));
 	  }
@@ -684,49 +684,50 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
 	TGraphAsymmErrors *leadingRatioPlot1Qcut;
 	leadingRatioPlot1Qcut = (TGraphAsymmErrors *) leadingRatioPlot1->Clone ();
 
-	if (addPlot3EnvelopSherpa){
-	  // Qcut envelop for Plot1:
-
-	  if (!isPDFComparison){
-	    
 	    Double_t y1temp = 0.;
 	    Double_t y2temp = 0.;
 	    Double_t x1temp = 0.;
 	    Double_t x2temp = 0.;
 	    Double_t r1temp = 0.;
 	    Double_t r2temp = 0.;
-	    
-	    for (Int_t ovo=0;ovo<nRivetPoints;ovo++) {
-	      leadingRivetPlot1Qcut->GetPoint(ovo,dummyXvar,dummyYvar); 
-	      leadingRivetPlot1QcutUP->GetPoint(ovo,x1temp,y1temp); 
-	      leadingRivetPlot1QcutDOWN->GetPoint(ovo,x2temp,y2temp); 
-	      
-	      if (absoluteNormalization) {
-		dummyNorm= (1.0);
-		if (lepton ==3) {
-		  y1temp=y1temp/2.0;	    
-		  y2temp=y2temp/2.0;
-		  dummyNorm= dummyNorm*(2.0);
-		}
-	      }
-	      
-	    leadingRivetPlot1Qcut->SetPointEYhigh(ovo,sqrt(pow(max(max(y1temp,y2temp),dummyYvar/dummyNorm)-dummyYvar/dummyNorm,2) + pow(leadingRivetPlot1Q->GetErrorYhigh(ovo),2)));
-	    leadingRivetPlot1Qcut->SetPointEYlow(ovo,sqrt(pow(-min(min(y1temp,y2temp),dummyYvar/dummyNorm)+dummyYvar/dummyNorm,2) + pow(leadingRivetPlot1Q->GetErrorYlow(ovo),2)));
-	    
-	    leadingRatioPlot1Q->GetPoint(ovo,r1temp,r2temp); 
-	    
-	    leadingRatioPlot1Qcut->SetPoint(ovo,r1temp,r2temp);
-	    leadingRatioPlot1Qcut->SetPointEYhigh(ovo, sqrt(pow((-min(min(y1temp,y2temp),dummyYvar/dummyNorm)+dummyYvar/dummyNorm)/dummyYvar/dummyNorm,2) + pow(leadingRatioPlot1Q->GetErrorYhigh(ovo),2)));
-	    leadingRatioPlot1Qcut-> SetPointEYlow(ovo, sqrt(pow((-min(min(y1temp,y2temp),dummyYvar/dummyNorm)+dummyYvar/dummyNorm)/dummyYvar/dummyNorm,2) + pow(leadingRatioPlot1Q->GetErrorYlow(ovo),2)));
 
+	if (addPlot3EnvelopSherpa){
+	  // Qcut envelop for Plot1:
+
+	  if (!isPDFComparison){
+	    for (Int_t ovo=0;ovo<nRivetPoints;ovo++) {
+	      leadingRivetPlot1Q->GetPoint(ovo,dummyXvar,dummyYvar); 
+	      leadingRivetPlot1QUP->GetPoint(ovo,x1temp,y1temp); 
+	      leadingRivetPlot1QDOWN->GetPoint(ovo,x2temp,y2temp); 
+	      
+	      for (Int_t ovo=0;ovo<nRivetPoints;ovo++) {
+		leadingRivetPlot1Qcut->GetPoint(ovo,dummyXvar,dummyYvar); 
+		leadingRivetPlot1QcutUP->GetPoint(ovo,x1temp,y1temp); 
+		leadingRivetPlot1QcutDOWN->GetPoint(ovo,x2temp,y2temp); 
+		
+		if (absoluteNormalization) {
+		  dummyNorm= (1.0);
+		  if (lepton ==3) {
+		    //dummyNorm= dummyNorm*2.0;
+		    y1temp=y1temp/2.0;	    
+		    y2temp=y2temp/2.0;
+		  }
+		}
+		
+		leadingRivetPlot1Qcut->SetPointEYhigh(ovo,sqrt(pow(max(max(y1temp,y2temp),dummyYvar/dummyNorm)-dummyYvar/dummyNorm,2) + pow(leadingRivetPlot1Q->GetErrorYhigh(ovo),2)));
+		leadingRivetPlot1Qcut->SetPointEYlow(ovo,sqrt(pow(-min(min(y1temp,y2temp),dummyYvar/dummyNorm)+dummyYvar/dummyNorm,2) + pow(leadingRivetPlot1Q->GetErrorYlow(ovo),2)));
+		leadingRatioPlot1Q->GetPoint(ovo,r1temp,r2temp);
+		leadingRatioPlot1Qcut->SetPoint(ovo,r1temp,r2temp);
+		leadingRatioPlot1Qcut->SetPointEYhigh(ovo,sqrt(pow((max(max(y1temp,y2temp),dummyYvar/dummyNorm)-dummyYvar/dummyNorm)/dummyYvar/dummyNorm,2) + pow(leadingRatioPlot1Q->GetErrorYhigh(ovo),2)));
+		leadingRatioPlot1Qcut->SetPointEYlow(ovo, sqrt(pow((-min(min(y1temp,y2temp),dummyYvar/dummyNorm)+dummyYvar/dummyNorm)/dummyYvar/dummyNorm,2) + pow(leadingRatioPlot1Q->GetErrorYlow(ovo),2)));
+	      }
 	    }
 	  }
 	}
-
 	///////////////	
 	// POWHEG:
 	///////////////
-
+	
 	nRivetPoints = leadingRivetPlot2->GetN();
 
 	// Plot2 FR-Up
@@ -778,11 +779,14 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
 	    if (lepton ==3) dummyNorm= (2.0);
 	  }
 
+	  Int_t ovoCorrected=ovo;
+	  if (whichobservable==3) ovoCorrected=ovo+leadingSystematics->GetNbinsX()/2;
+
 	  leadingRivetPlot2Stat->GetPoint(ovo,dummyXvar,dummyYvar); 
 	  leadingRivetPlot2Stat->SetPoint(ovo,dummyXvar,dummyYvar/dummyNorm); 
 	  leadingRivetPlot2Stat->SetPointEYhigh(ovo,leadingRivetPlot2Stat->GetErrorYhigh(ovo)/dummyNorm);
 	  leadingRivetPlot2Stat->SetPointEYlow(ovo,leadingRivetPlot2Stat->GetErrorYlow(ovo)/dummyNorm);
-	  leadingRatioPlot2Stat->SetPoint(ovo,dummyXvar,(dummyYvar/dummyNorm)/leadingSystematics->GetBinContent(ovo+1));
+	  leadingRatioPlot2Stat->SetPoint(ovo,dummyXvar,(dummyYvar/dummyNorm)/leadingSystematics->GetBinContent(ovoCorrected+1));
 	  leadingRatioPlot2Stat->SetPointEYhigh(ovo,(leadingRivetPlot2Stat->GetErrorYhigh(ovo))/(dummyYvar/dummyNorm));
 	  leadingRatioPlot2Stat->SetPointEYlow(ovo,(leadingRivetPlot2Stat->GetErrorYlow(ovo))/(dummyYvar/dummyNorm));
 	}
@@ -807,19 +811,22 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
 	    //dummyNorm= dummyNorm / (leading->GetXaxis()->GetBinWidth(1)); 
 	  }
 
+	  Int_t ovoCorrected=ovo;
+	  if (whichobservable==3) ovoCorrected=ovo+leadingSystematics->GetNbinsX()/2;
+
 	  leadingRivetPlot2->SetPoint(ovo,dummyXvar,dummyYvar/dummyNorm);
 	  leadingRivetPlot2->SetPointEYhigh(ovo,max(max(y1temp,y2temp),dummyYvar/dummyNorm)-dummyYvar/dummyNorm + leadingRivetPlot2Stat->GetErrorYhigh(ovo));
 	  leadingRivetPlot2->SetPointEYlow(ovo,-min(min(y1temp,y2temp),dummyYvar/dummyNorm)+dummyYvar/dummyNorm + leadingRivetPlot2Stat->GetErrorYlow(ovo));
 
-	  leadingRatioPlot2->SetPoint(ovo,dummyXvar,(dummyYvar/dummyNorm)/leadingSystematics->GetBinContent(ovo+1));
+	  leadingRatioPlot2->SetPoint(ovo,dummyXvar,(dummyYvar/dummyNorm)/leadingSystematics->GetBinContent(ovoCorrected+1));
 	  leadingRatioPlot2->SetPointEYhigh(ovo,(max(max(y1temp,y2temp),dummyYvar/dummyNorm)-dummyYvar/dummyNorm + leadingRivetPlot2Stat->GetErrorYhigh(ovo))/(dummyYvar/dummyNorm));
 	  leadingRatioPlot2->SetPointEYlow(ovo,(-min(min(y1temp,y2temp),dummyYvar/dummyNorm)+dummyYvar/dummyNorm + leadingRivetPlot2Stat->GetErrorYlow(ovo))/(dummyYvar/dummyNorm));
 	    
-	  leadingRatio3->SetBinContent(ovo+1,1.0);
-	  leadingRatio3->SetBinError(ovo+1,leading->GetBinError(ovo+1)/leading->GetBinContent(ovo+1));
+	  leadingRatio3->SetBinContent(ovoCorrected+1,1.0);
+	  leadingRatio3->SetBinError(ovoCorrected+1,leading->GetBinError(ovoCorrected+1)/leading->GetBinContent(ovoCorrected+1));
 
-	  leadingRatio3Systematics->SetBinContent(ovo+1,1.0);
-	  leadingRatio3Systematics->SetBinError(ovo+1,leadingSystematics->GetBinError(ovo+1)/leadingSystematics->GetBinContent(ovo+1));
+	  leadingRatio3Systematics->SetBinContent(ovoCorrected+1,1.0);
+	  leadingRatio3Systematics->SetBinError(ovoCorrected+1,leadingSystematics->GetBinError(ovoCorrected+1)/leadingSystematics->GetBinContent(ovoCorrected+1));
 	}
 	
 	// 2nd envelop for Plot2:
@@ -842,10 +849,13 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
 	  leadingRivetPlot2DOWN->GetPoint(ovo,x1temp,y1temp); 
 	  leadingRivetPlot2UP->GetPoint(ovo,x2temp,y2temp); 
 
+	  Int_t ovoCorrected=ovo;
+	  if (whichobservable==3) ovoCorrected=ovo+leadingSystematics->GetNbinsX()/2;
+
 	  //Set upper plot
 	  leadingRivetPlot22ENV->SetPoint(ovo,dummyXvar,dummyYvar/dummyNorm);
 	  //Set Ratio Plot
-	  leadingRatioPlot22ENV->SetPoint(ovo,dummyXvar,(dummyYvar/dummyNorm)/leadingSystematics->GetBinContent(ovo+1));
+	  leadingRatioPlot22ENV->SetPoint(ovo,dummyXvar,(dummyYvar/dummyNorm)/leadingSystematics->GetBinContent(ovoCorrected+1));
 
 	  //Set Bands for upper plots (not used...)
 	  leadingRivetPlot22ENV->SetPointEYhigh(ovo,sqrt(pow((max(max(y1temp,y2temp),dummyYvar/dummyNorm)-dummyYvar/dummyNorm)/(dummyYvar/dummyNorm),2) + pow(leadingRivetPlot2Stat->GetErrorYhigh(ovo),2)));
@@ -889,16 +899,19 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
 	  leadingRivetPlot3->SetPointEYhigh(ovo,leadingRivetPlot3->GetErrorYhigh(ovo)/dummyNorm);
 	  leadingRivetPlot3->SetPointEYlow(ovo,leadingRivetPlot3->GetErrorYlow(ovo)/dummyNorm);
 
-	  leadingRatioPlot3->SetPoint(ovo,dummyXvar,(dummyYvar/dummyNorm)/leadingSystematics->GetBinContent(ovo+1));
+	  Int_t ovoCorrected=ovo;
+	  if (whichobservable==3) ovoCorrected=ovo+leadingSystematics->GetNbinsX()/2;
+
+	  leadingRatioPlot3->SetPoint(ovo,dummyXvar,(dummyYvar/dummyNorm)/leadingSystematics->GetBinContent(ovoCorrected+1));
 
 	  leadingRatioPlot3->SetPointEYhigh(ovo,leadingRivetPlot3->GetErrorYhigh(ovo)*dummyNorm/dummyYvar);
 	  leadingRatioPlot3->SetPointEYlow(ovo,leadingRivetPlot3->GetErrorYlow(ovo)*dummyNorm/dummyYvar);
 
-	  leadingRatio2->SetBinContent(ovo+1,1.0);
-	  leadingRatio2->SetBinError(ovo+1,leading->GetBinError(ovo+1)/leading->GetBinContent(ovo+1));
+	  leadingRatio2->SetBinContent(ovoCorrected+1,1.0);
+	  leadingRatio2->SetBinError(ovoCorrected+1,leading->GetBinError(ovo+1)/leading->GetBinContent(ovo+1));
 
-	  leadingRatio2Systematics->SetBinContent(ovo+1,1.0);
-	  leadingRatio2Systematics->SetBinError(ovo+1,leadingSystematics->GetBinError(ovo+1)/leadingSystematics->GetBinContent(ovo+1));
+	  leadingRatio2Systematics->SetBinContent(ovoCorrected+1,1.0);
+	  leadingRatio2Systematics->SetBinError(ovoCorrected+1,leadingSystematics->GetBinError(ovoCorrected+1)/leadingSystematics->GetBinContent(ovoCorrected+1));
 	}
 
 	// 2nd envelop for Madgraph:
@@ -921,10 +934,20 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
 	    leadingRivetPlot3DOWN->GetPoint(ovo,x1temp,y1temp); 
 	    leadingRivetPlot3UP->GetPoint(ovo,x2temp,y2temp); 
 
+	  if (absoluteNormalization) {
+	    if (lepton ==3) {
+	      dummyNorm= 1.0;
+	      y1temp=y1temp/2.0;	    
+	      y2temp=y2temp/2.0;
+	    }
+	  }
+	  
+	  Int_t ovoCorrected=ovo;
+	  if (whichobservable==3) ovoCorrected=ovo+leadingSystematics->GetNbinsX()/2;
 	  //Set upper plot
 	  leadingRivetPlot32ENV->SetPoint(ovo,dummyXvar,dummyYvar/dummyNorm);
 	  //Set Ratio Plot
-	  leadingRatioPlot32ENV->SetPoint(ovo,dummyXvar,(dummyYvar/dummyNorm)/leadingSystematics->GetBinContent(ovo+1));
+	  leadingRatioPlot32ENV->SetPoint(ovo,dummyXvar,(dummyYvar/dummyNorm)/leadingSystematics->GetBinContent(ovoCorrected+1));
 
 	  double extraQuantityFromAlphaStrong_up=0.0;
 	  double extraQuantityFromAlphaStrong_down=0.0;
@@ -1289,6 +1312,7 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
 
 TGraphAsymmErrors* returnTGraphFromFile(string rivetPath, string rivet_data, string rivet_data_minus, bool etaFolded, bool isPDFComparison, int use_case, bool readTH1F){
   cout<<rivetPath<<endl;
+  TGraphAsymmErrors *leadingRivet;
   TFile *histoRivet = TFile::Open (rivetPath.c_str ());
   histoRivet->cd ("");
   TDirectory *dirRivet = gDirectory;
@@ -1301,26 +1325,24 @@ TGraphAsymmErrors* returnTGraphFromFile(string rivetPath, string rivet_data, str
       if (nameRivet == rivet_data || (isPDFComparison && (nameRivet == rivet_data_minus) ) )
 	{
 	  if (!isPDFComparison || !readTH1F) {
-	    TGraphAsymmErrors *leadingRivet;
 	    gDirectory->GetObject (nameRivet.c_str (), leadingRivet);
 	  }
 	  else{
 	    TH1F *histo;
 	    gDirectory->GetObject (nameRivet.c_str (), histo);
-	    TGraphAsymmErrors *leadingRivet=new TGraphAsymmErrors(histo);
+	    leadingRivet=new TGraphAsymmErrors(histo);
 	  }
 	}
-
-      if (etaFolded && use_case==3) {
-	double xx1temp, xx2temp, yy1temp, yy2temp;
-	for (int mdm=leadingRivet->GetN()/2; mdm<leadingRivetPlot1QUP->GetN(); mdm++) {
-	  leadingRivet->GetPoint(mdm,xx1temp,yy1temp);
-	  leadingRivet->GetPoint(leadingRivetPlot1QUP->GetN()-mdm-1,xx2temp,yy2temp);
-	  leadingRivet->SetPoint(mdm,xx1temp,yy1temp+yy2temp);
-	  leadingRivet->SetPointEYhigh(mdm,sqrt(pow(leadingRivet->GetErrorYhigh(mdm),2) + pow(leadingRivet->GetErrorYhigh(leadingRivet->GetN()-mdm-1),2)));
-	  leadingRivet->SetPointEYlow(mdm,sqrt(pow(leadingRivet->GetErrorYlow(mdm),2) + pow(leadingRivet->GetErrorYlow(leadingRivet->GetN()-mdm-1),2)));
-	}
-      }
     }
+  //if (etaFolded && use_case==3) {
+  //double xx1temp, xx2temp, yy1temp, yy2temp;
+  //for (int mdm=leadingRivet->GetN()/2; mdm<leadingRivet->GetN(); mdm++) {
+  //  leadingRivet->GetPoint(mdm,xx1temp,yy1temp);
+  //  leadingRivet->GetPoint(leadingRivet->GetN()-mdm-1,xx2temp,yy2temp);
+  //  leadingRivet->SetPoint(mdm,xx1temp,yy1temp+yy2temp);
+  //  leadingRivet->SetPointEYhigh(mdm,sqrt(pow(leadingRivet->GetErrorYhigh(mdm),2) + pow(leadingRivet->GetErrorYhigh(leadingRivet->GetN()-mdm-1),2)));
+  //  leadingRivet->SetPointEYlow(mdm,sqrt(pow(leadingRivet->GetErrorYlow(mdm),2) + pow(leadingRivet->GetErrorYlow(leadingRivet->GetN()-mdm-1),2)));
+  //}
+  //}
   return leadingRivet;
-} 
+}
