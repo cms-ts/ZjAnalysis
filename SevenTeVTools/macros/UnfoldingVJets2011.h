@@ -19,7 +19,12 @@
 #include "RooUnfoldSvd.h"
 #include "RooUnfoldBinByBin.h"
 #include "RooUnfoldInvert.h"
+#include <vector>
+#include <Math/GenVector/PxPyPzE4D.h>
 
+// Fixed size dimensions of array or collections stored in the TTree if any.
+const Int_t kMaxJetContainerFull = 8;
+const Int_t kMaxGenJetContainerFull = 11;
 
 class UnfoldingVJets2011 {
 public :
@@ -75,12 +80,12 @@ public :
    Double_t        l2_pt_gen;
    Bool_t           genZInAcceptance;
    Bool_t           recoZInAcceptance;
-   int    e1_charge;
-   TLorentzVector e1_tlv;
-   int    e2_charge;
-   TLorentzVector e2_tlv;
-   int Run;
-   vector<double> deltaRRecoGenJet;
+   //int    e1_charge;
+   //TLorentzVector e1_tlv;
+   //int    e2_charge;
+   //TLorentzVector e2_tlv;
+   //int Run;
+   vector<double> *deltaRRecoGenJet;
 
    Double_t        jet1_pt_gen_abs;
    Double_t        jet2_pt_gen_abs;
@@ -102,10 +107,28 @@ public :
    Double_t        jet2_phi;   
    Double_t        jet3_phi;
    Double_t        jet4_phi;
-   Double_t        jet5_phi;
-   Double_t        jet6_phi;
+   //Double_t        jet5_phi;
+   //Double_t        jet6_phi;
    int numberOfVertices;
    Bool_t isAnyJetTooCloseToLepton;
+   Int_t           JetContainerFull_;
+   Double_t        JetContainerFull_fCoordinates_fX[kMaxJetContainerFull];   //[JetContainerFull_]
+   Double_t        JetContainerFull_fCoordinates_fY[kMaxJetContainerFull];   //[JetContainerFull_]
+   Double_t        JetContainerFull_fCoordinates_fZ[kMaxJetContainerFull];   //[JetContainerFull_]
+   Double_t        JetContainerFull_fCoordinates_fT[kMaxJetContainerFull];   //[JetContainerFull_]
+   Int_t           GenJetContainerFull_;
+   Double_t        GenJetContainerFull_fCoordinates_fX[kMaxGenJetContainerFull];   //[GenJetContainerFull_]
+   Double_t        GenJetContainerFull_fCoordinates_fY[kMaxGenJetContainerFull];   //[GenJetContainerFull_]
+   Double_t        GenJetContainerFull_fCoordinates_fZ[kMaxGenJetContainerFull];   //[GenJetContainerFull_]
+   Double_t        GenJetContainerFull_fCoordinates_fT[kMaxGenJetContainerFull];   //[GenJetContainerFull_]
+   vector<double>  *fractionOfPFID0RecoJet;
+   vector<double>  *fractionOfPFID1RecoJet;
+   vector<double>  *fractionOfPFID2RecoJet;
+   vector<double>  *fractionOfPFID3RecoJet;
+   vector<double>  *fractionOfPFID4RecoJet;
+   vector<double>  *fractionOfPFID5RecoJet;
+   vector<double>  *fractionOfPFID6RecoJet;
+   vector<double>  *fractionOfPFID7RecoJet;
 
    // List of branches
    TBranch        *b_evWeight;   //!
@@ -156,11 +179,11 @@ public :
    TBranch        *b_l2_pt_gen;   //!
    TBranch        *b_genZInAcceptance;   //!
    TBranch        *b_recoZInAcceptance;   //!
-   TBranch        *b_e1_charge;
-   TBranch        *b_e2_charge;
-   TBranch        *b_e1_tlv;
-   TBranch        *b_e2_tlv;
-   TBranch        *b_Run;
+   //TBranch        *b_e1_charge;
+   //TBranch        *b_e2_charge;
+   //TBranch        *b_e1_tlv;
+   //TBranch        *b_e2_tlv;
+   //TBranch        *b_Run;
    TBranch        *b_deltaRRecoGenJet;
 
    TBranch        *b_jet1_pt_gen_abs;
@@ -185,10 +208,28 @@ public :
    TBranch        *b_jet2_phi;
    TBranch        *b_jet3_phi;
    TBranch        *b_jet4_phi;
-   TBranch        *b_jet5_phi;
-   TBranch        *b_jet6_phi;
+   //TBranch        *b_jet5_phi;
+   //TBranch        *b_jet6_phi;
 
    TBranch        *b_isAnyJetTooCloseToLepton;
+   TBranch        *b_JetContainerFull_;   //!
+   TBranch        *b_JetContainerFull_fCoordinates_fX;   //!
+   TBranch        *b_JetContainerFull_fCoordinates_fY;   //!
+   TBranch        *b_JetContainerFull_fCoordinates_fZ;   //!
+   TBranch        *b_JetContainerFull_fCoordinates_fT;   //!
+   TBranch        *b_GenJetContainerFull_;   //!
+   TBranch        *b_GenJetContainerFull_fCoordinates_fX;   //!
+   TBranch        *b_GenJetContainerFull_fCoordinates_fY;   //!
+   TBranch        *b_GenJetContainerFull_fCoordinates_fZ;   //!
+   TBranch        *b_GenJetContainerFull_fCoordinates_fT;   //!
+   TBranch        *b_fractionOfPFID0RecoJet;   //!
+   TBranch        *b_fractionOfPFID1RecoJet;   //!
+   TBranch        *b_fractionOfPFID2RecoJet;   //!
+   TBranch        *b_fractionOfPFID3RecoJet;   //!
+   TBranch        *b_fractionOfPFID4RecoJet;   //!
+   TBranch        *b_fractionOfPFID5RecoJet;   //!
+   TBranch        *b_fractionOfPFID6RecoJet;   //!
+   TBranch        *b_fractionOfPFID7RecoJet;   //!
 
    UnfoldingVJets2011(TTree *tree=0);
    virtual ~UnfoldingVJets2011();
@@ -207,7 +248,7 @@ public :
 #endif
 
 #ifdef UnfoldingVJets2011_cxx
-UnfoldingVJets2011::UnfoldingVJets2011(TTree *tree)
+UnfoldingVJets2011::UnfoldingVJets2011(TTree *tree) : fChain(0)
 {
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
@@ -237,17 +278,30 @@ Int_t UnfoldingVJets2011::GetEntry(Long64_t entry)
 }
 Long64_t UnfoldingVJets2011::LoadTree(Long64_t entry)
 {
+  if (gROOT->GetVersionInt() >= 53000) {
+    // Set the environment to read one entry
+    if (!fChain) return -5;
+    Long64_t centry = fChain->LoadTree(entry);
+    if (centry < 0) return centry;
+    if (!fChain->InheritsFrom(TChain::Class()))  return centry;
+    TChain *chain = (TChain*)fChain;
+    if (chain->GetTreeNumber() != fCurrent) {
+      fCurrent = chain->GetTreeNumber();
+      Notify();
+    }
+    return centry;
+  }
+  else{
 // Set the environment to read one entry
    if (!fChain) return -5;
    Long64_t centry = fChain->LoadTree(entry);
    if (centry < 0) return centry;
-   if (!fChain->InheritsFrom(TChain::Class()))  return centry;
-   TChain *chain = (TChain*)fChain;
-   if (chain->GetTreeNumber() != fCurrent) {
-      fCurrent = chain->GetTreeNumber();
+   if (fChain->GetTreeNumber() != fCurrent) {
+      fCurrent = fChain->GetTreeNumber();
       Notify();
    }
    return centry;
+  }
 }
 
 void UnfoldingVJets2011::Init(TTree *tree)
@@ -259,6 +313,19 @@ void UnfoldingVJets2011::Init(TTree *tree)
    // code, but the routine can be extended by the user if needed.
    // Init() will be called many times when running on PROOF
    // (once per file to be processed).
+
+  if (gROOT->GetVersionInt() >= 53000) {
+    // Set object pointer
+    deltaRRecoGenJet = 0;
+    fractionOfPFID0RecoJet = 0;
+    fractionOfPFID1RecoJet = 0;
+    fractionOfPFID2RecoJet = 0;
+    fractionOfPFID3RecoJet = 0;
+    fractionOfPFID4RecoJet = 0;
+    fractionOfPFID5RecoJet = 0;
+    fractionOfPFID6RecoJet = 0;
+    fractionOfPFID7RecoJet = 0;
+  }
 
    // Set branch addresses and branch pointers
    if (!tree) return;
@@ -308,10 +375,10 @@ void UnfoldingVJets2011::Init(TTree *tree)
    fChain->SetBranchAddress("e2_phi", &e2_phi, &b_e2_phi);
    fChain->SetBranchAddress("e1_mass", &e1_mass, &b_e1_mass);
    fChain->SetBranchAddress("e2_mass", &e2_mass, &b_e2_mass);
-   fChain->SetBranchAddress("e1_charge", &e1_charge, &b_e1_charge);
-   fChain->SetBranchAddress("e2_charge", &e2_charge, &b_e2_charge);
-   fChain->SetBranchAddress("e1_tlv", &e1_tlv);
-   fChain->SetBranchAddress("e2_tlv", &e2_tlv);
+   //fChain->SetBranchAddress("e1_charge", &e1_charge, &b_e1_charge);
+   //fChain->SetBranchAddress("e2_charge", &e2_charge, &b_e2_charge);
+   //fChain->SetBranchAddress("e1_tlv", &e1_tlv);
+   //fChain->SetBranchAddress("e2_tlv", &e2_tlv);
 
    fChain->SetBranchAddress("isElectron", &isElectron, &b_isElectron);
    fChain->SetBranchAddress("invMass_gen", &invMass_gen, &b_invMass_gen);
@@ -322,7 +389,7 @@ void UnfoldingVJets2011::Init(TTree *tree)
    fChain->SetBranchAddress("genZInAcceptance", &genZInAcceptance, &b_genZInAcceptance);
    fChain->SetBranchAddress("recoZInAcceptance", &recoZInAcceptance, &b_recoZInAcceptance);
    fChain->SetBranchAddress("deltaRRecoGenJet",&deltaRRecoGenJet,&b_deltaRRecoGenJet);
-   fChain->SetBranchAddress("Run", &Run);
+   //fChain->SetBranchAddress("Run", &Run);
 
    fChain->SetBranchAddress("numberOfVertices", &numberOfVertices);
 
@@ -346,10 +413,28 @@ void UnfoldingVJets2011::Init(TTree *tree)
    fChain->SetBranchAddress("jet2_phi", &jet2_phi, &b_jet2_phi);
    fChain->SetBranchAddress("jet3_phi", &jet3_phi, &b_jet3_phi);
    fChain->SetBranchAddress("jet4_phi", &jet4_phi, &b_jet4_phi);
-   fChain->SetBranchAddress("jet5_phi", &jet5_phi, &b_jet5_phi);
-   fChain->SetBranchAddress("jet6_phi", &jet6_phi, &b_jet6_phi);
+   //fChain->SetBranchAddress("jet5_phi", &jet5_phi, &b_jet5_phi);
+   //fChain->SetBranchAddress("jet6_phi", &jet6_phi, &b_jet6_phi);
 
    fChain->SetBranchAddress("isAnyJetTooCloseToLepton",&isAnyJetTooCloseToLepton,&b_isAnyJetTooCloseToLepton);
+   fChain->SetBranchAddress("JetContainerFull", &JetContainerFull_, &b_JetContainerFull_);
+   fChain->SetBranchAddress("JetContainerFull.fCoordinates.fX", JetContainerFull_fCoordinates_fX, &b_JetContainerFull_fCoordinates_fX);
+   fChain->SetBranchAddress("JetContainerFull.fCoordinates.fY", JetContainerFull_fCoordinates_fY, &b_JetContainerFull_fCoordinates_fY);
+   fChain->SetBranchAddress("JetContainerFull.fCoordinates.fZ", JetContainerFull_fCoordinates_fZ, &b_JetContainerFull_fCoordinates_fZ);
+   fChain->SetBranchAddress("JetContainerFull.fCoordinates.fT", JetContainerFull_fCoordinates_fT, &b_JetContainerFull_fCoordinates_fT);
+   fChain->SetBranchAddress("GenJetContainerFull", &GenJetContainerFull_, &b_GenJetContainerFull_);
+   fChain->SetBranchAddress("GenJetContainerFull.fCoordinates.fX", GenJetContainerFull_fCoordinates_fX, &b_GenJetContainerFull_fCoordinates_fX);
+   fChain->SetBranchAddress("GenJetContainerFull.fCoordinates.fY", GenJetContainerFull_fCoordinates_fY, &b_GenJetContainerFull_fCoordinates_fY);
+   fChain->SetBranchAddress("GenJetContainerFull.fCoordinates.fZ", GenJetContainerFull_fCoordinates_fZ, &b_GenJetContainerFull_fCoordinates_fZ);
+   fChain->SetBranchAddress("GenJetContainerFull.fCoordinates.fT", GenJetContainerFull_fCoordinates_fT, &b_GenJetContainerFull_fCoordinates_fT);
+   fChain->SetBranchAddress("fractionOfPFID0RecoJet", &fractionOfPFID0RecoJet, &b_fractionOfPFID0RecoJet);
+   fChain->SetBranchAddress("fractionOfPFID1RecoJet", &fractionOfPFID1RecoJet, &b_fractionOfPFID1RecoJet);
+   fChain->SetBranchAddress("fractionOfPFID2RecoJet", &fractionOfPFID2RecoJet, &b_fractionOfPFID2RecoJet);
+   fChain->SetBranchAddress("fractionOfPFID3RecoJet", &fractionOfPFID3RecoJet, &b_fractionOfPFID3RecoJet);
+   fChain->SetBranchAddress("fractionOfPFID4RecoJet", &fractionOfPFID4RecoJet, &b_fractionOfPFID4RecoJet);
+   fChain->SetBranchAddress("fractionOfPFID5RecoJet", &fractionOfPFID5RecoJet, &b_fractionOfPFID5RecoJet);
+   fChain->SetBranchAddress("fractionOfPFID6RecoJet", &fractionOfPFID6RecoJet, &b_fractionOfPFID6RecoJet);
+   fChain->SetBranchAddress("fractionOfPFID7RecoJet", &fractionOfPFID7RecoJet, &b_fractionOfPFID7RecoJet);
    Notify();
 }
 

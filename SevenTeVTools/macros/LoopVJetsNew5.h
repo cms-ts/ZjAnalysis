@@ -151,7 +151,7 @@ TH1D* performUnfolding(string whichalgo, int kvalue, TH1D *jData, TH1D *jTrue, R
   RooUnfoldSvd unfold_s (&response_j, jData, kvalue);
   std::vector<double> extraMCLimitedStatErrors;
 
-  if (whichalgo=="BCrevoladossolaayes") {
+  if (whichalgo=="Bayes") {
     unf = (TH1D *) unfold_b.Hreco ();
     unfold_b.PrintTable(cout,jTrue);
     cout<<"Bayes: Chi2 of this k parameter(k="<<kvalue<<")<< is "<<unfold_b.Chi2(jTrue,RooUnfold::kErrors)<<endl;
@@ -443,7 +443,7 @@ void UnfoldingVJets2011::LoopVJets (int numbOfJetsSelected,string whichtype, str
   //New style for unfolding
   RooUnfoldResponse response_fillfake(jMCreco,jTrue);
   response_fillfake.UseOverflow();           
-  
+
   /* Loop Montecarlo */
   fChain = tree_fA;             
   Init (fChain);
@@ -451,6 +451,7 @@ void UnfoldingVJets2011::LoopVJets (int numbOfJetsSelected,string whichtype, str
   int numberOfInversion=0;
   int numberOfInversionDenominator=0;
   Long64_t nentries = fChain->GetEntriesFast ();
+
   Long64_t nbytes = 0, nb = 0;
   int inTheGap=0; int recoButPtLow=0; int recoButEtaHigh=0; int recoButInvMassOut=0; int recoButNotGenerated=0; int genButNotReco=0; int recostructedEvents=0; int genOutsideTheLimits=0; int notGenNotReco=0; int recoinTheGap=0; int genRecoAfterGenCorr=0; int noGenRecoAfterGenCorr=0; int genNoRecoAfterGenCorr=0;//Simpatici counter 
   
@@ -464,11 +465,13 @@ void UnfoldingVJets2011::LoopVJets (int numbOfJetsSelected,string whichtype, str
   }
 
   if (fChain == 0) return; if (!doUnfold) nentries=0;
+
   int aaa=0; int bbb=0; int numbRecoGen=0; int numbRecoNotGen=0; int numbNotRecoGen=0; int numbRecoGenMatched=0; int numbRecoGenNotMatchedMiss=0; int numbRecoGenNotMatchedFake=0;
 
   for (Long64_t jentry = 0; jentry < nentries; jentry++)
     {
       Long64_t ientry = LoadTree (jentry);
+
       if (ientry < 0) break;
       nb = fChain->GetEntry (jentry);
       nbytes += nb;
@@ -484,7 +487,7 @@ void UnfoldingVJets2011::LoopVJets (int numbOfJetsSelected,string whichtype, str
 
       int ValidGenJets=getNumberOfValidJets(Jet_multiplicity_gen, 30, 2.4, jet1_pt_gen, jet2_pt_gen, jet3_pt_gen, jet4_pt_gen, jet5_pt_gen, jet6_pt_gen, jet1_eta_gen, jet2_eta_gen, jet3_eta_gen, jet4_eta_gen, jet5_eta_gen, jet6_eta_gen);
       int ValidRecoJets=Jet_multiplicity;
-
+ 
       //Extra control on DR lepton-jet arisen during Approval
       //bool resu=setRecoVariablesFilteringDRLeptons( e1_eta,  e2_eta,  e1_phi,  e2_phi,  jet1_pt,  jet2_pt,  jet3_pt,  jet4_pt,   jet5_pt,   jet6_pt,  jet1_eta,  jet2_eta,  jet3_eta,  jet4_eta,  jet5_eta,  jet6_eta,   jet1_phi,  jet2_phi,  jet3_phi,  jet4_phi,   jet5_phi,  jet6_phi, Jet_multiplicity);
       

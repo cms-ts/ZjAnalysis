@@ -5,7 +5,7 @@
  *********************************/
 
 
-#if !defined(__CINT__) || defined(__MAKECINT__)
+//#if !defined(__CINT__) || defined(__MAKECINT__)
 
 #define 	UnfoldingVJets2011_cxx
 
@@ -44,14 +44,13 @@
 #include "MakePlotLumiLabel.C"
 #include "TRandom3.h"
 
-
 using
 std::cout;
 using std::endl;
-#endif
+//#endif
 
 string version="_v2_58.root";
-bool isMu=true;  
+bool isMu=false;  
 bool isEle=!isMu;
 bool makeSecondaryPlots=true;
 bool correctForSecondaryMigrations=true;
@@ -61,7 +60,7 @@ bool unfoldWithAsymmetricBins=true;
 string smc="/gpfs/cms/data/2011/jet/jetValidation_zjets_magd_2011Mu_v2_58.root"; //V45 was the default one
 string sdata="/gpfs/cms/data/2011/jet/jetValidation_DATA_2011"+version;
 //string smcpythia="/gpfs/cms/data/2011/jet/jetValidation_zjets_sherpa_2011_v2_32.root";
-string smcpythia="/gpfs/cms/data/2011/jet/jetValidation_zjets_sherpa_2011Mu_v2_58.root";
+string smcpythia="/gpfs/cms/data/2011/jet/jetValidation_zjets_sherpa_2011Mu_v2_32.root";
 
 bool unfoldWithSherpa=false;
 
@@ -181,7 +180,7 @@ void UnfoldingVJets2011::Loop()
     s = "/afs/infn.it/ts/user/marone/html/ZJets/Unfolding/DATA_New2/Mu/";
     sdata="/gpfs/cms/data/2011/jet/jetValidation_DATA_2011Mu"+version;
     efffile="/gpfs/cms/data/2011/TaP/efficiencies_2011_v2_41_MCtemplate.root";
-    bkgstring=dir+"BackgroundsMu_v2_33.root";
+    bkgstring=dir+"BackgroundsMu_v2_58.root";
     filename=filename+"Mu.root";//+version;
   }
   else{
