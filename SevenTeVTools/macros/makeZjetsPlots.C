@@ -41,9 +41,9 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
 
   bool addPlot1EnvelopPowheg=true;
 
-  bool verboseSherpa=false;
-  bool verbosePowheg=true;
-  bool verboseMadGraph=true;
+  bool verboseSherpa=true;
+  bool verbosePowheg=false;
+  bool verboseMadGraph=false;
 
   setTDRStyle ();
   gStyle->SetErrorX(0.5);
@@ -62,14 +62,14 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
   int whichjet = whichjet;
   string version = "_v2_32";
 
-  string s                = "/afs/infn.it/ts/user/schizzi/html/approval/ele/";
-  if (lepton==2) string s = "/afs/infn.it/ts/user/schizzi/html/approval/mu/";
-  if (lepton==3) string s = "/afs/infn.it/ts/user/schizzi/html/approval/combined/";
+  string s                = "/afs/infn.it/ts/user/marone/html/ZJets/FinalPlotsForAN/v58/FinalPlotsArticle_27022014/Ele/";
+  if (lepton==2) string s = "/afs/infn.it/ts/user/marone/html/ZJets/FinalPlotsForAN/v58/FinalPlotsArticle_27022014/Mu/";
+  if (lepton==3) string s = "/afs/infn.it/ts/user/marone/html/ZJets/FinalPlotsForAN/v58/FinalPlotsArticle_27022014/Combined/";
 
   if (isPDFComparison) {
-    string s                = "/afs/infn.it/ts/user/schizzi/html/approval/pdf/ele/";
-    if (lepton==2) string s = "/afs/infn.it/ts/user/schizzi/html/approval/pdf/mu/";
-    if (lepton==3) string s = "/afs/infn.it/ts/user/schizzi/html/approval/pdf/combined/";
+    string s                = "/afs/infn.it/ts/user/marone/html/ZJets/FinalPlotsForAN/v58/FinalPlotsArticle_27022014/Ele/PDF/";
+    if (lepton==2) string s = "/afs/infn.it/ts/user/marone/html/ZJets/FinalPlotsForAN/v58/FinalPlotsArticle_27022014/Mu/PDF/";
+    if (lepton==3) string s = "/afs/infn.it/ts/user/marone/html/ZJets/FinalPlotsForAN/v58/FinalPlotsArticle_27022014/Combined/PDF/";
   }
 
   string plotpath           = "/gpfs/cms/users/schizzi/Systematics/ele/";
@@ -80,7 +80,7 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
 
   TCanvas *plots = new TCanvas ("plots", "EB", 200, 100, 600, 800);
 
-  TFile dumphistos_file("/tmp/schizzi/dump_histos.root","UPDATE");
+  TFile dumphistos_file("/tmp/dump_histos.root","UPDATE");
 
   //DATA:
   string           pathFile ="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV58_BinWidth.root";
@@ -284,9 +284,9 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
       rivet_data_minus="d"+oss.str()+"-x01-y01";
       if (incMultiplicity) {
 	rivetname="d"+ossInc.str()+"_x01_y01";
-	rivetnameMG="d"+ossInc.str()+"_x01_y01";
+	rivetnameMG="d"+ossInc.str()+"-x01-y01";
+      rivet_data_minus="d"+ossInc.str()+"-x01-y01";
       }
-
 
 
       rivet_data    = rivetname;
@@ -375,7 +375,7 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
 	//Plot1
 	////////////
 
-	TGraphAsymmErrors *leadingRivetPlot1=returnTGraphFromFile(rivetPathPlot1, rivet_data, rivet_data_minus, etaFolded, isPDFComparison, use_case, false);
+	TGraphAsymmErrors *leadingRivetPlot1=returnTGraphFromFile(rivetPathPlot1, rivet_data, rivet_data_minus, etaFolded, isPDFComparison, use_case, true);
 	TGraphAsymmErrors *leadingRivetPlot1Stat;
 	leadingRivetPlot1Stat = (TGraphAsymmErrors *) leadingRivetPlot1->Clone ("");
 	TGraphAsymmErrors *leadingRatioPlot1Stat;
@@ -383,11 +383,11 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
 	TGraphAsymmErrors *leadingRatioPlot1;
 	leadingRatioPlot1 = (TGraphAsymmErrors *) leadingRivetPlot1->Clone ("");
  
-	TGraphAsymmErrors *leadingRivetPlot1UP=returnTGraphFromFile(rivetPathPlot1UP, rivet_data, rivet_data_minus, etaFolded, isPDFComparison, use_case,false);
-	TGraphAsymmErrors *leadingRivetPlot1DOWN=returnTGraphFromFile(rivetPathPlot1DOWN, rivet_data, rivet_data_minus, etaFolded, isPDFComparison, use_case,false);
+	TGraphAsymmErrors *leadingRivetPlot1UP=returnTGraphFromFile(rivetPathPlot1UP, rivet_data, rivet_data_minus, etaFolded, isPDFComparison, use_case,true);
+	TGraphAsymmErrors *leadingRivetPlot1DOWN=returnTGraphFromFile(rivetPathPlot1DOWN, rivet_data, rivet_data_minus, etaFolded, isPDFComparison, use_case,true);
 
-	TGraphAsymmErrors *leadingRivetPlot1QcutUP=returnTGraphFromFile(rivetPathPlot1QcutUP, rivet_data, rivet_data_minus, etaFolded, isPDFComparison, use_case,false);
-	TGraphAsymmErrors *leadingRivetPlot1QcutDOWN=returnTGraphFromFile(rivetPathPlot1QcutDOWN, rivet_data, rivet_data_minus, etaFolded, isPDFComparison, use_case,false);
+	TGraphAsymmErrors *leadingRivetPlot1QcutUP=returnTGraphFromFile(rivetPathPlot1QcutUP, rivet_data, rivet_data_minus, etaFolded, isPDFComparison, use_case,true);
+	TGraphAsymmErrors *leadingRivetPlot1QcutDOWN=returnTGraphFromFile(rivetPathPlot1QcutDOWN, rivet_data, rivet_data_minus, etaFolded, isPDFComparison, use_case,true);
 
 	TGraphAsymmErrors *leadingRivetPlot1QUP=returnTGraphFromFile(rivetPathPlot1QUP, rivet_data, rivet_data_minus, etaFolded, isPDFComparison, use_case,true);
 	TGraphAsymmErrors *leadingRivetPlot1QDOWN=returnTGraphFromFile(rivetPathPlot1QDOWN, rivet_data, rivet_data_minus, etaFolded, isPDFComparison, use_case,true);
@@ -397,7 +397,7 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
 	// Plot2
 	/////////////
 
-	TGraphAsymmErrors *leadingRivetPlot2=returnTGraphFromFile(rivetPathPlot2, rivet_data, rivet_data_minus, etaFolded, isPDFComparison, use_case,false);
+	TGraphAsymmErrors *leadingRivetPlot2=returnTGraphFromFile(rivetPathPlot2, rivet_data, rivet_data_minus, etaFolded, isPDFComparison, use_case,true);
 	TGraphAsymmErrors *leadingRivetPlot2Stat;
 	leadingRivetPlot2Stat = (TGraphAsymmErrors *) leadingRivetPlot2->Clone ("");
 	TGraphAsymmErrors *leadingRatioPlot2Stat;
@@ -415,7 +415,7 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
 
 	//Central value
 
-	TGraphAsymmErrors *leadingRivetPlot3=returnTGraphFromFile(rivetPathPlot3, rivet_data, rivet_data_minus, etaFolded, isPDFComparison, use_case,false);
+	TGraphAsymmErrors *leadingRivetPlot3=returnTGraphFromFile(rivetPathPlot3, rivet_data, rivet_data_minus, etaFolded, isPDFComparison, use_case,true);
 	TGraphAsymmErrors *leadingRatioPlot3;
 	leadingRatioPlot3 = (TGraphAsymmErrors *) leadingRivetPlot3->Clone ("");
 
@@ -614,9 +614,9 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
 	    if (absoluteNormalization) {
 	      dummyNorm= (1.0);
 	      if (lepton ==3) {
-		dummyNorm= dummyNorm*2.0;
-		y1temp=y1temp/2.0;	    
-		y2temp=y2temp/2.0;
+		//dummyNorm= dummyNorm*2.0;
+		//y1temp=y1temp/2.0;	    
+		//y2temp=y2temp/2.0;
 	      }
 	    }
 
@@ -687,8 +687,8 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
 	    dummyNorm= (1.0);
 	    if (lepton ==3) {
 	      //dummyNorm= dummyNorm*2.0;
-	      y1temp=y1temp/2.0;	    
-	      y2temp=y2temp/2.0;
+	      //y1temp=y1temp/2.0;	    
+	      //y2temp=y2temp/2.0;
 	    }
 	  }
 
@@ -739,8 +739,8 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
 		  dummyNorm= (1.0);
 		  if (lepton ==3) {
 		    //dummyNorm= dummyNorm*2.0;
-		    y1temp=y1temp/2.0;	    
-		    y2temp=y2temp/2.0;
+		    //y1temp=y1temp/2.0;	    
+		    //y2temp=y2temp/2.0;
 		  }
 		}
 		
@@ -780,7 +780,7 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
 	for (Int_t ovo=0;ovo<nRivetPoints;ovo++) {
 	  if (absoluteNormalization) {
 	    dummyNorm= 1.0;
-	    if (lepton ==3) dummyNorm= dummyNorm*2.0;
+	    //if (lepton ==3) dummyNorm= dummyNorm*2.0;
 	  }
 	  leadingRivetPlot2UP->GetPoint(ovo,dummyXvar,dummyYvar);
 	  leadingRivetPlot2UP->SetPoint(ovo,dummyXvar,dummyYvar/dummyNorm); 
@@ -797,7 +797,7 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
 	for (Int_t ovo=0;ovo<nRivetPoints;ovo++) {
 	  if (absoluteNormalization) {
 	    dummyNorm= (1.0);
-	    if (lepton ==3) dummyNorm= dummyNorm*2.0;
+	    //if (lepton ==3) dummyNorm= dummyNorm*2.0;
 	    //dummyNorm= dummyNorm / (leading->GetXaxis()->GetBinWidth(1));
 	  }
 	  leadingRivetPlot2DOWN->GetPoint(ovo,dummyXvar,dummyYvar); 
@@ -816,7 +816,7 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
 	  if (absoluteNormalization) {
 	    if (lepton ==1) dummyNorm= (1.0);
 	    if (lepton ==2) dummyNorm= (1.0);
-	    if (lepton ==3) dummyNorm= (2.0);
+	    if (lepton ==3) dummyNorm= (1.0);
 	  }
 
 	  Int_t ovoCorrected=ovo;
@@ -847,7 +847,7 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
 	  if (absoluteNormalization) {
 	    if (lepton ==1) dummyNorm= (1.0);
 	    if (lepton ==2) dummyNorm= (1.0);
-	    if (lepton ==3) dummyNorm= (2.0);
+	    //if (lepton ==3) dummyNorm= (2.0);
 	    //dummyNorm= dummyNorm / (leading->GetXaxis()->GetBinWidth(1)); 
 	  }
 
@@ -938,7 +938,7 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
 
 	  if (absoluteNormalization) {
 	    if (!isPDFComparison) dummyNorm= 2475.0/3048.0; else dummyNorm=1.0;
-	    if (lepton==3) dummyNorm=dummyNorm*2.0;
+	    //if (lepton==3) dummyNorm=dummyNorm*2.0;
 	  }
 	  leadingRivetPlot3->GetPoint(ovo,dummyXvar,dummyYvar); 
 	  leadingRivetPlot3->SetPoint(ovo,dummyXvar,dummyYvar/dummyNorm);
@@ -984,8 +984,8 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
 	  if (absoluteNormalization) {
 	    if (lepton ==3) {
 	      dummyNorm= 1.0;
-	      y1temp=y1temp/2.0;	    
-	      y2temp=y2temp/2.0;
+	      //y1temp=y1temp/2.0;	    
+	      //y2temp=y2temp/2.0;
 	    }
 	  }
 	  
@@ -1241,7 +1241,7 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
 	if (!isPDFComparison) {
 	  latexLabelPlot2->DrawLatex(0.19,0.87,"Powheg+Pythia6 (Z+1j@NLO +PS)");
 	} else {
-	  latexLabelPlot2->DrawLatex(0.19,0.87,"Sherpa2 NNPDF");
+	  latexLabelPlot2->DrawLatex(0.19,0.87,"Sherpa2 NNPDF21");
 	}
 
         TLegend *legendPlot2;
@@ -1361,7 +1361,7 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
 	if (!isPDFComparison) {
 	  latexLabelPlot3->DrawLatex(0.19,0.9,"MadGraph+Pythia6 (#leq4j@LO +PS)");
 	} else {
-	  latexLabelPlot3->DrawLatex(0.19,0.9,"Sherpa2 MSTW2008");
+	  latexLabelPlot3->DrawLatex(0.19,0.9,"Sherpa2 MSTW2008nlo68cl");
 	}
 
         TLegend *legendPlot3;
@@ -1455,9 +1455,10 @@ TGraphAsymmErrors* returnTGraphFromFile(string rivetPath, string rivet_data, str
   while ((tobjRivet= iterRivet.Next ()))
     {
       string nameRivet= tobjRivet->GetName ();
-      if (nameRivet == rivet_data || (isPDFComparison && (nameRivet == rivet_data_minus) ) )
+      if (nameRivet == rivet_data_minus) 
 	{
-	  if (!isPDFComparison || !readTH1F) {
+      cout<<nameRivet<<endl;
+	  if (!readTH1F) {
 	    gDirectory->GetObject (nameRivet.c_str (), leadingRivet);
 	  }
 	  else{
@@ -1467,15 +1468,6 @@ TGraphAsymmErrors* returnTGraphFromFile(string rivetPath, string rivet_data, str
 	  }
 	}
     }
-  //if (etaFolded && use_case==3) {
-  //double xx1temp, xx2temp, yy1temp, yy2temp;
-  //for (int mdm=leadingRivet->GetN()/2; mdm<leadingRivet->GetN(); mdm++) {
-  //  leadingRivet->GetPoint(mdm,xx1temp,yy1temp);
-  //  leadingRivet->GetPoint(leadingRivet->GetN()-mdm-1,xx2temp,yy2temp);
-  //  leadingRivet->SetPoint(mdm,xx1temp,yy1temp+yy2temp);
-  //  leadingRivet->SetPointEYhigh(mdm,sqrt(pow(leadingRivet->GetErrorYhigh(mdm),2) + pow(leadingRivet->GetErrorYhigh(leadingRivet->GetN()-mdm-1),2)));
-  //  leadingRivet->SetPointEYlow(mdm,sqrt(pow(leadingRivet->GetErrorYlow(mdm),2) + pow(leadingRivet->GetErrorYlow(leadingRivet->GetN()-mdm-1),2)));
-  //}
-  //}
+
   return leadingRivet;
 }
