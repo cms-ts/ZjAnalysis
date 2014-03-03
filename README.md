@@ -121,10 +121,10 @@ runObs.C (run it twice, editing the falg "isMu" twice to create electron and muo
 DrawComparisonJetMCData.C (twice again)
 makeJetsPlotsWebPages.sh (to create the pre-unfolding plots)
 
-3) Unfolding
+3) Unfolding (and sdystematics)
 Run runUnfoldCustom.C to perform the unfolding (paramters to run the unfolding and the systematics are in Unfolding2011VJets.C)
 
-4) Other systematics
+4) Other systematics (backgrouns)
 Run
 macros/runDrawComparisonJetMCDataXScale.C
 macros/DrawComparisonJetMCDataScaleDown.C
