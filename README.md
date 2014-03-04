@@ -11,15 +11,11 @@ Sub-packages:
 
       It contains the configuration file to be used if you need to reprocess the rootuples
 
-         jetValidationPfAK5ChsNewIsoOldIdWP90MCEandMu_UnfoldingSherpa_cfg.py     ---> create the sherpa MC dataset (systematics for unfolding)
-
-         jetValidationPfAK5ChsNewIsoOldIdWP90MCEandMu_cfg.py                     ---> create the madgraph MC dataset (ONLY RECO). 
-
-         jetValidationPfAK5ChsNewIsoOldIdWP90MCEandMu_Unfolding_cfg.py           ---> create the madgraph MC dataset (RECO And GEN LEVEL).
-
-         jetValidationPfAK5ChsNewIsoOldIdWP90mu_cfg.py                           ---> run on data (muons)
-
-         jetValidationPfAK5ChsNewIsoOldIdWP90_cfg.py                             ---> run on data (ele)
+       *  jetValidationPfAK5ChsNewIsoOldIdWP90MCEandMu_UnfoldingSherpa_cfg.py     ---> create the sherpa MC dataset (systematics for unfolding)
+       *  jetValidationPfAK5ChsNewIsoOldIdWP90MCEandMu_cfg.py                     ---> create the madgraph MC dataset (ONLY RECO). 
+       *  jetValidationPfAK5ChsNewIsoOldIdWP90MCEandMu_Unfolding_cfg.py           ---> create the madgraph MC dataset (RECO And GEN LEVEL).
+       *  jetValidationPfAK5ChsNewIsoOldIdWP90mu_cfg.py                           ---> run on data (muons)
+       *  jetValidationPfAK5ChsNewIsoOldIdWP90_cfg.py                             ---> run on data (ele)
 
    -) "scripts". COntains cfgs to run the forementioned files over the analysis datasets
 
