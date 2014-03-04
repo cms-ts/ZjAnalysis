@@ -19,29 +19,18 @@ Sub-packages:
 
    -) "scripts". COntains cfgs to run the forementioned files over the analysis datasets
 
-        crabProcessDataMuRunA44.cfg  crabProcessDataMunB44.cfg     --> run runA and B for muons
-
-        crabProcessDataRunA44.cfg  crabProcessDataRunB44.cfg       --> run runA and B for electrons
-
-        crabProcessMCNoXroot.cfg                                   --> run madgraph using XrootD
-
-        crabProcessMCWZLocale.cfg                                  --> run WZ dataset (locally)
-
-	crabTTBarScalingDOWNRemote.cfg crabTTBarScalingUPRemote.cfg--> run ttbar dataset scaled down (systematics)
-
-	crabProcessMCDYLocale.cfg           			   --> run madgraph reco (locally)
-
-	crabProcessMCTTBarLocale.cfg  				   --> run ttbar dataset (locally)
-
-	crabProcessMCZZLocale.cfg      				   --> run zz dataset (locally)
-
-	crabProcessMCDYLocaleUnfolding.cfg  			   --> run madgraph reco and gen level (locally)
-
-	crabProcessMCWWLocale.cfg     				   --> run WW dataset (locally)
-
-	crabSherpaUnfoldingRemote.cfg  				   --> run madgraph reco and gen level (grid)
-
-	multicrabMC44X.cfg					   --> run QCD datasets (grid)
+       * crabProcessDataMuRunA44.cfg  crabProcessDataMunB44.cfg     --> run runA and B for muons
+       * crabProcessDataRunA44.cfg  crabProcessDataRunB44.cfg       --> run runA and B for electrons
+       * crabProcessMCNoXroot.cfg                                   --> run madgraph using XrootD
+       * crabProcessMCWZLocale.cfg                                  --> run WZ dataset (locally)
+       * crabTTBarScalingDOWNRemote.cfg crabTTBarScalingUPRemote.cfg--> run ttbar dataset scaled down (systematics)
+       * crabProcessMCDYLocale.cfg           			   --> run madgraph reco (locally)
+       * crabProcessMCTTBarLocale.cfg  				   --> run ttbar dataset (locally)
+	   * crabProcessMCZZLocale.cfg      				   --> run zz dataset (locally)
+	   * crabProcessMCDYLocaleUnfolding.cfg  			   --> run madgraph reco and gen level (locally)
+	   * crabProcessMCWWLocale.cfg     				   --> run WW dataset (locally)
+	   * crabSherpaUnfoldingRemote.cfg  				   --> run madgraph reco and gen level (grid)
+	   * multicrabMC44X.cfg					   --> run QCD datasets (grid)
 
    -) "/interface" "/src" "/python". It contains plugins/code called inside these python files 
 
