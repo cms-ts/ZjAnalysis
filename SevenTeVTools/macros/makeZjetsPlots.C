@@ -1036,10 +1036,10 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
 	leadingRivetPlot1Stat->SetMarkerStyle(24);
 	leadingRivetPlot1Stat->Draw("pz");
 
-	leadingRivetPlot2Stat->SetFillColor(kGreen-8);
+	leadingRivetPlot2Stat->SetFillColor(kMagenta-8);
 	leadingRivetPlot2Stat->SetFillStyle(1001);
-	leadingRivetPlot2Stat->SetLineColor(kGreen+4);
-	leadingRivetPlot2Stat->SetMarkerColor(kGreen+4);
+	leadingRivetPlot2Stat->SetLineColor(kMagenta+4);
+	leadingRivetPlot2Stat->SetMarkerColor(kMagenta+4);
 	leadingRivetPlot2Stat->SetMarkerStyle(26);
 	leadingRivetPlot2Stat->Draw("pz");
 
@@ -1214,17 +1214,17 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
 	leadingRatio3Systematics->Draw ("E2");
 	leadingRatio3->Draw ("E1SAME");
 
-	leadingRatioPlot22ENV->SetFillColor(kGreen-9);
+	leadingRatioPlot22ENV->SetFillColor(kMagenta-9);
 	leadingRatioPlot22ENV->SetFillStyle(1001);
-	leadingRatioPlot22ENV->SetLineColor(kGreen-9);
-	leadingRatioPlot22ENV->SetMarkerColor(kGreen-9);
+	leadingRatioPlot22ENV->SetLineColor(kMagenta-9);
+	leadingRatioPlot22ENV->SetMarkerColor(kMagenta-9);
 	leadingRatioPlot22ENV->SetLineWidth(0.6);
 	leadingRatioPlot22ENV->Draw("5");
 	
-	leadingRatioPlot2Stat->SetFillColor(kGreen-6);
+	leadingRatioPlot2Stat->SetFillColor(kMagenta-6);
 	leadingRatioPlot2Stat->SetFillStyle(1001);
-	leadingRatioPlot2Stat->SetLineColor(kGreen+4);
-	leadingRatioPlot2Stat->SetMarkerColor(kGreen+4);
+	leadingRatioPlot2Stat->SetLineColor(kMagenta+4);
+	leadingRatioPlot2Stat->SetMarkerColor(kMagenta+4);
 	leadingRatioPlot2Stat->SetMarkerStyle(26);
 	leadingRatioPlot2Stat->SetLineWidth(1);
 	leadingRatioPlot2Stat->Draw("2");
