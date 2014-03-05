@@ -1387,6 +1387,7 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
 	string title1;
 	title1 = s + "DifferentialX" + stringmatch + ".pdf";
 	if (incMultiplicity) title1 = s + "DifferentialXInc" + stringmatch + ".pdf";
+        if (etaFolded && use_case == 3 ) title1 = s + "DifferentialX" + stringmatch + "Abs.pdf";
 
 	cout << title1 << endl;
 	  
