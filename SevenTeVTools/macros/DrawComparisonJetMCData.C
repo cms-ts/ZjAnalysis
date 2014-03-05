@@ -24,7 +24,7 @@
 #include "lumi_scale_factors.h"
 //#include "lumi_scale_factorsLO.h"
 
-#include "Unfolding/MakePlotLumiLabel.C"
+#include "MakePlotLumiLabel.C"
 
 bool isAngularAnalysis= true;  // If true it will produce the plots connected to the differential and angular analysis. If false the usual control plots
 //NB: Backgrounds are ONLY estimated when this flag is true!!!
@@ -960,10 +960,10 @@ void comparisonJetMCData(string plot,int rebin){
 
     TH1F* tau;
     gDirectory->GetObject(plot.c_str(),tau);
+    cout<<"number of taus..."<<tau->GetEntries()<<endl;
     if(tau){
       tau->SetFillColor(kGreen);
       tau->Sumw2();
-
       if(zNumEvents>0.){
 	if(lumiweights==1) {
 	  if (WholeStat){
@@ -991,7 +991,7 @@ void comparisonJetMCData(string plot,int rebin){
       tau->Rebin(rebin);
       if(lumiweights==0) tau->Draw("HISTO SAMES");
       hsum->Rebin(rebin);
-      tau->Scale(1./1000.); //aaaaaaa
+      //tau->Scale(1./1000.); //aaaaaaa
       hsum->Add(tau);
       legend->AddEntry(tau,"#tau#tau+jets","f");
 
@@ -1119,10 +1119,11 @@ void comparisonJetMCData(string plot,int rebin){
     //======================
     // Stacked Histogram
     //if(qcd23em) 	hs->Add(qcdTotEM);
-    if(!qcdbcempty) 	hs->Add(qcdTotBC);
+ 
+   if(!qcdbcempty) 	hs->Add(qcdTotBC);
     if(w)  	        hs->Add(w);
     if (ww)         hs->Add(ww);
-    if(tau)		hs->Add(tau); //Z+Jets
+    if(tau)		hs->Add(tau); //Z+Jets 
     if (zz)         hs->Add(zz);
     if (wz)         hs->Add(wz);
     if (ttbar)	hs->Add(ttbar);
@@ -1155,9 +1156,9 @@ void comparisonJetMCData(string plot,int rebin){
     //lumi->AddEntry((TObject*)0,"#int L dt =4.9 1/fb","");
     lumi->Draw();
     string channel;
-    if (isMu) channel="Z#rightarrow#mu#mu";
-    if (!isMu) channel="Z#rightarrow ee";
-    TLatex *latexLabel=CMSPrel(4.890,channel,0.55,0.85); // make fancy label
+    if (isMu) channel="Z/#gamma*#rightarrow#mu#mu";
+    if (!isMu) channel="Z/#gamma*#rightarrow ee";
+    TLatex *latexLabel=CMSPrel(4.9,channel,0.55,0.85); // make fancy label
     latexLabel->Draw("same");
 
     CanvPlot->Update();

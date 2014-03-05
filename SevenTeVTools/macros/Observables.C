@@ -43,8 +43,8 @@
 #include "TH2.h"
 #include "THStack.h"
 #include <string.h>
-#include "Unfolding/NewUnfolding/getEfficiencyCorrection.C"
-#include "Unfolding/NewUnfolding/getMuscleFitCorrection.C"
+#include "getEfficiencyCorrection.C"
+#include "getMuscleFitCorrection.C"
 
 
 using
