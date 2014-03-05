@@ -60,9 +60,9 @@ bool unfoldWithAsymmetricBins=true;
 string smc="/gpfs/cms/data/2011/jet/jetValidation_zjets_magd_2011Mu_v2_58.root"; //V45 was the default one
 string sdata="/gpfs/cms/data/2011/jet/jetValidation_DATA_2011"+version;
 //string smcpythia="/gpfs/cms/data/2011/jet/jetValidation_zjets_sherpa_2011_v2_32.root";
-string smcpythia="/gpfs/cms/data/2011/jet/jetValidation_zjets_sherpa_2011Mu_v2_32.root";
+string smcpythia="/gpfs/cms/data/2011/jet/jetValidation_zjets_sherpa_2011Mu_v2_58.root";
 
-bool unfoldWithSherpa=false;
+bool unfoldWithSherpa=true;
 
 //Normalizations...
 // The choice of the K value can affect the normalization. The following list of XS supersede the one in data
@@ -92,7 +92,7 @@ bool extraTests=false; //to perform several cross checks
 bool saveFile=true; //saveFile True, it will save the rootfile. Switch it, when you are sure!
 string direct="/gpfs/cms/data/2011/Unfolding/";
 //string filename="/tmp/pippo";
-string filename=direct+"UnfoldingOfficialV58_BinWidth";
+string filename=direct+"UnfoldingOfficialV58_Sherpa";
 
 // Efficiency corrections
 bool correctForEff=true; // If true, it will take the correction factor from outside

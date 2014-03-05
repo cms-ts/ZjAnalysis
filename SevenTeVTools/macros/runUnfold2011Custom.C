@@ -13,7 +13,7 @@ gROOT->LoadMacro("UnfoldingVJets2011.C++");
 gROOT->ProcessLine("UnfoldingVJets2011 a;");
 gROOT->ForceStyle();
 gROOT->LoadMacro("tdrStyle.C++");
-tdrStyle();	
+setTDRStyle();	
 gROOT->SetStyle("Plain");
 gROOT->ProcessLine("a.LoopText(\"SVD\",\"Multiplicity\"\,1,true);");
 
@@ -73,7 +73,7 @@ gROOT->LoadMacro("UnfoldingVJets2011.C++");
 gROOT->ProcessLine("UnfoldingVJets2011 a;");
 gROOT->ForceStyle();
 gROOT->LoadMacro("tdrStyle.C++");
-tdrStyle();	
+setTDRStyle();	
 gROOT->SetStyle("Plain");
 gROOT->ProcessLine("a.LoopText(\"SVD\",\"Multiplicity\"\,1,false);");
 

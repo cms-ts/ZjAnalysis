@@ -114,7 +114,7 @@ makeEleMuComparisonPlots (int whichobservable, int whichjet, int whichlepton)
 {
   //Open the file and form the name
   string fileSystematics; 
-  string suffix="/gpfs/cms/data/2011/Systematics/postApproval/";
+  string suffix="/gpfs/cms/data/2011/Systematics/postApproval_v58/";
   //string suffix="/tmp/";
 
   if (whichlepton==1) suffix=suffix+"ele/";
@@ -134,7 +134,7 @@ makeEleMuComparisonPlots (int whichobservable, int whichjet, int whichlepton)
   string version = "_v2_32";
 
   //string s         = "/afs/infn.it/ts/user/marone/html/ZJets/FinalPlotsForAN/v41/SVDBayes/";
-  string s="/afs/infn.it/ts/user/marone/html/ZJets/FinalPlotsForAN/v57_3_postApproval/ele/";
+  string s="/afs/infn.it/ts/user/marone/html/ZJets/FinalPlotsForAN/v58_3/UnfoldingSyst/ele/";
   //  string s         = "/gpfs/cms/users/schizzi/EleMuComparisonPlots/PostUnfolding/";
   string  eleplotpath = "/gpfs/cms/users/schizzi/Systematics/ele/";
   string  muoplotpath = "/gpfs/cms/users/schizzi/Systematics/muo/";
@@ -150,9 +150,9 @@ makeEleMuComparisonPlots (int whichobservable, int whichjet, int whichlepton)
   string muopathFile   ="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV57_3.root";
 
   if (whichlepton==2){
-  elepathFile   ="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV57_3SherpaMu.root";
-  muopathFile   ="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV57_3Mu.root";
-  s="/afs/infn.it/ts/user/marone/html/ZJets/FinalPlotsForAN/v57_3_postApproval/muo/";
+  elepathFile   ="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV58_SherpaMu.root";
+  muopathFile   ="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV58_BinWidthMu.root";
+  s="/afs/infn.it/ts/user/marone/html/ZJets/FinalPlotsForAN/v58/UnfoldingSyst/muo/";
   }
   //string elepathFile   ="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV57_3NoSQRT.root";
   //string muopathFile   ="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV57_3NoMCToy.root";

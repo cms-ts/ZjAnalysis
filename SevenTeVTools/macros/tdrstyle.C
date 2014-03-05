@@ -11,7 +11,7 @@
 // fixOverlay: Redraws the axis
 
 void fixOverlay() {
-  gPad->RedrawAxis();
+  //  gPad->RedrawAxis();
 }
 
 void setTDRStyle() {

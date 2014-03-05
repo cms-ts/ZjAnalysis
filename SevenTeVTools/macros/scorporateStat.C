@@ -35,7 +35,7 @@ scorporateStat(int whichobservable, int whichjet, int lepton)
 {
 
   string fileSystematics; 
-  string suffix="/gpfs/cms/data/2011/Systematics/postApproval/";
+  string suffix="/gpfs/cms/data/2011/Systematics/postApproval_v58/";
   if (lepton==1) suffix=suffix+"ele/";
   if (lepton==2) suffix=suffix+"muo/";
 
@@ -51,12 +51,12 @@ scorporateStat(int whichobservable, int whichjet, int lepton)
   if (lepton == 2) plotpath = "/gpfs/cms/data/2011/Systematics/muo/";
   if (lepton == 3) plotpath = "/gpfs/cms/data/2011/Systematics/combination/";
 
-  string pathFile="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV57_3NewUnfSystNoProtectionNoToy.root";
-  string pathFilea2="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV57_3NewUnfSystNoProtectionYesToy.root";
+  string pathFile="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV57_3NewUnfSystNoProtectionNoToy.roota";
+  string pathFilea2="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV57_3NewUnfSystNoProtectionYesToy.roota";
 
   if (lepton ==2){
-  pathFile="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV57_3NewUnfSystNoProtectionNoToyMu.root";
-  pathFilea2="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV57_3NewUnfSystNoProtectionYesToyMu.root";
+  pathFile="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV57_3NewUnfSystNoProtectionNoToyMu.roota";
+  pathFilea2="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV57_3NewUnfSystNoProtectionYesToyMu.roota";
   }
 
   gStyle->SetOptStat (0);
