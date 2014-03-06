@@ -1384,22 +1384,26 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
         legendPlot32->AddEntry (leadingRatioPlot3, "Statistical unc. (gen)", "F");
         legendPlot32->Draw ("same");
 
-	string title1;
-	title1 = s + "DifferentialX" + stringmatch + ".pdf";
-	if (incMultiplicity) title1 = s + "DifferentialXInc" + stringmatch + ".pdf";
+        TString title1;
+        title1 = s + "DifferentialX" + stringmatch + ".pdf";
+        if (incMultiplicity) title1 = s + "DifferentialXInc" + stringmatch + ".pdf";
         if (etaFolded && use_case == 3 ) title1 = s + "DifferentialX" + stringmatch + "Abs.pdf";
-
-	cout << title1 << endl;
-	  
-	plots->Print (title1.c_str ());
-
-    TString title2 = title1;
-    TString pdf = ".pdf";
-    TString png = ".png";
-    title2.ReplaceAll(pdf,png);
-
-    cout << title2 << endl;
-    plots->Print (title2);
+        
+        TString pdf = ".pdf";
+        TString PDFpdf = "_PDF.pdf";
+        if ( isPDFComparison ) title1.ReplaceAll(pdf,PDFpdf);
+        
+        cout << title1 << endl;
+        
+        plots->Print (title1);
+        
+        TString title2(title1);
+        TString png = ".png";
+        title2.ReplaceAll(pdf,png);
+        
+        cout << title2 << endl;
+        
+        plots->Print (title2);
 
 	if (lepton==1) {
 	  name = name + "_ele";
