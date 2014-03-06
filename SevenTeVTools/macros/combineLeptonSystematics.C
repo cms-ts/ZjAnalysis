@@ -109,9 +109,9 @@ int combineLeptonSystematics::letscombine (int leptonSP) {
     datahisto_muo->Sumw2();
     datahisto_combi->Sumw2();
 
-    datahisto_ele->Scale(1./4890.0);
-    datahisto_muo->Scale(1./4890.0);
-    datahisto_combi->Scale(1./4890.0);
+    //    datahisto_ele->Scale(1./4890.0);
+    //    datahisto_muo->Scale(1./4890.0);
+    //    datahisto_combi->Scale(1./4890.0);
 
     cout << "   -> Writing exclusive systematics..." << endl;
     std::vector<double> jetEleEff = combineLeptonSystematics::systOne(eleEff);
@@ -485,7 +485,6 @@ int combineLeptonSystematics::printLatex (std::vector<double> jetSyst,
 	   << "\\end{center}" << endl
            << "\\end{sidewaystable}" << endl;
 
-
   // TABLE for the paper with breakdown of combined systs:
   textfile << "\\begin{sidewaystable}[htbH]" << endl
 	   << "\\begin{center}" << endl
@@ -566,6 +565,80 @@ int combineLeptonSystematics::printLatex (std::vector<double> jetSyst,
            << "\\end{sidewaystable}" << endl;
   
 
+  // FINAL TABLE for INCLUSIVE MULTIPLICITY:
+  
+  if (variablesName=="jetMult") {
+    column.clear();
+    column = combineLeptonSystematics::getBinColumn(variablesName, true);
+
+    textfile << "\\begin{sidewaystable}[htbH]" << endl
+	     << "\\begin{center}" << endl
+	     << "\\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}" << endl
+	     << "\\hline" << endl 
+	     << "\\multicolumn{2}{|c|}{DATA xsec (pb)} \t&\t \\multicolumn{1}{|c|}{Stat. Unc. (\\%)} \t&\t \\multicolumn{6}{|c|}{Syst. Unc. (\\%)}  \t\\\\" << endl
+	     << "\\hline" << endl; 
+    
+    textfile << "Bins \t&\t Comb. Ele/Mu \t&\t Comb. Ele/Mu \t&\t Eff. \t&\t JEC \t&\t Unf. \t&\t PU \t&\t Bkg. \t&\t Total \t\\\\" << endl
+	     << "\\hline" << endl; 
+    
+    double inclusiveYield=0.0;
+    double inclusiveYieldUnc=0.0;
+    double inclusiveUncEff=0.0;
+    double inclusiveUncJEC=0.0;
+    double inclusiveUncUnf=0.0;
+    double inclusiveUncPU=0.0;
+    double inclusiveUncBkg=0.0;
+    double inclusiveSyst=0.0;
+    
+    for (Int_t i=0; i<jetSyst.size(); i++) {
+
+      inclusiveYield=0.0;
+      inclusiveYieldUnc=0.0;
+      inclusiveUncEff=0.0;
+      inclusiveUncJEC=0.0;
+      inclusiveUncUnf=0.0;
+      inclusiveUncPU=0.0;
+      inclusiveUncBkg=0.0;
+      inclusiveSyst=0.0;
+      for (int ff=i; ff<jetSyst.size(); ff++) {
+	inclusiveYield=inclusiveYield + datahisto_combi->GetBinContent(ff+1);
+	inclusiveYieldUnc=sqrt(inclusiveYieldUnc*inclusiveYieldUnc + datahisto_combi->GetBinContent(ff+1)*jetStat[ff]*datahisto_combi->GetBinContent(ff+1)*jetStat[ff]);
+	inclusiveUncEff = sqrt(inclusiveUncEff*inclusiveUncEff + datahisto_combi->GetBinContent(ff+1)*jetEff[ff]*datahisto_combi->GetBinContent(ff+1)*jetEff[ff]);
+	inclusiveUncJEC = sqrt(inclusiveUncJEC*inclusiveUncJEC + pow(datahisto_combi->GetBinContent(ff+1)*(jetEleJEC[ff]*datahisto_ele->GetBinContent(ff+1) + jetMuoJEC[ff]*datahisto_muo->GetBinContent(ff+1))/(datahisto_ele->GetBinContent(ff+1) + datahisto_muo->GetBinContent(ff+1)),2));
+	inclusiveUncUnf = sqrt(inclusiveUncUnf*inclusiveUncUnf + pow(datahisto_combi->GetBinContent(ff+1)*(jetEleUnf[ff]*datahisto_ele->GetBinContent(ff+1) + jetMuoUnf[ff]*datahisto_muo->GetBinContent(ff+1))/(datahisto_ele->GetBinContent(ff+1) + datahisto_muo->GetBinContent(ff+1)),2));
+	inclusiveUncPU  = sqrt(inclusiveUncPU *inclusiveUncPU  + pow(datahisto_combi->GetBinContent(ff+1)*(jetElePU[ff] *datahisto_ele->GetBinContent(ff+1) + jetMuoPU[ff] *datahisto_muo->GetBinContent(ff+1))/(datahisto_ele->GetBinContent(ff+1) + datahisto_muo->GetBinContent(ff+1)),2));
+	inclusiveUncBkg = sqrt(inclusiveUncBkg*inclusiveUncBkg + pow(datahisto_combi->GetBinContent(ff+1)*(jetEleBkg[ff]*datahisto_ele->GetBinContent(ff+1) + jetMuoBkg[ff]*datahisto_muo->GetBinContent(ff+1))/(datahisto_ele->GetBinContent(ff+1) + datahisto_muo->GetBinContent(ff+1)),2));
+	inclusiveSyst   = sqrt(inclusiveSyst*inclusiveSyst     + datahisto_combi->GetBinContent(ff+1)*jetSyst[ff]*datahisto_combi->GetBinContent(ff+1)*jetSyst[ff]);
+      }
+
+      textfile << column[i] << "\t&\t" ;
+      textfile.unsetf(ios_base::floatfield);
+      textfile.precision(3);
+      textfile << inclusiveYield << "\t&\t" ;
+      textfile.precision(1);
+      textfile << std::fixed <<  inclusiveYieldUnc*100./inclusiveYield  << "\t&\t" ;
+//      textfile << jetEff[i]*100. << "\t&\t";
+//      textfile << (jetEleJEC[i]*datahisto_ele->GetBinContent(i+1) + jetMuoJEC[i]*datahisto_muo->GetBinContent(i+1))/(datahisto_ele->GetBinContent(i+1) + datahisto_muo->GetBinContent(i+1))*100. << "\t&\t";
+//      textfile << (jetEleUnf[i]*datahisto_ele->GetBinContent(i+1) + jetMuoUnf[i]*datahisto_muo->GetBinContent(i+1))/(datahisto_ele->GetBinContent(i+1) + datahisto_muo->GetBinContent(i+1))*100. << "\t&\t";
+//      textfile << (jetElePU[i] *datahisto_ele->GetBinContent(i+1) + jetMuoPU[i] *datahisto_muo->GetBinContent(i+1))/(datahisto_ele->GetBinContent(i+1) + datahisto_muo->GetBinContent(i+1))*100. << "\t&\t";
+//      textfile << (jetEleBkg[i]*datahisto_ele->GetBinContent(i+1) + jetMuoBkg[i]*datahisto_muo->GetBinContent(i+1))/(datahisto_ele->GetBinContent(i+1) + datahisto_muo->GetBinContent(i+1))*100. << "\t&\t";
+//      textfile << jetSyst[i]*100.   << "\t\\\\" << endl;
+      textfile << inclusiveUncEff*100./inclusiveYield << "\t&\t";
+      textfile << inclusiveUncJEC*100./inclusiveYield << "\t&\t";
+      textfile << inclusiveUncUnf*100./inclusiveYield << "\t&\t";
+      textfile << inclusiveUncPU *100./inclusiveYield << "\t&\t";
+      textfile << inclusiveUncBkg*100./inclusiveYield << "\t&\t";
+      textfile << inclusiveSyst  *100./inclusiveYield << "\t\\\\" << endl;
+    }
+
+    textfile << "\\hline" << endl
+	     << "\\end{tabular}" << endl
+	     << "\\caption{" << variablesName << "}" << endl
+	     << "\\label{tab:finalsupersystematicstab}" << endl
+	     << "\\end{center}" << endl
+	     << "\\end{sidewaystable}" << endl;
+  }
+  
 //  // SYSTEMATICS ONLY:
 //  textfile << "\\begin{table}[htbH]" << endl
 //	   << "\\begin{center}" << endl
@@ -692,12 +765,12 @@ std::vector<string> combineLeptonSystematics::getBinColumn(string observable, bo
     outputColumn.push_back("190-210");
     outputColumn.push_back("210-230");
     outputColumn.push_back("230-250");
-    outputColumn.push_back("250-270");
-    outputColumn.push_back("270-290");
-    outputColumn.push_back("290-310");
-    outputColumn.push_back("310-330");
-    outputColumn.push_back("330-350");
-    outputColumn.push_back("350-370");
+    outputColumn.push_back("250-280");
+    outputColumn.push_back("280-310");
+    outputColumn.push_back("310-350");
+    outputColumn.push_back("350-400");
+    outputColumn.push_back("400-500");
+    outputColumn.push_back("500-700");
   }
   if (observable == "jet2Pt"){
     outputColumn.push_back("30-50");
