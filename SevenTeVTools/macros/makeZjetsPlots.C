@@ -1393,6 +1393,14 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
 	  
 	plots->Print (title1.c_str ());
 
+    TString title2 = title1;
+    TString pdf = ".pdf";
+    TString png = ".png";
+    title2.ReplaceAll(pdf,png);
+
+    cout << title2 << endl;
+    plots->Print (title2);
+
 	if (lepton==1) {
 	  name = name + "_ele";
 	  if (incMultiplicity) name = name + "_inclusive_ele";
