@@ -62,14 +62,24 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
   int whichjet = whichjet;
   string version = "_v2_32";
 
-  string s                = "/afs/infn.it/ts/user/marone/html/ZJets/FinalPlotsForAN/v58/FinalPlotsArticle_27022014/Ele/";
-  if (lepton==2) string s = "/afs/infn.it/ts/user/marone/html/ZJets/FinalPlotsForAN/v58/FinalPlotsArticle_27022014/Mu/";
-  if (lepton==3) string s = "/afs/infn.it/ts/user/marone/html/ZJets/FinalPlotsForAN/v58/FinalPlotsArticle_27022014/Combined/";
+  /* string s                = "/afs/infn.it/ts/user/marone/html/ZJets/FinalPlotsForAN/v58/FinalPlotsArticle_27022014/Ele/"; */
+  /* if (lepton==2) string s = "/afs/infn.it/ts/user/marone/html/ZJets/FinalPlotsForAN/v58/FinalPlotsArticle_27022014/Mu/"; */
+  /* if (lepton==3) string s = "/afs/infn.it/ts/user/marone/html/ZJets/FinalPlotsForAN/v58/FinalPlotsArticle_27022014/Combined/"; */
+
+  /* if (isPDFComparison) { */
+  /*   string s                = "/afs/infn.it/ts/user/marone/html/ZJets/FinalPlotsForAN/v58/FinalPlotsArticle_27022014/Ele/PDF/"; */
+  /*   if (lepton==2) string s = "/afs/infn.it/ts/user/marone/html/ZJets/FinalPlotsForAN/v58/FinalPlotsArticle_27022014/Mu/PDF/"; */
+  /*   if (lepton==3) string s = "/afs/infn.it/ts/user/marone/html/ZJets/FinalPlotsForAN/v58/FinalPlotsArticle_27022014/Combined/PDF/"; */
+  /* } */
+
+  string s                = "Ele/";
+  if (lepton==2) string s = "Mu/";
+  if (lepton==3) string s = "Combined/";
 
   if (isPDFComparison) {
-    string s                = "/afs/infn.it/ts/user/marone/html/ZJets/FinalPlotsForAN/v58/FinalPlotsArticle_27022014/Ele/PDF/";
-    if (lepton==2) string s = "/afs/infn.it/ts/user/marone/html/ZJets/FinalPlotsForAN/v58/FinalPlotsArticle_27022014/Mu/PDF/";
-    if (lepton==3) string s = "/afs/infn.it/ts/user/marone/html/ZJets/FinalPlotsForAN/v58/FinalPlotsArticle_27022014/Combined/PDF/";
+    string s                = "Ele/PDF/";
+    if (lepton==2) string s = "Mu/PDF/";
+    if (lepton==3) string s = "Combined/PDF/";
   }
 
   string plotpath           = "/gpfs/cms/users/schizzi/Systematics/ele/";
@@ -80,7 +90,7 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
 
   TCanvas *plots = new TCanvas ("plots", "EB", 200, 100, 600, 800);
 
-  TFile dumphistos_file("/tmp/dump_histos.root","UPDATE");
+  TFile dumphistos_file("data_rivet_histos.root","UPDATE");
 
   //DATA:
   string           pathFile ="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV58_BinWidth.root";
@@ -88,38 +98,72 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
   if (lepton == 3) pathFile ="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV58_BinWidthCombined.root";
 
   //RIVET:
-  string rivetPathPlot1           ="/gpfs/cms/data/2011/Rivet/FinalDatasets/Sherpa/CentralSherpa/out.root";
+  /* string rivetPathPlot1           ="/gpfs/cms/data/2011/Rivet/FinalDatasets/Sherpa/CentralSherpa/out.root"; */
 
-  string rivetPathPlot1UP         ="/gpfs/cms/data/2011/Rivet/FinalDatasets/Sherpa/FRUp/out.root";
-  string rivetPathPlot1DOWN       ="/gpfs/cms/data/2011/Rivet/FinalDatasets/Sherpa/FRDown/out.root";
+  /* string rivetPathPlot1UP         ="/gpfs/cms/data/2011/Rivet/FinalDatasets/Sherpa/FRUp/out.root"; */
+  /* string rivetPathPlot1DOWN       ="/gpfs/cms/data/2011/Rivet/FinalDatasets/Sherpa/FRDown/out.root"; */
 
-  string  rivetPathPlot1QUP        ="/gpfs/cms/data/2011/Rivet/FinalDatasets/Sherpa/QUp/out.root";
-  string  rivetPathPlot1QDOWN      ="/gpfs/cms/data/2011/Rivet/FinalDatasets/Sherpa/QDown/out.root";
-  string  rivetPathPlot1QcutUP     ="/gpfs/cms/data/2011/Rivet/FinalDatasets/Sherpa/QCutUp/out.root";
-  string  rivetPathPlot1QcutDOWN   ="/gpfs/cms/data/2011/Rivet/FinalDatasets/Sherpa/QCutDown/out.root";
+  /* string  rivetPathPlot1QUP        ="/gpfs/cms/data/2011/Rivet/FinalDatasets/Sherpa/QUp/out.root"; */
+  /* string  rivetPathPlot1QDOWN      ="/gpfs/cms/data/2011/Rivet/FinalDatasets/Sherpa/QDown/out.root"; */
+  /* string  rivetPathPlot1QcutUP     ="/gpfs/cms/data/2011/Rivet/FinalDatasets/Sherpa/QCutUp/out.root"; */
+  /* string  rivetPathPlot1QcutDOWN   ="/gpfs/cms/data/2011/Rivet/FinalDatasets/Sherpa/QCutDown/out.root"; */
   
-  string  rivetPathPlot1MSTW       ="/gpfs/cms/data/2011/Rivet/FinalDatasets/Sherpa/MSTW/out.root";
-  string  rivetPathPlot1NNPDF      ="/gpfs/cms/data/2011/Rivet/FinalDatasets/Sherpa/NNPDF/out.root";
+  /* string  rivetPathPlot1MSTW       ="/gpfs/cms/data/2011/Rivet/FinalDatasets/Sherpa/MSTW/out.root"; */
+  /* string  rivetPathPlot1NNPDF      ="/gpfs/cms/data/2011/Rivet/FinalDatasets/Sherpa/NNPDF/out.root"; */
   
-  string rivetPathPlot3         ="/gpfs/cms/data/2011/Rivet/FinalDatasets/Madgraph/CentralMadgraph/DYToLL.root";
-  string rivetPathPlot3UP       ="/gpfs/cms/data/2011/Rivet/FinalDatasets/Madgraph/CentralMadgraph/DYToLL.root";
-  string rivetPathPlot3DOWN     ="/gpfs/cms/data/2011/Rivet/FinalDatasets/Madgraph/CentralMadgraph/DYToLL.root";
+  /* string rivetPathPlot3         ="/gpfs/cms/data/2011/Rivet/FinalDatasets/Madgraph/CentralMadgraph/DYToLL.root"; */
+  /* string rivetPathPlot3UP       ="/gpfs/cms/data/2011/Rivet/FinalDatasets/Madgraph/CentralMadgraph/DYToLL.root"; */
+  /* string rivetPathPlot3DOWN     ="/gpfs/cms/data/2011/Rivet/FinalDatasets/Madgraph/CentralMadgraph/DYToLL.root"; */
 
-  string rivetPathPlot2           ="/gpfs/cms/data/2011/Rivet/FinalDatasets/Powheg/CentralPowheg/scaleorig.root";
-  string rivetPathPlot2UP         ="/gpfs/cms/data/2011/Rivet/FinalDatasets/Powheg/PowhegScaleUp/scaleup.root";
-  string rivetPathPlot2DOWN       ="/gpfs/cms/data/2011/Rivet/FinalDatasets/Powheg/PowhegScaleDown/scaledown.root";  
+  /* string rivetPathPlot2           ="/gpfs/cms/data/2011/Rivet/FinalDatasets/Powheg/CentralPowheg/scaleorig.root"; */
+  /* string rivetPathPlot2UP         ="/gpfs/cms/data/2011/Rivet/FinalDatasets/Powheg/PowhegScaleUp/scaleup.root"; */
+  /* string rivetPathPlot2DOWN       ="/gpfs/cms/data/2011/Rivet/FinalDatasets/Powheg/PowhegScaleDown/scaledown.root";   */
 
-  string rivetPathAlphaStrongUpVersusCT10="/gpfs/cms/data/2011/Rivet/FinalDatasets/Sherpa/AsUp/out.root";
-  string rivetPathAlphaStrongDownVersusCT10="/gpfs/cms/data/2011/Rivet/FinalDatasets/Sherpa/AsDown/out.root";
+  /* string rivetPathAlphaStrongUpVersusCT10="/gpfs/cms/data/2011/Rivet/FinalDatasets/Sherpa/AsUp/out.root"; */
+  /* string rivetPathAlphaStrongDownVersusCT10="/gpfs/cms/data/2011/Rivet/FinalDatasets/Sherpa/AsDown/out.root"; */
 
-  string rivetPathVariationPDF_CT10_down="/gpfs/cms/data/2011/Rivet/FinalDatasets/Sherpa/CT10/CT10DownUp/Observables_CT10_down.root";
-  string rivetPathVariationPDF_CT10_up="/gpfs/cms/data/2011/Rivet/FinalDatasets/Sherpa/CT10/CT10DownUp/Observables_CT10_up.root";
+  /* string rivetPathVariationPDF_CT10_down="/gpfs/cms/data/2011/Rivet/FinalDatasets/Sherpa/CT10/CT10DownUp/Observables_CT10_down.root"; */
+  /* string rivetPathVariationPDF_CT10_up="/gpfs/cms/data/2011/Rivet/FinalDatasets/Sherpa/CT10/CT10DownUp/Observables_CT10_up.root"; */
 
-  string rivetPathVariationPDF_MSTW_down="/gpfs/cms/data/2011/Rivet/FinalDatasets/Sherpa/MSTW/MSTWUpDown/Observables_MSTW2008_down.root";
-  string rivetPathVariationPDF_MSTW_up="/gpfs/cms/data/2011/Rivet/FinalDatasets/Sherpa/MSTW/MSTWUpDown/Observables_MSTW2008_up.root";
+  /* string rivetPathVariationPDF_MSTW_down="/gpfs/cms/data/2011/Rivet/FinalDatasets/Sherpa/MSTW/MSTWDownUp/Observables_MSTW2008_down.root"; */
+  /* string rivetPathVariationPDF_MSTW_up="/gpfs/cms/data/2011/Rivet/FinalDatasets/Sherpa/MSTW/MSTWDownUp/Observables_MSTW2008_up.root"; */
 
-  string rivetPathVariationPDF_NNPDF_down="/gpfs/cms/data/2011/Rivet/FinalDatasets/Sherpa/NNPDF/NNPDFUpDown/Observables_NNPDF21_down.root";
-  string rivetPathVariationPDF_NNPDF_up="/gpfs/cms/data/2011/Rivet/FinalDatasets/Sherpa/NNPDF/NNPDFUpDown/Observables_NNPDF21_up.root";
+  /* string rivetPathVariationPDF_NNPDF_down="/gpfs/cms/data/2011/Rivet/FinalDatasets/Sherpa/NNPDF/NNPDFDownUp/Observables_NNPDF21_down.root"; */
+  /* string rivetPathVariationPDF_NNPDF_up="/gpfs/cms/data/2011/Rivet/FinalDatasets/Sherpa/NNPDF/NNPDFDownUp/Observables_NNPDF21_up.root"; */
+
+
+  string rivetPathPlot1           ="/gpfs/cms/users/cossutti/ZjAnalysis/2011/Rivet/20140306/Sherpa/CentralSherpa/out.root";
+
+  string rivetPathPlot1UP         ="/gpfs/cms/users/cossutti/ZjAnalysis/2011/Rivet/20140306/Sherpa/FRUp/out.root";
+  string rivetPathPlot1DOWN       ="/gpfs/cms/users/cossutti/ZjAnalysis/2011/Rivet/20140306/Sherpa/FRDown/out.root";
+
+  string  rivetPathPlot1QUP        ="/gpfs/cms/users/cossutti/ZjAnalysis/2011/Rivet/20140306/Sherpa/QUp/out.root";
+  string  rivetPathPlot1QDOWN      ="/gpfs/cms/users/cossutti/ZjAnalysis/2011/Rivet/20140306/Sherpa/QDown/out.root";
+  string  rivetPathPlot1QcutUP     ="/gpfs/cms/users/cossutti/ZjAnalysis/2011/Rivet/20140306/Sherpa/QCutUp/out.root";
+  string  rivetPathPlot1QcutDOWN   ="/gpfs/cms/users/cossutti/ZjAnalysis/2011/Rivet/20140306/Sherpa/QCutDown/out.root";
+  
+  string  rivetPathPlot1MSTW       ="/gpfs/cms/users/cossutti/ZjAnalysis/2011/Rivet/20140306/Sherpa/MSTW/out.root";
+  string  rivetPathPlot1NNPDF      ="/gpfs/cms/users/cossutti/ZjAnalysis/2011/Rivet/20140306/Sherpa/NNPDF/out.root";
+  
+  string rivetPathPlot3         ="/gpfs/cms/users/cossutti/ZjAnalysis/2011/Rivet/20140306/Madgraph/CentralMadgraph/DYToLL.root";
+  string rivetPathPlot3UP       ="/gpfs/cms/users/cossutti/ZjAnalysis/2011/Rivet/20140306/Madgraph/CentralMadgraph/DYToLL.root";
+  string rivetPathPlot3DOWN     ="/gpfs/cms/users/cossutti/ZjAnalysis/2011/Rivet/20140306/Madgraph/CentralMadgraph/DYToLL.root";
+
+  string rivetPathPlot2           ="/gpfs/cms/users/cossutti/ZjAnalysis/2011/Rivet/20140306/Powheg/CentralPowheg/scaleorig.root";
+  string rivetPathPlot2UP         ="/gpfs/cms/users/cossutti/ZjAnalysis/2011/Rivet/20140306/Powheg/PowhegScaleUp/scaleup.root";
+  string rivetPathPlot2DOWN       ="/gpfs/cms/users/cossutti/ZjAnalysis/2011/Rivet/20140306/Powheg/PowhegScaleDown/scaledown.root";  
+
+  string rivetPathAlphaStrongUpVersusCT10="/gpfs/cms/users/cossutti/ZjAnalysis/2011/Rivet/20140306/Sherpa/AsUp/out.root";
+  string rivetPathAlphaStrongDownVersusCT10="/gpfs/cms/users/cossutti/ZjAnalysis/2011/Rivet/20140306/Sherpa/AsDown/out.root";
+
+  string rivetPathVariationPDF_CT10_down="/gpfs/cms/users/cossutti/ZjAnalysis/2011/Rivet/20140306/Sherpa/CT10/CT10DownUp/Observables_CT10_down.root";
+  string rivetPathVariationPDF_CT10_up="/gpfs/cms/users/cossutti/ZjAnalysis/2011/Rivet/20140306/Sherpa/CT10/CT10DownUp/Observables_CT10_up.root";
+
+  string rivetPathVariationPDF_MSTW_down="/gpfs/cms/users/cossutti/ZjAnalysis/2011/Rivet/20140306/Sherpa/MSTW/MSTWDownUp/Observables_MSTW2008_down.root";
+  string rivetPathVariationPDF_MSTW_up="/gpfs/cms/users/cossutti/ZjAnalysis/2011/Rivet/20140306/Sherpa/MSTW/MSTWDownUp/Observables_MSTW2008_up.root";
+
+  string rivetPathVariationPDF_NNPDF_down="/gpfs/cms/users/cossutti/ZjAnalysis/2011/Rivet/20140306/Sherpa/NNPDF/NNPDFDownUp/Observables_NNPDF21_down.root";
+  string rivetPathVariationPDF_NNPDF_up="/gpfs/cms/users/cossutti/ZjAnalysis/2011/Rivet/20140306/Sherpa/NNPDF/NNPDFDownUp/Observables_NNPDF21_up.root";
 
     //Switchjing paths when we compare PDFs
   if (isPDFComparison){
@@ -422,7 +466,15 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
 	TGraphAsymmErrors *leadingRivetPlot3UP=returnTGraphFromFile(rivetPathPlot3UP, rivet_data, rivet_data_minus, etaFolded, isPDFComparison, use_case,true);
 	TGraphAsymmErrors *leadingRivetPlot3DOWN=returnTGraphFromFile(rivetPathPlot3DOWN, rivet_data, rivet_data_minus, etaFolded, isPDFComparison, use_case,true);
 
-	
+    std::vector<double> data;
+    std::vector<double> MC;
+    std::vector<double> MCstat;
+    std::vector<double> MCstFR_up;
+    std::vector<double> MCstFRQ_up;
+    std::vector<double> MCstFRQQcut_up;
+    std::vector<double> MCstFR_down;
+    std::vector<double> MCstFRQ_down;
+    std::vector<double> MCstFRQQcut_down;
 
 
 	// ------------------------------------------------------------
@@ -656,7 +708,16 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
 	      cout<<"statistics envelop, high "<<leadingRatioPlot1Stat->GetErrorYhigh(ovo)<<endl;
 	      cout<<"statistics envelop, low "<<leadingRatioPlot1Stat->GetErrorYlow(ovo)<<endl;
 	      cout<<"statistics envelop + FR envelop, high "<<leadingRatioPlot1->GetErrorYhigh(ovo)<<endl;
-	    cout<<"statistics envelop + FR envelop, low "<<leadingRatioPlot1->GetErrorYlow(ovo)<<endl;
+          cout<<"statistics envelop + FR envelop, low "<<leadingRatioPlot1->GetErrorYlow(ovo)<<endl;
+          Double_t dumX,dumY;
+          data.push_back(leadingSystematics->GetBinContent(ovoCorrected+1));
+          //          std::cout << "data " << data[ovo] << std::endl;
+          leadingRivetPlot1->GetPoint(ovo,dumX,dumY);
+          MC.push_back(dumY);
+          //          std::cout << "MC   " << MC[ovo] << std::endl;
+          MCstat.push_back(0.5*(leadingRatioPlot1Stat->GetErrorYhigh(ovo)+leadingRatioPlot1Stat->GetErrorYlow(ovo))*data[ovo]);
+          MCstFR_up.push_back(leadingRatioPlot1->GetErrorYhigh(ovo)*data[ovo]);
+          MCstFR_down.push_back(leadingRatioPlot1->GetErrorYlow(ovo)*data[ovo]);
 	    }
 	  }
 	}
@@ -706,6 +767,8 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
 	      cout<<"statistics envelop + FR envelop, low "<<leadingRatioPlot1->GetErrorYlow(ovo)<<endl;
 	      cout<<"statistics envelop + FR envelop + QUP, high "<<leadingRatioPlot1Q->GetErrorYhigh(ovo)<<endl;
 	      cout<<"statistics envelop + FR envelop + QDOWN, low "<<leadingRatioPlot1Q->GetErrorYlow(ovo)<<endl;
+          MCstFRQ_up.push_back(leadingRatioPlot1Q->GetErrorYhigh(ovo)*data[ovo]);
+          MCstFRQ_down.push_back(leadingRatioPlot1Q->GetErrorYlow(ovo)*data[ovo]);
 	    }
 	  }
 	}
@@ -758,12 +821,39 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
 		  cout<<"statistics envelop + FR envelop + QDOWN, low "<<leadingRatioPlot1Q->GetErrorYlow(ovo)<<endl;
 		  cout<<"statistics envelop + FR envelop + QUP + QcutUP, high "<<leadingRatioPlot1Qcut->GetErrorYhigh(ovo)<<endl;
 		  cout<<"statistics envelop + FR envelop + QDOWN + QcutUP, low "<<leadingRatioPlot1Qcut->GetErrorYlow(ovo)<<endl;
-		  
+          MCstFRQQcut_up.push_back(leadingRatioPlot1Qcut->GetErrorYhigh(ovo)*data[ovo]);
+          MCstFRQQcut_down.push_back(leadingRatioPlot1Qcut->GetErrorYlow(ovo)*data[ovo]);
 		}
 	      }
 	    }
 	  }
 	}
+
+    std::vector<double> tsyst_up;
+    std::vector<double> tsyst_down;
+    if ( isPDFComparison ) {
+      tsyst_up = MCstFRQ_up;
+      tsyst_down = MCstFRQ_down;
+    }
+    else {
+      tsyst_up = MCstFRQQcut_up;
+      tsyst_down = MCstFRQQcut_down;
+    }
+
+    //               123456789012345678901234567890123456789012345678901234567890
+    std::cout << "Bin    Sherpa      stat   syst-up syst-down    tot-up  tot-down" << std::endl;
+    for ( Int_t i = 0; i < MC.size(); i++ ) {
+      std::cout << std::setfill(' ') << std::setw(3) << std::fixed << std::setprecision(0) << i+1
+                << std::setfill(' ') << std::setw(10) << std::fixed << std::setprecision(5) << MC[i]
+                << std::setfill(' ') << std::setw(10) << std::fixed << std::setprecision(5) << MCstat[i]
+                << std::setfill(' ') << std::setw(10) << std::fixed << std::setprecision(5) << std::sqrt(tsyst_up[i]*tsyst_up[i]-MCstat[i]*MCstat[i])
+                << std::setfill(' ') << std::setw(10) << std::fixed << std::setprecision(5) << std::sqrt(tsyst_down[i]*tsyst_down[i]-MCstat[i]*MCstat[i])
+                << std::setfill(' ') << std::setw(10) << std::fixed << std::setprecision(5) << tsyst_up[i]
+                << std::setfill(' ') << std::setw(10) << std::fixed << std::setprecision(5) << tsyst_down[i]
+                << std::endl;
+    }
+
+
 	///////////////	
 	// POWHEG:
 	///////////////
@@ -1404,7 +1494,7 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
         cout << title2 << endl;
         
         plots->Print (title2);
-
+        
 	if (lepton==1) {
 	  name = name + "_ele";
 	  if (incMultiplicity) name = name + "_inclusive_ele";
