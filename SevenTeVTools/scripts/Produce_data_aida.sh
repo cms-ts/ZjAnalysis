@@ -1,0 +1,20 @@
+#!/bin/bash 
+
+root2flat data_rivet_histos.root
+
+touch data_rivet_histos.dat
+
+for HISTO in JetMultiplicityUnfolded_ele.dat JetMultiplicityUnfolded_ele_inclusive_ele.dat jReco_leading_ele.dat jReco_subleading_ele.dat jReco_subsubleading_ele.dat jReco_subsubsubleading_ele.dat jReco_leadingeta_ele.dat jReco_subleadingeta_ele.dat jReco_subsubleadingeta_ele.dat jReco_subsubsubleadingeta_ele.dat HReco_leading_ele.dat HReco_subleading_ele.dat HReco_subsubleading_ele.dat HReco_subsubsubleading_ele.dat JetMultiplicityUnfolded_muo.dat JetMultiplicityUnfolded_muo_inclusive_muo.dat jReco_leading_muo.dat jReco_subleading_muo.dat jReco_subsubleading_muo.dat jReco_subsubsubleading_muo.dat jReco_leadingeta_muo.dat jReco_subleadingeta_muo.dat jReco_subsubleadingeta_muo.dat jReco_subsubsubleadingeta_muo.dat HReco_leading_muo.dat HReco_subleading_muo.dat HReco_subsubleading_muo.dat HReco_subsubsubleading_muo.dat JetMultiplicityUnfolded_combined.dat JetMultiplicityUnfolded_combined_inclusive_combined.dat jReco_leading_combined.dat jReco_subleading_combined.dat jReco_subsubleading_combined.dat jReco_subsubsubleading_combined.dat jReco_leadingeta_combined.dat jReco_subleadingeta_combined.dat jReco_subsubleadingeta_combined.dat jReco_subsubsubleadingeta_combined.dat HReco_leading_combined.dat HReco_subleading_combined.dat HReco_subsubleading_combined.dat HReco_subsubsubleading_combined.dat
+
+do
+
+  cat $HISTO >> data_rivet_histos.dat
+  rm -f $HISTO
+
+done
+
+flat2aida data_rivet_histos.dat
+
+grep AidaPath data_rivet_histos.aida | nl
+
+exit 0
