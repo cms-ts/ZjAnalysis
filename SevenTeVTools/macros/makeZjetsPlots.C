@@ -581,7 +581,7 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
 	leadingSystematics->GetXaxis()->SetTitle ();
 
 	if (use_case ==1) {
-	  if (absoluteNormalization) leadingSystematics->GetYaxis ()->SetTitle ("d#sigma/dN [pb]");
+	  if (absoluteNormalization) leadingSystematics->GetYaxis ()->SetTitle ("#sigma(Z/#gamma*#rightarrow ll + N_{jet}) [pb]");
 	}
 
 	if (use_case ==2) {
@@ -1147,9 +1147,9 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
 
 	TLatex *latexLabel;
 
-	if (lepton ==1) latexLabel = CMSPrel (4.890, "Z/#gamma*#rightarrow ee channel", 0.20, 0.16);
-	if (lepton ==2) latexLabel = CMSPrel (4.890, "Z/#gamma*#rightarrow #mu#mu channel", 0.20, 0.16);
-	if (lepton ==3) latexLabel = CMSPrel (4.890, "Z/#gamma*#rightarrow ll channel", 0.20, 0.16);
+	if (lepton ==1) latexLabel = CMSPrel (4.890, "Z/#gamma*#rightarrow ee selection", 0.20, 0.16);
+	if (lepton ==2) latexLabel = CMSPrel (4.890, "Z/#gamma*#rightarrow #mu#mu selection", 0.20, 0.16);
+	if (lepton ==3) latexLabel = CMSPrel (4.890, "Z/#gamma*#rightarrow ll selection", 0.20, 0.16);
 
 	leadingSystematics->SetMarkerColor(kBlack);
 	leadingSystematics->SetMarkerSize(0.8);
@@ -1382,7 +1382,8 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
 	leadingRatioPlot3->SetTitle("");	  
 
 	if (use_case ==1) {
-	  leadingRatio2Systematics->GetXaxis()->SetTitle ("Exclusive jet multiplicity");
+      //	  leadingRatio2Systematics->GetXaxis()->SetTitle ("Exclusive jet multiplicity");
+	  leadingRatio2Systematics->GetXaxis()->SetTitle ("N_{jet}");
 	  if (incMultiplicity) {
 	    leadingRatio2Systematics->GetXaxis()->SetLabelSize(0.15);
 	    leadingRatio2Systematics->GetXaxis()->SetBinLabel(1,"#geq 1");
@@ -1391,7 +1392,8 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
 	    leadingRatio2Systematics->GetXaxis()->SetBinLabel(4,"#geq 4");
 	    leadingRatio2Systematics->GetXaxis()->SetBinLabel(5,"#geq 5");
 	    leadingRatio2Systematics->GetXaxis()->SetBinLabel(6,"#geq 6");
-	    leadingRatio2Systematics->GetXaxis()->SetTitle ("Inclusive jet multiplicity");
+        //	    leadingRatio2Systematics->GetXaxis()->SetTitle ("Inclusive jet multiplicity");
+	    leadingRatio2Systematics->GetXaxis()->SetTitle ("N_{jet}");
 	  }
 	  leadingRatio2Systematics->GetXaxis()->SetNdivisions(110);
 	  leadingRatio3Systematics->GetXaxis()->SetNdivisions(110);
