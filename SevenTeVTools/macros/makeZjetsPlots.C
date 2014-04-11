@@ -88,7 +88,8 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
 
   gStyle->SetOptStat (0);
 
-  TCanvas *plots = new TCanvas ("plots", "EB", 200, 100, 600, 800);
+  //  TCanvas *plots = new TCanvas ("plots", "EB", 200, 100, 600, 800);
+  TCanvas *plots = new TCanvas ("plots", "EB", 200, 100, 600, 850);
 
   TFile dumphistos_file("data_rivet_histos.root","UPDATE");
 
@@ -553,9 +554,13 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
         if (use_case !=3) pad1->SetLogy(1); 
         else pad1->SetLogy(0);
 
+        if (use_case ==2){
+          if ( whichjet == 1 ) leadingSystematics->SetMinimum(0.1*leadingSystematics->GetMinimum());
+        }
         if (use_case ==3){
           leadingSystematics->SetMinimum((0.5-0.05*(whichjet-1))*leadingSystematics->GetMinimum());
           leadingSystematics->SetMaximum((1.25+0.35*(whichjet-1))*leadingSystematics->GetMaximum());
+          if ( whichjet == 3 || whichjet == 4 ) leadingSystematics->SetMaximum(0.65*leadingSystematics->GetMaximum());
         }
 
         leadingSystematics->SetLineColor (kBlack);
@@ -565,17 +570,17 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
         leadingSystematics->SetFillStyle (3004);
         leadingSystematics->SetMarkerColor (kBlack);
 
-        leadingSystematics->GetXaxis()->SetTitleOffset (1.1);
-        leadingSystematics->GetXaxis()->SetTitleSize (0.05);
-        leadingSystematics->GetXaxis()->SetLabelSize (0.0);
-        leadingSystematics->GetXaxis()->SetLabelFont (42);
-        leadingSystematics->GetXaxis()->SetTitleFont (42);
+        leadingSystematics->GetXaxis()->SetTitleOffset (2.);
+        leadingSystematics->GetXaxis()->SetTitleFont (43);
+        leadingSystematics->GetXaxis()->SetTitleSize (25);
+        leadingSystematics->GetXaxis()->SetLabelFont (43);
+        leadingSystematics->GetXaxis()->SetLabelSize (22);
 
-        leadingSystematics->GetYaxis()->SetTitleOffset (1.);
-        leadingSystematics->GetYaxis()->SetTitleSize (0.07);
-        leadingSystematics->GetYaxis()->SetLabelSize (0.06);
-        leadingSystematics->GetYaxis()->SetLabelFont (42);
-        leadingSystematics->GetYaxis()->SetTitleFont (42);
+        leadingSystematics->GetYaxis()->SetTitleOffset (2.5);
+        leadingSystematics->GetYaxis()->SetTitleFont (43);
+        leadingSystematics->GetYaxis()->SetTitleSize (25);
+        leadingSystematics->GetYaxis()->SetLabelFont (43);
+        leadingSystematics->GetYaxis()->SetLabelSize (22);
 
         leadingSystematics->SetTitle();
         leadingSystematics->GetXaxis()->SetTitle ();
@@ -1159,36 +1164,38 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
         std::cout << "Final journal draft version, no \"Preliminary\"" << std::endl;
         std::cout << "***********************************************" << std::endl;
 
-        if (lepton ==1) latexLabel = CMSFinal (4.890, "Z/#gamma*#rightarrow ee selection", 0.20, 0.16);
-        if (lepton ==2) latexLabel = CMSFinal (4.890, "Z/#gamma*#rightarrow #mu#mu selection", 0.20, 0.16);
-        if (lepton ==3) latexLabel = CMSFinal (4.890, "Z/#gamma*#rightarrow ll selection", 0.20, 0.16);
+        if (lepton ==1) latexLabel = CMSFinal (4.890, "Z/#gamma*#rightarrow ee selection", 0.20, 0.19);
+        if (lepton ==2) latexLabel = CMSFinal (4.890, "Z/#gamma*#rightarrow #mu#mu selection", 0.20, 0.19);
+        if (lepton ==3) latexLabel = CMSFinal (4.890, "Z/#gamma*#rightarrow ll selection", 0.20, 0.19);
 
         leadingSystematics->SetMarkerColor(kBlack);
         leadingSystematics->SetMarkerSize(0.8);
         leading->SetMarkerSize(0.8);
         latexLabel->Draw ("same");
 
+        //        Double_t tsize = mmTsize(0.05);
+
         TLegend *legenddx_d;
         if (!isPDFComparison) {
-          legenddx_d = new TLegend (0.42, 0.75, 1.0, 1.0);	   
+          legenddx_d = new TLegend (0.46, 0.75, 1.0, 1.0);	   
         } else {
-          legenddx_d = new TLegend (0.62, 0.75, 1.0, 1.0);	   
+          legenddx_d = new TLegend (0.5, 0.75, 1.0, 1.0);	   
         }
         legenddx_d->SetFillColor (0);
         legenddx_d->SetFillStyle (1001);
         legenddx_d->SetBorderSize (1);
-        legenddx_d->SetTextFont(42);
-        legenddx_d->SetTextSize(.05);
+        legenddx_d->SetTextFont(43);
+        legenddx_d->SetTextSize(19);
         legenddx_d->AddEntry (leadingSystematics, "Data", "PLEF");
         if (!isPDFComparison){
-          legenddx_d->AddEntry (leadingRivetPlot1Stat, "Sherpa2 (0,1j@NLO #leq4j@LO +PS)", "PLEF");
-          legenddx_d->AddEntry (leadingRivetPlot2Stat, "Powheg+Pythia6 (Z+1j@NLO +PS)", "PLEF");
-          legenddx_d->AddEntry (leadingRivetPlot3, "MadGraph+Pythia6 (#leq4j@LO +PS)", "PLEF");
+          legenddx_d->AddEntry (leadingRivetPlot1Stat, "Sherpa2#beta2 (0,1j NLO #leq4j LO)", "PLEF");
+          legenddx_d->AddEntry (leadingRivetPlot2Stat, "Powheg+Pythia6 (1j NLO)", "PLEF");
+          legenddx_d->AddEntry (leadingRivetPlot3, "MadGraph+Pythia6 (#leq4j LO)", "PLEF");
         }
         else{
-          legenddx_d->AddEntry (leadingRivetPlot1Stat, "Sherpa2 CT10", "PLEF");
-          legenddx_d->AddEntry (leadingRivetPlot2Stat, "Sherpa2 NNPDF", "PLEF");
-          legenddx_d->AddEntry (leadingRivetPlot3, "Sherpa2 MSTW2008", "PLEF");
+          legenddx_d->AddEntry (leadingRivetPlot1Stat, "Sherpa2#beta2 CT10", "PLEF");
+          legenddx_d->AddEntry (leadingRivetPlot2Stat, "Sherpa2#beta2 NNPDF21", "PLEF");
+          legenddx_d->AddEntry (leadingRivetPlot3, "Sherpa2#beta2 MSTW2008nlo", "PLEF");
         }
         legenddx_d->Draw ("same");
 
@@ -1202,19 +1209,15 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
         pad2->SetRightMargin(0.1);
         pad2->SetFillStyle(0);
 
-        leadingRatioSystematics->GetXaxis()->SetLabelFont (42);
-        leadingRatioSystematics->GetXaxis()->SetTitleFont (42);
-        leadingRatioSystematics->GetXaxis()->SetTitleSize(0.14);
-        leadingRatioSystematics->GetXaxis()->SetLabelSize(0.0);
-        leadingRatioSystematics->GetYaxis()->SetTitleSize(0.14);
-        leadingRatioSystematics->GetYaxis()->SetLabelSize(0.14);
-        leadingRatioSystematics->GetYaxis()->SetTitleOffset(0.45);
+        leadingRatioSystematics->GetXaxis()->SetLabelFont (43);
+        leadingRatioSystematics->GetXaxis()->SetTitleFont (43);
+        leadingRatioSystematics->GetXaxis()->SetTitleSize(22);
+        leadingRatioSystematics->GetXaxis()->SetLabelSize(22);
+        leadingRatioSystematics->GetYaxis()->SetTitleSize(22);
+        leadingRatioSystematics->GetYaxis()->SetLabelSize(22);
+        leadingRatioSystematics->GetYaxis()->SetTitleOffset(2.5);
 
-        //        if (!isPDFComparison) {
         leadingRatioSystematics->GetYaxis()->SetTitle("Theory/Data   "); 
-        //	} else {
-        //	  leadingRatioSystematics->GetYaxis()->SetTitle("CT10/Data   ");
-        //	}
 
         leadingRatioSystematics->GetYaxis()->SetNdivisions(505);
         leadingRatioSystematics->GetYaxis()->SetRangeUser(0.2,1.8);
@@ -1258,31 +1261,36 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
         leadingRatio->Draw ("E1SAME");
         leadingRatio->Draw ("E1SAME AXIS");
 
+
         TLatex *latexLabelPlot1 = new TLatex();
-        latexLabelPlot1->SetTextSize(0.11);
-        latexLabelPlot1->SetTextFont(42);
+        latexLabelPlot1->SetTextFont(43);
+        latexLabelPlot1->SetTextSize(18);
         latexLabelPlot1->SetLineWidth(2);
         latexLabelPlot1->SetNDC();
         if (!isPDFComparison) {
-          latexLabelPlot1->DrawLatex(0.19,0.87,"Sherpa2 (0,1j@NLO #leq4j@LO +PS)");
+          latexLabelPlot1->DrawLatex(0.21,0.83,"Sherpa2#beta2");
         } else {
-          latexLabelPlot1->DrawLatex(0.19,0.87,"Sherpa2 CT10");
+          latexLabelPlot1->DrawLatex(0.21,0.83,"Sherpa2#beta2 CT10");
         }
         TLegend *legendPlot1;
-        legendPlot1 = new TLegend (0.19, 0.04, 0.40, 0.16);       
+        legendPlot1 = new TLegend (0.21, 0.04, 0.46, 0.2);       
         legendPlot1->SetFillColor (0);
         legendPlot1->SetFillStyle (0);
         legendPlot1->SetBorderSize (0);
-        if (!isPDFComparison) legendPlot1->AddEntry (leadingRatioPlot1Qcut, "Theory unc. (gen)", "F");
-        else legendPlot1->AddEntry (leadingRatioPlot1Q, "Theory unc. (gen)", "F");
+        legendPlot1->SetTextFont(43);
+        legendPlot1->SetTextSize(18);
+        if (!isPDFComparison) legendPlot1->AddEntry (leadingRatioPlot1Qcut, "Theory syst.", "F");
+        else legendPlot1->AddEntry (leadingRatioPlot1Q, "Theory syst.", "F");
         legendPlot1->Draw ("same");
 
         TLegend *legendPlot12;
-        legendPlot12 = new TLegend (0.40, 0.04, 0.65, 0.16);       
+        legendPlot12 = new TLegend (0.46, 0.04, 0.75, 0.2);       
         legendPlot12->SetFillColor (0);
         legendPlot12->SetFillStyle (0);
         legendPlot12->SetBorderSize (0);
-        legendPlot12->AddEntry (leadingRatioPlot1Stat, "Statistical unc. (gen)", "F");
+        legendPlot12->SetTextFont(43);
+        legendPlot12->SetTextSize(18);
+        legendPlot12->AddEntry (leadingRatioPlot1Stat, "Theory stat.", "F");
         legendPlot12->Draw ("same");
 
 
@@ -1296,12 +1304,13 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
         pad4->SetRightMargin(0.1);
         pad4->SetFillStyle(0);
 
-        leadingRatio3Systematics->GetXaxis()->SetLabelFont (42);
-        leadingRatio3Systematics->GetXaxis()->SetTitleFont (42);
-        leadingRatio3Systematics->GetXaxis()->SetLabelSize(0.0);
-        leadingRatio3Systematics->GetYaxis()->SetTitleSize(0.14);
-        leadingRatio3Systematics->GetYaxis()->SetLabelSize(0.14);
-        leadingRatio3Systematics->GetYaxis()->SetTitleOffset(0.45);
+        leadingRatio3Systematics->GetXaxis()->SetLabelFont (43);
+        leadingRatio3Systematics->GetXaxis()->SetTitleFont (43);
+        leadingRatio3Systematics->GetXaxis()->SetLabelSize(22);
+        leadingRatio3Systematics->GetYaxis()->SetTitleSize(22);
+        leadingRatio3Systematics->GetYaxis()->SetLabelSize(22);
+        leadingRatio3Systematics->GetYaxis()->SetTitleSize(22);
+        leadingRatio3Systematics->GetYaxis()->SetTitleOffset(2.5);
 
         //	if (!isPDFComparison) {
         leadingRatio3Systematics->GetYaxis()->SetTitle("Theory/Data   "); 
@@ -1338,30 +1347,34 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
         leadingRatio3->Draw ("E1SAME AXIS");
 
         TLatex *latexLabelPlot2 = new TLatex();
-        latexLabelPlot2->SetTextSize(0.11);
-        latexLabelPlot2->SetTextFont(42);
+        latexLabelPlot2->SetTextFont(43); 
+        latexLabelPlot2->SetTextSize(18);
         latexLabelPlot2->SetLineWidth(2);
         latexLabelPlot2->SetNDC();
         if (!isPDFComparison) {
-          latexLabelPlot2->DrawLatex(0.19,0.87,"Powheg+Pythia6 (Z+1j@NLO +PS)");
+          latexLabelPlot2->DrawLatex(0.21,0.83,"Powheg+Pythia6");
         } else {
-          latexLabelPlot2->DrawLatex(0.19,0.87,"Sherpa2 NNPDF21");
+          latexLabelPlot2->DrawLatex(0.21,0.83,"Sherpa2#beta2 NNPDF21");
         }
 
         TLegend *legendPlot2;
-        legendPlot2 = new TLegend (0.19, 0.04, 0.40, 0.16);       
+        legendPlot2 = new TLegend (0.21, 0.04, 0.46, 0.2);       
         legendPlot2->SetFillColor (0);
         legendPlot2->SetFillStyle (0);
         legendPlot2->SetBorderSize (0);
-        legendPlot2->AddEntry (leadingRatioPlot22ENV, "Theory unc. (gen)", "F");
+        legendPlot2->SetTextFont(43);
+        legendPlot2->SetTextSize(18);
+        legendPlot2->AddEntry (leadingRatioPlot22ENV, "Theory syst.", "F");
         legendPlot2->Draw ("same");
 
         TLegend *legendPlot22;
-        legendPlot22 = new TLegend (0.40, 0.04, 0.65, 0.16);       
+        legendPlot22 = new TLegend (0.46, 0.04, 0.75, 0.2);       
         legendPlot22->SetFillColor (0);
         legendPlot22->SetFillStyle (0);
         legendPlot22->SetBorderSize (0);
-        legendPlot22->AddEntry (leadingRatioPlot2Stat, "Statistical unc. (gen)", "F");
+        legendPlot22->SetTextFont(43);
+        legendPlot22->SetTextSize(18);
+        legendPlot22->AddEntry (leadingRatioPlot2Stat, "Theory stat.", "F");
         legendPlot22->Draw ("same");
 
 
@@ -1375,20 +1388,18 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
         pad3->SetRightMargin(0.1);
         pad3->SetFillStyle(0);
 
-        leadingRatio2Systematics->GetXaxis()->SetLabelFont (42);
-        leadingRatio2Systematics->GetXaxis()->SetTitleFont (42);
-        leadingRatio2Systematics->GetXaxis()->SetTitleSize(0.11);
-        leadingRatio2Systematics->GetXaxis()->SetLabelSize(0.11);
-        leadingRatio2Systematics->GetXaxis()->SetTitleOffset (1.1);
-        leadingRatio2Systematics->GetYaxis()->SetTitleSize(0.1);
-        leadingRatio2Systematics->GetYaxis()->SetLabelSize(0.10);
-        leadingRatio2Systematics->GetYaxis()->SetTitleOffset(0.63);
+        leadingRatio2Systematics->GetXaxis()->SetTitleFont (43);
+        leadingRatio2Systematics->GetXaxis()->SetLabelFont (43);
+        leadingRatio2Systematics->GetXaxis()->SetTitleSize(24);
+        leadingRatio2Systematics->GetXaxis()->SetLabelSize(22);
+        leadingRatio2Systematics->GetXaxis()->SetTitleOffset(5.);
+        leadingRatio2Systematics->GetYaxis()->SetTitleFont (43);
+        leadingRatio2Systematics->GetYaxis()->SetLabelFont (43);
+        leadingRatio2Systematics->GetYaxis()->SetTitleSize(22);
+        leadingRatio2Systematics->GetYaxis()->SetLabelSize(22);
+        leadingRatio2Systematics->GetYaxis()->SetTitleOffset(2.5);
 
-        //	if (!isPDFComparison) {
         leadingRatio2Systematics->GetYaxis()->SetTitle("Theory/Data   "); 
-        //	} else {
-        //	  leadingRatio2Systematics->GetYaxis()->SetTitle("NNPDF/Data   ");    
-        //	}
 
         leadingRatio2Systematics->GetYaxis()->SetNdivisions(505);
         leadingRatio2Systematics->GetYaxis()->SetRangeUser(0.2,1.8);
@@ -1396,17 +1407,14 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
         leadingRatioPlot3->SetTitle("");	  
 
         if (use_case ==1) {
-          //	  leadingRatio2Systematics->GetXaxis()->SetTitle ("Exclusive jet multiplicity");
           leadingRatio2Systematics->GetXaxis()->SetTitle ("N_{jet}");
           if (incMultiplicity) {
-            leadingRatio2Systematics->GetXaxis()->SetLabelSize(0.15);
             leadingRatio2Systematics->GetXaxis()->SetBinLabel(1,"#geq 1");
             leadingRatio2Systematics->GetXaxis()->SetBinLabel(2,"#geq 2");
             leadingRatio2Systematics->GetXaxis()->SetBinLabel(3,"#geq 3");
             leadingRatio2Systematics->GetXaxis()->SetBinLabel(4,"#geq 4");
             leadingRatio2Systematics->GetXaxis()->SetBinLabel(5,"#geq 5");
             leadingRatio2Systematics->GetXaxis()->SetBinLabel(6,"#geq 6");
-            //	    leadingRatio2Systematics->GetXaxis()->SetTitle ("Inclusive jet multiplicity");
             leadingRatio2Systematics->GetXaxis()->SetTitle ("N_{jet}");
           }
           leadingRatio2Systematics->GetXaxis()->SetNdivisions(110);
@@ -1461,34 +1469,41 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
         leadingRatio2->Draw ("E1SAME AXIS");
 
         TLatex *latexLabelPlot3 = new TLatex();
-        latexLabelPlot3->SetTextSize(0.08);
-        latexLabelPlot3->SetTextFont(42);
+        //        latexLabelPlot3->SetTextSize(0.08);
+        //        latexLabelPlot3->SetTextFont(42);
+        latexLabelPlot3->SetTextFont(43);
+        latexLabelPlot3->SetTextSize(18);
         latexLabelPlot3->SetLineWidth(2);
         latexLabelPlot3->SetNDC();
         if (!isPDFComparison) {
-          latexLabelPlot3->DrawLatex(0.19,0.9,"MadGraph+Pythia6 (#leq4j@LO +PS)");
+          latexLabelPlot3->DrawLatex(0.21,0.88,"MadGraph+Pythia6");
         } else {
-          latexLabelPlot3->DrawLatex(0.19,0.9,"Sherpa2 MSTW2008nlo68cl");
+          latexLabelPlot3->DrawLatex(0.21,0.88,"Sherpa2#beta2 MSTW2008nlo");
         }
 
         TLegend *legendPlot3;
-        legendPlot3 = new TLegend (0.19, 0.33, 0.40, 0.44);       
+        //        legendPlot3 = new TLegend (0.19, 0.33, 0.40, 0.44);       
+        legendPlot3 = new TLegend (0.21, 0.33, 0.49, 0.46);       
         legendPlot3->SetFillColor (0);
         legendPlot3->SetFillStyle (0);
         legendPlot3->SetBorderSize (0);
-        legendPlot3->AddEntry (leadingRatioPlot32ENV, "Theory unc. (gen)", "F");
+        legendPlot3->SetTextFont(43);
+        legendPlot3->SetTextSize(18);
+        legendPlot3->AddEntry (leadingRatioPlot32ENV, "Theory syst.", "F");
         if (isPDFComparison) legendPlot3->Draw ("same");
 
         TLegend *legendPlot32;
         if (isPDFComparison) {
-          legendPlot32 = new TLegend (0.40, 0.33, 0.65, 0.44);       
+          legendPlot32 = new TLegend (0.46, 0.33, 0.77, 0.46);       
         } else {
-          legendPlot32 = new TLegend (0.19, 0.33, 0.44, 0.41);
+          legendPlot32 = new TLegend (0.21, 0.33, 0.49, 0.46);
         }
         legendPlot32->SetFillColor (0);
         legendPlot32->SetFillStyle (0);
         legendPlot32->SetBorderSize (0);
-        legendPlot32->AddEntry (leadingRatioPlot3, "Statistical unc. (gen)", "F");
+        legendPlot32->SetTextFont(43);
+        legendPlot32->SetTextSize(18);
+        legendPlot32->AddEntry (leadingRatioPlot3, "Theory stat.", "F");
         legendPlot32->Draw ("same");
 
         TString title1;

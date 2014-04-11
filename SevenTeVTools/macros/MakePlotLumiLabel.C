@@ -60,7 +60,7 @@ TLatex* CMSFinal(Float_t Lumi,TString _decaychannel,double x, double y){
 
   TLatex *latexLabel = new TLatex();
   latexLabel->SetTextFont(43); 
-  latexLabel->SetTextSize(18);
+  latexLabel->SetTextSize(24);
   latexLabel->SetLineWidth(2);
   latexLabel->SetNDC();
 
@@ -70,11 +70,13 @@ TLatex* CMSFinal(Float_t Lumi,TString _decaychannel,double x, double y){
 
   TLatex *latexLabel2 = new TLatex();
   latexLabel2->SetTextFont(43);
-  latexLabel2->SetTextSize(18);
+  latexLabel2->SetTextSize(19);
   latexLabel2->SetLineWidth(3);
   latexLabel2->SetNDC();
 
-  latexLabel2->DrawLatex(0.16,0.92,"CMS #sqrt{s} = 7 TeV L = 4.9 fb^{-1}");
+  //  latexLabel2->DrawLatex(0.16,0.92,"CMS #sqrt{s} = 7 TeV L = 4.9 fb^{-1}");
+  latexLabel2->DrawLatex(0.16,0.96,"CMS");
+  latexLabel2->DrawLatex(0.16,0.91,"#sqrt{s} = 7 TeV L = 4.9 fb^{-1}");
 
   return latexLabel;
 }
