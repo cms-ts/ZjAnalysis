@@ -560,7 +560,8 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
         if (use_case ==3){
           leadingSystematics->SetMinimum((0.5-0.05*(whichjet-1))*leadingSystematics->GetMinimum());
           leadingSystematics->SetMaximum((1.25+0.35*(whichjet-1))*leadingSystematics->GetMaximum());
-          if ( whichjet == 3 || whichjet == 4 ) leadingSystematics->SetMaximum(0.65*leadingSystematics->GetMaximum());
+          if ( whichjet == 3 ) leadingSystematics->SetMaximum(0.75*leadingSystematics->GetMaximum());
+          if ( whichjet == 4 ) leadingSystematics->SetMaximum(0.65*leadingSystematics->GetMaximum());
         }
 
         leadingSystematics->SetLineColor (kBlack);
