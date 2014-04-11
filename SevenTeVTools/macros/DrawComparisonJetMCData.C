@@ -1,4 +1,4 @@
-#include "tdrStyle.C"
+#include "tdrstyle.C"
 #include "TLatex.h"
 
 #include <TROOT.h>
@@ -35,6 +35,9 @@ bool RunA= true;                // if true, reweing on RunA lumi, if false, on R
 bool lumiPixel = true;           // if true, Lumi estimated using pixel, else with HF
 
 bool isMu=true;
+
+// flag for labels and style: is not preliminary use paper style
+bool isPreliminary=false;
 
 string plotpath;
 string datafile;
@@ -130,7 +133,7 @@ void DrawComparisonJetMCData(void){
 
   fzj = new TFile(bkg.c_str(), "RECREATE");
   
-plotpath		="/tmp/marone/"; //put here the path where you want the plots
+plotpath		="/tmp/cossutti/"; //put here the path where you want the plots
 datafile		="/gpfs/cms/data/2011/jet/jetValidation_DATA_2011"+version;
  mcfile                ="/gpfs/cms/data/2011/jet/jetValidation_zjets_magd_2011Mu_v2_58.root";
 
@@ -173,8 +176,9 @@ WW               ="/gpfs/cms/data/2011/jet/jetValidation_ww_2011"+versionMu;
 
   gROOT->Reset();
   gROOT->ForceStyle();
-  gROOT->LoadMacro("tdrStyle.C++");
-  tdrStyle();
+  gROOT->LoadMacro("tdrstyle.C++");
+  //tdrStyle();
+  setTDRStyle();
 
   // Recupero l'informazione sul numero di eventi processati per singolo MC
   dataNumEvents = numEventsPerStep(datafile, "demo"); 
@@ -228,7 +232,8 @@ WW               ="/gpfs/cms/data/2011/jet/jetValidation_ww_2011"+versionMu;
   while ( (tobj = iter.Next()) ) {    
     gROOT->Reset();
     gROOT->ForceStyle();
-    tdrStyle();
+    //    tdrStyle();
+    setTDRStyle();
     gStyle->SetPadRightMargin(0.15);
 
     string name=tobj->GetName();
@@ -271,7 +276,7 @@ WW               ="/gpfs/cms/data/2011/jet/jetValidation_ww_2011"+versionMu;
 	mc->SetMinimum(1.);
 	mc->Draw();
 	zwemean = mc->GetMean();
-	tmpname=plotpath+name+"-zjets.png";
+	tmpname=plotpath+name+"-zjets.pdf";
 	Canvweight->Print(tmpname.c_str());
       }
 
@@ -292,7 +297,7 @@ WW               ="/gpfs/cms/data/2011/jet/jetValidation_ww_2011"+versionMu;
 	ttbar->GetXaxis()->SetRangeUser(0.,12.);
 	ttbar->Draw();
 	ttwemean = ttbar->GetMean();
-	tmpname=plotpath+name+"-ttbar.png";
+	tmpname=plotpath+name+"-ttbar.pdf";
 	Canvweight->Print(tmpname.c_str());
       }
 
@@ -312,7 +317,7 @@ WW               ="/gpfs/cms/data/2011/jet/jetValidation_ww_2011"+versionMu;
 	w->GetXaxis()->SetRangeUser(0.,12.);
 	w->Draw();
 	wwemean = w->GetMean();
-	tmpname=plotpath+name+"-wjets.png";
+	tmpname=plotpath+name+"-wjets.pdf";
 	Canvweight->Print(tmpname.c_str());
       }
 
@@ -332,7 +337,7 @@ WW               ="/gpfs/cms/data/2011/jet/jetValidation_ww_2011"+versionMu;
 	wz->GetXaxis()->SetRangeUser(0.,12.);
 	wz->Draw();
 	wzwemean = w->GetMean();
-	tmpname=plotpath+name+"-wzjets.png";
+	tmpname=plotpath+name+"-wzjets.pdf";
 	Canvweight->Print(tmpname.c_str());
       }	
 
@@ -352,7 +357,7 @@ WW               ="/gpfs/cms/data/2011/jet/jetValidation_ww_2011"+versionMu;
 	zz->GetXaxis()->SetRangeUser(0.,12.);
 	zz->Draw();
 	zzwemean = w->GetMean();
-	tmpname=plotpath+name+"-zzjets.png";
+	tmpname=plotpath+name+"-zzjets.pdf";
 	Canvweight->Print(tmpname.c_str());
       }
 
@@ -372,7 +377,7 @@ WW               ="/gpfs/cms/data/2011/jet/jetValidation_ww_2011"+versionMu;
 	www->GetXaxis()->SetRangeUser(0.,12.);
 	www->Draw();
 	wwwemean = www->GetMean();
-	tmpname=plotpath+name+"-wwwjets.png";
+	tmpname=plotpath+name+"-wwwjets.pdf";
 	Canvweight->Print(tmpname.c_str());
       }		
     }
@@ -456,6 +461,7 @@ void comparisonJetMCData(string plot,int rebin){
   // Canvas
   if (CanvPlot) delete CanvPlot;
   CanvPlot = new TCanvas("CanvPlot","CanvPlot",0,0,800,600);
+  if ( !isPreliminary ) CanvPlot = new TCanvas("CanvPlot","CanvPlot",0,0,800,800);
 
   // Getting, defining ...
   dataf->cd("validationJEC");
@@ -529,15 +535,29 @@ void comparisonJetMCData(string plot,int rebin){
     data->GetYaxis()->SetLabelSize(0.06);
     data->GetYaxis()->SetTitleSize(0.06);
     data->GetYaxis()->SetTitleOffset(0.8);
+    if ( !isPreliminary ) {
+      data->GetYaxis()->SetLabelSize(0.06);
+      data->GetYaxis()->SetTitleSize(0.06);
+      data->GetYaxis()->SetTitleOffset(1.);
+      data->GetYaxis()->SetNdivisions(4);
+    }
 
     data->Draw("E1");
 
 
     TLegend* legend = new TLegend(0.725,0.27,0.85,0.72);
+    if ( !isPreliminary ) {
+      legend->SetY1(0.22);
+      legend->SetY2(0.67);
+    }
     legend->SetFillColor(0);
     legend->SetFillStyle(0);
     legend->SetBorderSize(0);
-    legend->SetTextSize(0.060);
+    if ( isPreliminary ) {     legend->SetTextSize(0.060); }
+    else {
+      legend->SetTextFont(43);
+      legend->SetTextSize(27);
+    }
     legend->AddEntry(data,"data","p");
 
     // hack to calculate some yields in restricted regions...
@@ -1158,7 +1178,9 @@ void comparisonJetMCData(string plot,int rebin){
     string channel;
     if (isMu) channel="Z/#gamma*#rightarrow#mu#mu";
     if (!isMu) channel="Z/#gamma*#rightarrow ee";
-    TLatex *latexLabel=CMSPrel(4.9,channel,0.55,0.85); // make fancy label
+    TLatex *latexLabel;
+    if (isPreliminary ) latexLabel=CMSPrel(4.9,channel,0.55,0.85); // make fancy label
+    else latexLabel=CMSFinal1(4.9,channel,0.45,0.8); // make fancy label
     latexLabel->Draw("same");
 
     CanvPlot->Update();
@@ -1209,6 +1231,15 @@ void comparisonJetMCData(string plot,int rebin){
     ratio->GetYaxis()->SetTitleSize(0.11);
     ratio->GetYaxis()->SetTitleOffset(0.43);
     ratio->GetYaxis()->SetTitle("ratio data/MC");   
+    if ( !isPreliminary ) {
+      ratio->GetXaxis()->SetTitleSize(0.14);
+      ratio->GetXaxis()->SetLabelSize(0.14);
+      ratio->GetXaxis()->SetTitleOffset(1.);
+      ratio->GetYaxis()->SetLabelSize(0.13);
+      ratio->GetYaxis()->SetTitleSize(0.13);
+      ratio->GetYaxis()->SetTitleOffset(0.43);
+      ratio->GetYaxis()->SetTitle("data/MC");   
+    }
 
     ratio->Draw("E1");
 		
@@ -1254,7 +1285,7 @@ void comparisonJetMCData(string plot,int rebin){
     //r3->Draw();
     CanvPlot->Update();
 
-    tmp=plotpath+plot+".png";
+    tmp=plotpath+plot+".pdf";
     CanvPlot->Print(tmp.c_str());
 
   }
@@ -1276,7 +1307,7 @@ void comparisonJetMCData(string plot,int rebin){
     //r1->Draw();
     CanvPlot->Update();
 
-    tmp=plotpath+plot+"data.png";
+    tmp=plotpath+plot+"data.pdf";
     CanvPlot->Print(tmp.c_str());
 
 
@@ -1302,7 +1333,7 @@ void comparisonJetMCData(string plot,int rebin){
     //r2->Draw();
     CanvPlot->Update();
 
-    tmp=plotpath+plot+"mc.png";
+    tmp=plotpath+plot+"mc.pdf";
     CanvPlot->Print(tmp.c_str());
   }
   //	else { cout << "You're getting an exception! Most likely there's no histogram here... \n"; }
