@@ -1174,6 +1174,18 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
         leading->SetMarkerSize(0.8);
         latexLabel->Draw ("same");
 
+        if ( use_case == 4 ) {
+          TLatex * htLabel = new TLatex();
+          htLabel->SetTextFont(43);
+          htLabel->SetTextSize(22);
+          htLabel->SetLineWidth(3);
+          htLabel->SetNDC();
+          if ( whichjet == 1 ) htLabel->DrawLatex(0.72,0.55,"N_{jet} #geq 1");
+          if ( whichjet == 2 ) htLabel->DrawLatex(0.72,0.55,"N_{jet} #geq 2");
+          if ( whichjet == 3 ) htLabel->DrawLatex(0.72,0.55,"N_{jet} #geq 3");
+          if ( whichjet == 4 ) htLabel->DrawLatex(0.72,0.55,"N_{jet} #geq 4");
+        }
+
         //        Double_t tsize = mmTsize(0.05);
 
         TLegend *legenddx_d;
@@ -1435,13 +1447,15 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
           if (whichjet == 4) leadingRatio2Systematics->GetXaxis ()->SetTitle ("Fourth jet #eta");
         }
         if (use_case ==4) {
-          if (whichjet == 1) leadingRatio2Systematics->GetXaxis ()->SetTitle ("H_{T}, N_{jet} #geq 1 [GeV]");
-          if (whichjet == 2) leadingRatio2Systematics->GetXaxis ()->SetTitle ("H_{T}, N_{jet} #geq 2 [GeV]");
-          if (whichjet == 3) leadingRatio2Systematics->GetXaxis ()->SetTitle ("H_{T}, N_{jet} #geq 3 [GeV]");
-          if (whichjet == 4) leadingRatio2Systematics->GetXaxis ()->SetTitle ("H_{T}, N_{jet} #geq 4 [GeV]");
+          /* if (whichjet == 1) leadingRatio2Systematics->GetXaxis ()->SetTitle ("H_{T}, N_{jet} #geq 1 [GeV]"); */
+          /* if (whichjet == 2) leadingRatio2Systematics->GetXaxis ()->SetTitle ("H_{T}, N_{jet} #geq 2 [GeV]"); */
+          /* if (whichjet == 3) leadingRatio2Systematics->GetXaxis ()->SetTitle ("H_{T}, N_{jet} #geq 3 [GeV]"); */
+          /* if (whichjet == 4) leadingRatio2Systematics->GetXaxis ()->SetTitle ("H_{T}, N_{jet} #geq 4 [GeV]"); */
+          leadingRatio2Systematics->GetXaxis ()->SetTitle ("H_{T} [GeV]");
         }
 
         leadingRatio2Systematics->SetMarkerStyle(1);
+
         leadingRatio2->SetMarkerStyle(1);
         leadingRatio2Systematics->Draw ("E2");
         leadingRatio2->Draw ("E1SAME");
