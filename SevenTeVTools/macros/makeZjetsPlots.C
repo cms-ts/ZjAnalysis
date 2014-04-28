@@ -554,14 +554,22 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
         if (use_case !=3) pad1->SetLogy(1); 
         else pad1->SetLogy(0);
 
+        if (use_case ==1){
+          leadingSystematics->SetMaximum(3.*leadingSystematics->GetMaximum());
+        }
         if (use_case ==2){
           if ( whichjet == 1 ) leadingSystematics->SetMinimum(0.1*leadingSystematics->GetMinimum());
         }
         if (use_case ==3){
           leadingSystematics->SetMinimum((0.5-0.05*(whichjet-1))*leadingSystematics->GetMinimum());
           leadingSystematics->SetMaximum((1.25+0.35*(whichjet-1))*leadingSystematics->GetMaximum());
+          if ( whichjet == 1 ) leadingSystematics->SetMaximum(1.2*leadingSystematics->GetMaximum());
           if ( whichjet == 3 ) leadingSystematics->SetMaximum(0.75*leadingSystematics->GetMaximum());
-          if ( whichjet == 4 ) leadingSystematics->SetMaximum(0.65*leadingSystematics->GetMaximum());
+          if ( whichjet == 4 ) leadingSystematics->SetMaximum(0.75*leadingSystematics->GetMaximum());
+        }
+        if (use_case ==4){
+          if ( whichjet == 3 ) leadingSystematics->SetMaximum(2.5*leadingSystematics->GetMaximum());
+          if ( whichjet == 4 ) leadingSystematics->SetMaximum(2.5*leadingSystematics->GetMaximum());
         }
 
         leadingSystematics->SetLineColor (kBlack);
@@ -749,7 +757,7 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
             leadingRivetPlot1Q->GetPoint(ovo,dummyXvar,dummyYvar); 
             leadingRivetPlot1QUP->GetPoint(ovo,x1temp,y1temp); 
             leadingRivetPlot1QDOWN->GetPoint(ovo,x2temp,y2temp); 
-	    
+
             if (absoluteNormalization) {
               dummyNorm= (1.0);
               if (lepton ==3) {
@@ -1190,15 +1198,19 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
 
         TLegend *legenddx_d;
         if (!isPDFComparison) {
-          legenddx_d = new TLegend (0.46, 0.75, 1.0, 1.0);	   
+          //          legenddx_d = new TLegend (0.46, 0.75, 1.0, 1.0);	   
+          legenddx_d = new TLegend (0.42, 0.65, 0.82, 0.9);	   
         } else {
-          legenddx_d = new TLegend (0.5, 0.75, 1.0, 1.0);	   
+          //          legenddx_d = new TLegend (0.5, 0.75, 1.0, 1.0);	   
+          legenddx_d = new TLegend (0.46, 0.65, 0.86, 0.9);	   
         }
         legenddx_d->SetFillColor (0);
         legenddx_d->SetFillStyle (1001);
         legenddx_d->SetBorderSize (1);
+        legenddx_d->SetBorderSize (0);
         legenddx_d->SetTextFont(43);
         legenddx_d->SetTextSize(19);
+        legenddx_d->SetTextSize(17);
         legenddx_d->AddEntry (leadingSystematics, "Data", "PLEF");
         if (!isPDFComparison){
           legenddx_d->AddEntry (leadingRivetPlot1Stat, "Sherpa2#beta2 (0,1j NLO #leq4j LO)", "PLEF");
@@ -1208,10 +1220,10 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
         else{
           legenddx_d->AddEntry (leadingRivetPlot1Stat, "Sherpa2#beta2 CT10", "PLEF");
           legenddx_d->AddEntry (leadingRivetPlot2Stat, "Sherpa2#beta2 NNPDF21", "PLEF");
-          legenddx_d->AddEntry (leadingRivetPlot3, "Sherpa2#beta2 MSTW2008nlo", "PLEF");
+          legenddx_d->AddEntry (leadingRivetPlot3, "Sherpa2#beta2 MSTW2008", "PLEF");
         }
         legenddx_d->Draw ("same");
-
+        leadingSystematics->Draw("E2SAME AXIS");
 
         plots->cd ();
         TPad *pad2 = new TPad("pad2","pad2",0.01,0.39,0.99,0.55);
@@ -1283,7 +1295,7 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
         if (!isPDFComparison) {
           latexLabelPlot1->DrawLatex(0.21,0.83,"Sherpa2#beta2");
         } else {
-          latexLabelPlot1->DrawLatex(0.21,0.83,"Sherpa2#beta2 CT10");
+          latexLabelPlot1->DrawLatex(0.21,0.83,"CT10");
         }
         TLegend *legendPlot1;
         legendPlot1 = new TLegend (0.21, 0.04, 0.46, 0.2);       
@@ -1367,7 +1379,7 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
         if (!isPDFComparison) {
           latexLabelPlot2->DrawLatex(0.21,0.83,"Powheg+Pythia6");
         } else {
-          latexLabelPlot2->DrawLatex(0.21,0.83,"Sherpa2#beta2 NNPDF21");
+          latexLabelPlot2->DrawLatex(0.21,0.83,"NNPDF21");
         }
 
         TLegend *legendPlot2;
@@ -1493,7 +1505,7 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
         if (!isPDFComparison) {
           latexLabelPlot3->DrawLatex(0.21,0.88,"MadGraph+Pythia6");
         } else {
-          latexLabelPlot3->DrawLatex(0.21,0.88,"Sherpa2#beta2 MSTW2008nlo");
+          latexLabelPlot3->DrawLatex(0.21,0.88,"MSTW2008");
         }
 
         TLegend *legendPlot3;
