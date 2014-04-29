@@ -1283,9 +1283,8 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
         leadingRatioPlot1Stat->Draw("pz");
 
         leadingRatioSystematics->Draw ("E2SAME");
+        leadingRatioSystematics->Draw ("E2SAME AXIS");
         leadingRatio->Draw ("E1SAME");
-        leadingRatio->Draw ("E1SAME AXIS");
-
 
         TLatex *latexLabelPlot1 = new TLatex();
         latexLabelPlot1->SetTextFont(43);
@@ -1368,8 +1367,8 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
         leadingRatioPlot2Stat->Draw("pz");
 
         leadingRatio3Systematics->Draw ("E2SAME");
+        leadingRatio3Systematics->Draw ("E2SAME AXIS");
         leadingRatio3->Draw ("E1SAME");
-        leadingRatio3->Draw ("E1SAME AXIS");
 
         TLatex *latexLabelPlot2 = new TLatex();
         latexLabelPlot2->SetTextFont(43); 
@@ -1492,8 +1491,8 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
 
 
         leadingRatio2Systematics->Draw ("E2SAME");
+        leadingRatio2Systematics->Draw ("E2SAME AXIS");
         leadingRatio2->Draw ("E1SAME");
-        leadingRatio2->Draw ("E1SAME AXIS");
 
         TLatex *latexLabelPlot3 = new TLatex();
         //        latexLabelPlot3->SetTextSize(0.08);
