@@ -559,6 +559,7 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
         }
         if (use_case ==2){
           if ( whichjet == 1 ) leadingSystematics->SetMinimum(0.1*leadingSystematics->GetMinimum());
+          if ( whichjet == 4 ) leadingSystematics->SetMaximum(4.*leadingSystematics->GetMaximum());
         }
         if (use_case ==3){
           leadingSystematics->SetMinimum((0.5-0.05*(whichjet-1))*leadingSystematics->GetMinimum());
@@ -569,7 +570,7 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
         }
         if (use_case ==4){
           if ( whichjet == 3 ) leadingSystematics->SetMaximum(2.5*leadingSystematics->GetMaximum());
-          if ( whichjet == 4 ) leadingSystematics->SetMaximum(2.5*leadingSystematics->GetMaximum());
+          if ( whichjet == 4 ) leadingSystematics->SetMaximum(4.*leadingSystematics->GetMaximum());
         }
 
         leadingSystematics->SetLineColor (kBlack);
@@ -1198,11 +1199,9 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
 
         TLegend *legenddx_d;
         if (!isPDFComparison) {
-          //          legenddx_d = new TLegend (0.46, 0.75, 1.0, 1.0);	   
-          legenddx_d = new TLegend (0.42, 0.65, 0.82, 0.9);	   
+          legenddx_d = new TLegend (0.42, 0.63, 0.82, 0.88);	   
         } else {
-          //          legenddx_d = new TLegend (0.5, 0.75, 1.0, 1.0);	   
-          legenddx_d = new TLegend (0.46, 0.65, 0.86, 0.9);	   
+          legenddx_d = new TLegend (0.46, 0.63, 0.86, 0.88);	   
         }
         legenddx_d->SetFillColor (0);
         legenddx_d->SetFillStyle (1001);
@@ -1303,12 +1302,12 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
         legendPlot1->SetBorderSize (0);
         legendPlot1->SetTextFont(43);
         legendPlot1->SetTextSize(18);
-        if (!isPDFComparison) legendPlot1->AddEntry (leadingRatioPlot1Qcut, "Theory syst.", "F");
-        else legendPlot1->AddEntry (leadingRatioPlot1Q, "Theory syst.", "F");
+        if (!isPDFComparison) legendPlot1->AddEntry (leadingRatioPlot1Qcut, "Theory syst.+stat.", "F");
+        else legendPlot1->AddEntry (leadingRatioPlot1Q, "Theory syst.+stat.", "F");
         legendPlot1->Draw ("same");
 
         TLegend *legendPlot12;
-        legendPlot12 = new TLegend (0.46, 0.04, 0.75, 0.2);       
+        legendPlot12 = new TLegend (0.50, 0.04, 0.79, 0.2);       
         legendPlot12->SetFillColor (0);
         legendPlot12->SetFillStyle (0);
         legendPlot12->SetBorderSize (0);
@@ -1388,11 +1387,11 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
         legendPlot2->SetBorderSize (0);
         legendPlot2->SetTextFont(43);
         legendPlot2->SetTextSize(18);
-        legendPlot2->AddEntry (leadingRatioPlot22ENV, "Theory syst.", "F");
+        legendPlot2->AddEntry (leadingRatioPlot22ENV, "Theory syst.+stat.", "F");
         legendPlot2->Draw ("same");
 
         TLegend *legendPlot22;
-        legendPlot22 = new TLegend (0.46, 0.04, 0.75, 0.2);       
+        legendPlot22 = new TLegend (0.5, 0.04, 0.79, 0.2);       
         legendPlot22->SetFillColor (0);
         legendPlot22->SetFillStyle (0);
         legendPlot22->SetBorderSize (0);
@@ -1508,19 +1507,18 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
         }
 
         TLegend *legendPlot3;
-        //        legendPlot3 = new TLegend (0.19, 0.33, 0.40, 0.44);       
         legendPlot3 = new TLegend (0.21, 0.33, 0.49, 0.46);       
         legendPlot3->SetFillColor (0);
         legendPlot3->SetFillStyle (0);
         legendPlot3->SetBorderSize (0);
         legendPlot3->SetTextFont(43);
         legendPlot3->SetTextSize(18);
-        legendPlot3->AddEntry (leadingRatioPlot32ENV, "Theory syst.", "F");
+        legendPlot3->AddEntry (leadingRatioPlot32ENV, "Theory syst.+stat.", "F");
         if (isPDFComparison) legendPlot3->Draw ("same");
 
         TLegend *legendPlot32;
         if (isPDFComparison) {
-          legendPlot32 = new TLegend (0.46, 0.33, 0.77, 0.46);       
+          legendPlot32 = new TLegend (0.5, 0.33, 0.81, 0.46);       
         } else {
           legendPlot32 = new TLegend (0.21, 0.33, 0.49, 0.46);
         }
