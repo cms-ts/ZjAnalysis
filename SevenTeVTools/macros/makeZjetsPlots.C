@@ -604,7 +604,7 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
         }
 
         if (use_case ==3) {
-          if (absoluteNormalization) leadingSystematics->GetYaxis ()->SetTitle ("d#sigma/d#eta [pb]");
+          if (absoluteNormalization) leadingSystematics->GetYaxis ()->SetTitle ("d#sigma/d|#eta| [pb]");
         }
 	  
         if (use_case ==4) {
@@ -1451,10 +1451,10 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
           if (whichjet == 4) leadingRatio2Systematics->GetXaxis ()->SetTitle ("Fourth jet p_{T} [GeV]");
         }
         if (use_case ==3) {
-          if (whichjet == 1) leadingRatio2Systematics->GetXaxis ()->SetTitle ("Leading jet #eta");
-          if (whichjet == 2) leadingRatio2Systematics->GetXaxis ()->SetTitle ("Second jet #eta");
-          if (whichjet == 3) leadingRatio2Systematics->GetXaxis ()->SetTitle ("Third jet #eta");
-          if (whichjet == 4) leadingRatio2Systematics->GetXaxis ()->SetTitle ("Fourth jet #eta");
+          if (whichjet == 1) leadingRatio2Systematics->GetXaxis ()->SetTitle ("Leading jet |#eta|");
+          if (whichjet == 2) leadingRatio2Systematics->GetXaxis ()->SetTitle ("Second jet |#eta|");
+          if (whichjet == 3) leadingRatio2Systematics->GetXaxis ()->SetTitle ("Third jet |#eta|");
+          if (whichjet == 4) leadingRatio2Systematics->GetXaxis ()->SetTitle ("Fourth jet |#eta|");
         }
         if (use_case ==4) {
           /* if (whichjet == 1) leadingRatio2Systematics->GetXaxis ()->SetTitle ("H_{T}, N_{jet} #geq 1 [GeV]"); */
