@@ -76,7 +76,7 @@ TLatex* CMSFinal(Float_t Lumi,TString _decaychannel,double x, double y){
   //  latexLabel2->SetTextSize(30);
   latexLabel2->SetTextSize(26);
   //  latexLabel2->DrawLatex(0.16,0.92,"CMS");
-  latexLabel2->DrawLatex(0.16,0.92,"CMS #sqrt{s} = 7 TeV , 4.9 fb^{-1}");
+  latexLabel2->DrawLatex(0.16,0.92,"CMS #sqrt{s} = 7 TeV , L = 4.9 fb^{-1}");
 
   //  latexLabel2->SetTextSize(22);
   //  latexLabel2->DrawLatex(0.52,0.65,"#sqrt{s} = 7 TeV , 4.9 fb^{-1}");
