@@ -65,7 +65,7 @@ TLatex* CMSFinal(Float_t Lumi,TString _decaychannel,double x, double y){
   latexLabel->SetNDC();
 
   latexLabel->DrawLatex(x,y,_decaychannel);
-  latexLabel->DrawLatex(x,y-0.07,"anti-k_{T} (R = 0.5) Jets");
+  latexLabel->DrawLatex(x,y-0.07,"anti-k_{T} (R = 0.5) jets");
   latexLabel->DrawLatex(x,y-0.14,"p_{T}^{jet} > 30 GeV, |#eta^{jet}| < 2.4");
 
   TLatex *latexLabel2 = new TLatex();
@@ -76,7 +76,7 @@ TLatex* CMSFinal(Float_t Lumi,TString _decaychannel,double x, double y){
   //  latexLabel2->SetTextSize(30);
   latexLabel2->SetTextSize(26);
   //  latexLabel2->DrawLatex(0.16,0.92,"CMS");
-  latexLabel2->DrawLatex(0.16,0.92,"CMS #sqrt{s} = 7 TeV , 4.9 fb^{-1}");
+  latexLabel2->DrawLatex(0.16,0.92,"CMS #sqrt{s} = 7 TeV , L = 4.9 fb^{-1}");
 
   //  latexLabel2->SetTextSize(22);
   //  latexLabel2->DrawLatex(0.52,0.65,"#sqrt{s} = 7 TeV , 4.9 fb^{-1}");
