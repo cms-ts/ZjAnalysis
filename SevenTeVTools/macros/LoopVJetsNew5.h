@@ -18,6 +18,9 @@ int kmax=1;
 bool spanKvalues=false;
 const double asymmetricRangeLeadingJetPt[18]={30,50,70,90,110,130,150,170,190,210,230,250,280,310,350,400,500,700};
 
+//Defining histograms manually for reweight
+const double asymmetricLeadingJetPtMoreBins[18]={30,50,70,90,110,130,150,170,190,210,230,250,280,310,350,400,500,700};
+
 double jet_Obs_gen=0;double jet_Obs=0;
 double jet_Obs_gen_abs=0;
 
@@ -285,7 +288,7 @@ TH1D* performUnfolding(string whichalgo, int kvalue, TH1D *jData, TH1D *jTrue, R
     else {
       cout<<"(sigma_unf+sigma_toy)/sigma_unf) is "<<sqrt(extraMCLimitedStatErrors[p])/preCorrectionUnf;
     }
-   //cout<<"(sigma_unf+sigma_toy)/sigma_toy) is "<<(sqrt(extraMCLimitedStatErrors[p])/unf->GetBinError(p+1);
+    //cout<<"(sigma_unf+sigma_toy)/sigma_toy) is "<<(sqrt(extraMCLimitedStatErrors[p])/unf->GetBinError(p+1);
   }
   myfile.close();
 
@@ -368,22 +371,27 @@ void UnfoldingVJets2011::LoopVJets (int numbOfJetsSelected,string whichtype, str
   TH2D *jMatxAnneMarie = new TH2D ("jMatxAnneMarie", "Unfolding Matrix jeet Anne Marie",divPlot2,minObsPlot2,maxObsPlot2,divPlot2,minObsPlot2,maxObsPlot2);
   TH2D *jMatxlong = new TH2D ("jMatxlong", "Unfolding Matrix jeet long",divPlot2+1,minObsPlot2-((maxObsPlot2-minObsPlot2)/divPlot2),maxObsPlot2,divPlot2+1,minObsPlot2-((maxObsPlot2-minObsPlot2)/divPlot2),maxObsPlot2);
   TH1D *jMCreco = new TH1D ("jMCreco", "jet mcreco",divPlot2,minObsPlot2,maxObsPlot2);
+  TH1D *jMCrecoForReweight = new TH1D ("jMCrecoForReweight", "jet mcreco for reweight",divPlot2,minObsPlot2,maxObsPlot2);
+  TH1D *jDataForReweight = new TH1D ("jDataForReweight", "jet DATA MeasuredForReweight ",divPlot2,minObsPlot2,maxObsPlot2);
+  TH1D *jWeight = new TH1D ("jWeight", "jeweight ",divPlot2,minObsPlot2,maxObsPlot2);
+  for (int i=0; i<=jWeight->GetXaxis()->GetNbins()+1;i++){jWeight->SetBinContent(i,1);}
 
   if (numbOfJetsSelected==1 && whichtype=="Pt" && unfoldWithAsymmetricBins){
-  jTrue->SetBins(divPlot2-1,asymmetricRangeLeadingJetPt);
-  jTrueMatched->SetBins(divPlot2-1,asymmetricRangeLeadingJetPt);
-  jTruePythia->SetBins(divPlot2-1,asymmetricRangeLeadingJetPt);
-  jData->SetBins(divPlot2-1,asymmetricRangeLeadingJetPt);
-  jReco->SetBins(divPlot2-1,asymmetricRangeLeadingJetPt);
-  jRecoMatched->SetBins(divPlot2-1,asymmetricRangeLeadingJetPt);
-  jRecoAnne->SetBins(divPlot2-1,asymmetricRangeLeadingJetPt);
-  jMatx->SetBins(divPlot2-1,asymmetricRangeLeadingJetPt,divPlot2-1,asymmetricRangeLeadingJetPt);
-  jMatxAnneMarie->SetBins(divPlot2-1,asymmetricRangeLeadingJetPt,divPlot2-1,asymmetricRangeLeadingJetPt);
-  jMatxlong->SetBins(divPlot2-1,asymmetricRangeLeadingJetPt,divPlot2-1,asymmetricRangeLeadingJetPt);
-  jMCreco->SetBins(divPlot2-1,asymmetricRangeLeadingJetPt);
+    jTrue->SetBins(divPlot2-1,asymmetricRangeLeadingJetPt);
+    jTrueMatched->SetBins(divPlot2-1,asymmetricRangeLeadingJetPt);
+    jTruePythia->SetBins(divPlot2-1,asymmetricRangeLeadingJetPt);
+    jData->SetBins(divPlot2-1,asymmetricRangeLeadingJetPt);
+    jReco->SetBins(divPlot2-1,asymmetricRangeLeadingJetPt);
+    jRecoMatched->SetBins(divPlot2-1,asymmetricRangeLeadingJetPt);
+    jRecoAnne->SetBins(divPlot2-1,asymmetricRangeLeadingJetPt);
+    jMatx->SetBins(divPlot2-1,asymmetricRangeLeadingJetPt,divPlot2-1,asymmetricRangeLeadingJetPt);
+    jMatxAnneMarie->SetBins(divPlot2-1,asymmetricRangeLeadingJetPt,divPlot2-1,asymmetricRangeLeadingJetPt);
+    jMatxlong->SetBins(divPlot2-1,asymmetricRangeLeadingJetPt,divPlot2-1,asymmetricRangeLeadingJetPt);
+    jMCreco->SetBins(divPlot2-1,asymmetricRangeLeadingJetPt);
   }
 
-  jData->Sumw2(); jTrue->Sumw2(); jReco->Sumw2(); jMatx->Sumw2(); jMatxlong->Sumw2(); jMCreco->Sumw2(); jTruePythia->Sumw2();
+  jData->Sumw2(); jTrue->Sumw2(); jReco->Sumw2(); jMatx->Sumw2(); jMatxlong->Sumw2(); jMCreco->Sumw2(); jTruePythia->Sumw2(); 
+  jMCrecoForReweight->Sumw2(); jDataForReweight->Sumw2();
 
   //////////////////////////
   //Instanciate trees and CO
@@ -391,7 +399,7 @@ void UnfoldingVJets2011::LoopVJets (int numbOfJetsSelected,string whichtype, str
 
   string sdatadir=sdata+":/validationJEC";
   if (isMu) sdatadir=sdata+":/EPTmuoReco";
-    string smcdir=smc+":/EPTmuoReco_MC";  
+  string smcdir=smc+":/EPTmuoReco_MC";  
   if (isMu) {smcdir=smc+":/EPTmuoReco_MC";}
   
   fA->cd (smcdir.c_str());
@@ -422,7 +430,7 @@ void UnfoldingVJets2011::LoopVJets (int numbOfJetsSelected,string whichtype, str
       fPythia->cd (smcpythia.c_str());
       gDirectory->ls("tree*");
       tree_fA= (TTree *) gDirectory->Get ("treeValidationJEC_");
-    if (isMu) tree_fA= (TTree *) gDirectory->Get ("treeValidationJECMu_");
+      if (isMu) tree_fA= (TTree *) gDirectory->Get ("treeValidationJECMu_");
     }
   }
 
@@ -444,170 +452,11 @@ void UnfoldingVJets2011::LoopVJets (int numbOfJetsSelected,string whichtype, str
   RooUnfoldResponse response_fillfake(jMCreco,jTrue);
   response_fillfake.UseOverflow();           
 
-  /* Loop Montecarlo */
-  fChain = tree_fA;             
-  Init (fChain);
-  
-  int numberOfInversion=0;
-  int numberOfInversionDenominator=0;
-  Long64_t nentries = fChain->GetEntriesFast ();
-
-  Long64_t nbytes = 0, nb = 0;
-  int inTheGap=0; int recoButPtLow=0; int recoButEtaHigh=0; int recoButInvMassOut=0; int recoButNotGenerated=0; int genButNotReco=0; int recostructedEvents=0; int genOutsideTheLimits=0; int notGenNotReco=0; int recoinTheGap=0; int genRecoAfterGenCorr=0; int noGenRecoAfterGenCorr=0; int genNoRecoAfterGenCorr=0;//Simpatici counter 
-  
-  double PUreweightArea=0;
-  int PUreweightEvents=0;
-
-  if (splitCheck) {
-    cout<<"Entries before split check test "<<nentries<<endl;
-    nentries=(int) 50.0*(nentries/100.);
-    cout<<"Splitcheck is active, so Dataset A (MC) has now "<<nentries<<endl;
-  }
-
-  if (fChain == 0) return; if (!doUnfold) nentries=0;
-
-  int aaa=0; int bbb=0; int numbRecoGen=0; int numbRecoNotGen=0; int numbNotRecoGen=0; int numbRecoGenMatched=0; int numbRecoGenNotMatchedMiss=0; int numbRecoGenNotMatchedFake=0;
-
-  for (Long64_t jentry = 0; jentry < nentries; jentry++)
-    {
-      Long64_t ientry = LoadTree (jentry);
-
-      if (ientry < 0) break;
-      nb = fChain->GetEntry (jentry);
-      nbytes += nb;
-      jet_Obs_gen_abs=0;
-      jet_Obs_gen=0;
-      jet_Obs=0;
-
-      //isAnyJetTooCloseToLepton
-
-      if (Jet_multiplicity > 10 || Jet_multiplicity_gen > 10 ) continue;     
-      //In this way, jets with more than 25 GeV are accounted!! --> getNumberOfValidJets to change it offline..
-      //int ValidGenJets=Jet_multiplicity_gen;//getNumberOfValidJets(Jet_multiplicity_gen, 30.0, threshEta, jet1_pt_gen, jet2_pt_gen, jet3_pt_gen, jet4_pt_gen, jet5_pt_gen, jet6_pt_gen, jet1_eta_gen, jet2_eta_gen, jet3_eta_gen, jet4_eta_gen, jet5_eta_gen, jet6_eta_gen);
-
-      int ValidGenJets=getNumberOfValidJets(Jet_multiplicity_gen, 30, 2.4, jet1_pt_gen, jet2_pt_gen, jet3_pt_gen, jet4_pt_gen, jet5_pt_gen, jet6_pt_gen, jet1_eta_gen, jet2_eta_gen, jet3_eta_gen, jet4_eta_gen, jet5_eta_gen, jet6_eta_gen);
-      int ValidRecoJets=Jet_multiplicity;
- 
-      //Extra control on DR lepton-jet arisen during Approval
-      //bool resu=setRecoVariablesFilteringDRLeptons( e1_eta,  e2_eta,  e1_phi,  e2_phi,  jet1_pt,  jet2_pt,  jet3_pt,  jet4_pt,   jet5_pt,   jet6_pt,  jet1_eta,  jet2_eta,  jet3_eta,  jet4_eta,  jet5_eta,  jet6_eta,   jet1_phi,  jet2_phi,  jet3_phi,  jet4_phi,   jet5_phi,  jet6_phi, Jet_multiplicity);
-      
-      // Initialize the Observables
-      setObservablesMC(numbOfJetsSelected, whichtype, jet1_pt_gen, jet2_pt_gen, jet3_pt_gen, jet4_pt_gen,  jet5_pt_gen,  jet6_pt_gen, jet1_eta_gen, jet2_eta_gen, jet3_eta_gen, jet4_eta_gen, jet5_eta_gen, jet6_eta_gen, ValidGenJets, jet1_pt, jet2_pt, jet3_pt, jet4_pt,  jet5_pt,  jet6_pt, jet1_eta, jet2_eta, jet3_eta, jet4_eta, jet5_eta, jet6_eta,ValidRecoJets,jet1_pt_gen_abs, jet2_pt_gen_abs, jet3_pt_gen_abs, jet4_pt_gen_abs,  jet5_pt_gen_abs,  jet6_pt_gen_abs, jet1_eta_gen_abs, jet2_eta_gen_abs, jet3_eta_gen_abs, jet4_eta_gen_abs, jet5_eta_gen_abs, jet6_eta_gen_abs);
-
-      //Eta Case...by default, events missed can be =0, removed by hands
-      if (jet_Obs==0 && whichtype=="Eta") {
-	///et_Obs=-9999;
-      } 
-
-      if (jet_Obs_gen==0 && whichtype=="Eta") {
-	//jet_Obs_gen=-9999;
-      } 
-
-      if (ValidGenJets<numbOfJetsSelected &&  ValidRecoJets<numbOfJetsSelected) continue; //-------------> Occhio all'IDENTITY CHECK con questo
-      aaa++;
-      
-      //PU
-      double PU=1.00;
-      if (!extraTests && !pythiaCheck && !identityCheck) PU=evWeight;
-      PUreweightArea+=PU;
-      PUreweightEvents++;
-      if (unfoldWithSherpa || pythiaCheck) PU=PU*evWeightSherpa;
-      //cout<<evWeightSherpa<<endl;
-
-      // Get Efficiency
-      double effcorrmc=1.00;
-      if (correctForEff) {
-	if (isMu) {
-	  //------------> bool is2011A=false;
-	  if (recoZInAcceptance && numberOfVertices<numbOfVerticesForSeparation) effcorrmc=PU*getSfMuonPOG(false, e1_pt ,e1_eta, e2_pt ,e2_eta);
-	  if (recoZInAcceptance && numberOfVertices>=numbOfVerticesForSeparation) effcorrmc=PU*getSfMuonPOG(true, e1_pt ,e1_eta, e2_pt ,e2_eta);
-	}
-	if (!isMu) {
-	  double SF=getSfEGammaPOG(e1_pt ,e1_eta, e2_pt , e2_eta,false,false)*getScaleFactorPtUsingElectron(fAeff, e1_pt , e1_eta, e2_pt, e2_eta);
-	  if (recoZInAcceptance) effcorrmc=PU*(SF);
-	}
-      }
-      efficiencycorrectionsmc->Fill(effcorrmc);
-
-      //////////////////////////////////
-      // Gen Level Correction
-      //////////////////////////////////
-
-      if (jet_Obs_gen==0 && jet_Obs==0) {  continue;}
-      
-      //std::vector<double> binRanges;
-      //binRanges.push_back(30.0);binRanges.push_back(100.0);binRanges.push_back(300.0);binRanges.push_back(800.0);
-      //int asymmetricbin=returnBinInAsymmetricBinRange(binRanges, jet1_pt);
-	
-
-      if (genZInAcceptance && recoZInAcceptance) {
-	//printObservables( jet1_pt_gen,  jet2_pt_gen,  jet3_pt_gen,  jet4_pt_gen,   jet5_pt_gen,   jet6_pt_gen,  jet1_eta_gen,  jet2_eta_gen,  jet3_eta_gen,  jet4_eta_gen,  jet5_eta_gen,  jet6_eta_gen,  Jet_multiplicity_gen,  jet1_pt,  jet2_pt,  jet3_pt,  jet4_pt,   jet5_pt,   jet6_pt,  jet1_eta,  jet2_eta,  jet3_eta,  jet4_eta,  jet5_eta,  jet6_eta, Jet_multiplicity,  jet_Obs, jet_Obs_gen);
-	//cout<<"Reco and Gen. ";
-	numbRecoGen++;
-	//MCrco e JTrue rimepite sempre
- 	if (verifyAcceptance(whichtype,jet_Obs_gen_abs,jet_Obs_pt_gen_abs,jet_Obs_multi_gen_abs, jet_Obs_eta_gen_abs,numbOfJetsSelected))jTrue->Fill (jet_Obs_gen_abs,PU);
-	if (verifyAcceptance(whichtype,jet_Obs,jet_Obs_pt,jet_Obs_multi, jet_Obs_eta,numbOfJetsSelected)) jMCreco->Fill (jet_Obs,effcorrmc);
-	    
-	//Matching RECO-GEN (Our method)
-	if ( verifyMatching(whichtype, jet_Obs_gen, jet_Obs, jet_Obs_pt_gen, jet_Obs_pt,jet_Obs_eta_gen, jet_Obs_multi, jet_Obs_multi_gen,numbOfJetsSelected) ){
-	  //cout<<" matched ";
-	  if ( verifyAcceptance(whichtype,jet_Obs_gen,jet_Obs_pt_gen,jet_Obs_multi_gen, jet_Obs_eta_gen,numbOfJetsSelected) && (verifyAcceptance(whichtype,jet_Obs,jet_Obs_pt,jet_Obs_multi, jet_Obs_eta_gen,numbOfJetsSelected))){
-	    jMatxlong->Fill (jet_Obs, jet_Obs_gen,effcorrmc); 
-	    jMatx->Fill (jet_Obs, jet_Obs_gen,effcorrmc);
-	    jTrueMatched->Fill (jet_Obs_gen,effcorrmc); 
-	    numbRecoGenMatched++;
-	    //cout<<" whithin acceptances"<<endl;
-	  }
-	}
-	
-	//Matching RECO-GEN (Anne Marie Method)
-	if (extraTests){
-	  if ( verifyMatching(whichtype, jet_Obs_gen, jet_Obs, jet_Obs_pt_gen, jet_Obs_pt,jet_Obs_eta_gen, jet_Obs_multi, jet_Obs_multi_gen,numbOfJetsSelected) ){
-	    
-	    if ( verifyAcceptance(whichtype,jet_Obs_gen_abs,jet_Obs_pt_gen_abs,jet_Obs_multi_gen_abs, jet_Obs_eta_gen_abs,numbOfJetsSelected) &&  verifyAcceptance(whichtype,jet_Obs,jet_Obs_pt,jet_Obs_multi, jet_Obs_eta_gen,numbOfJetsSelected) ){
-	      jMatxAnneMarie->Fill (jet_Obs, jet_Obs_gen_abs,effcorrmc);
-	    }
-	  }
-	}
-	
-	continue;
-      }
-      if (genZInAcceptance && !recoZInAcceptance) {
-	numbNotRecoGen++;
-	if (verifyAcceptance(whichtype,jet_Obs_gen_abs,jet_Obs_pt_gen_abs,jet_Obs_multi_gen_abs, jet_Obs_eta_gen_abs,numbOfJetsSelected)) jTrue->Fill (jet_Obs_gen_abs,PU);
-	continue;
-      }
-      if (!genZInAcceptance && recoZInAcceptance) {
-	if (verifyAcceptance(whichtype,jet_Obs,jet_Obs_pt,jet_Obs_multi, jet_Obs_eta,numbOfJetsSelected)) jMCreco->Fill (jet_Obs,effcorrmc);
-	continue;
-      }
-    } 
- 
-
-  //Rescaling for non unitariety of the PU reweighting...
-  double PUscaleFactor=PUreweightArea/PUreweightEvents;
-  cout<<"PUscaleFactor "<<PUscaleFactor<<endl;
-  jMCreco->Scale(1./PUscaleFactor);
-  jTrue->Scale(1./PUscaleFactor);
-  jTrueMatched->Scale(1./PUscaleFactor);
-  jMatx->Scale(1./PUscaleFactor);
-  jMatxAnneMarie->Scale(1./PUscaleFactor);
-
-  cout<<"aaa is "<<aaa<<" and bbb "<<bbb<<endl;
-  //Numbers for debug.. Output in our code
-  cout<<"Total Number of events inside the rootupla==>"<<nentries<<endl;
-  cout<<"Generated Outside the detector limits=>"<<genOutsideTheLimits<<", of which "<<recoButNotGenerated<<" reconstructed."<<"So,"<<notGenNotReco<<" not reco not gen. Filling gap for ele with "<<inTheGap<<endl;
-  cout<<"<Reconstructed events==>"<<recostructedEvents<<". Reco but gen in the gap=>"<<recoinTheGap<<" gen low pt=>"<<recoButPtLow<<" gen high eta=>"<<recoButEtaHigh<<" gen outInvMass=>"<<recoButInvMassOut<<" recoNotGen=>"<<recoButNotGenerated<<" genNotReco=>"<<genButNotReco<<endl;
-  cout<<"Gen & Reco after GEN Level Correction=>"<<genRecoAfterGenCorr<<"Gen & !Reco=>"<<genNoRecoAfterGenCorr<<"!Gen & Reco=>"<<noGenRecoAfterGenCorr<<endl;
-  cout<<"Inversion ->"<<numberOfInversion<<" out of->"<<numberOfInversionDenominator<<endl;
-  cout<<"numbRecoGen "<<numbRecoGen<<" (matched "<<numbRecoGenMatched<<") numbRecoNotGen "<<numbRecoNotGen<<" numbNotRecoGen "<<numbNotRecoGen<<endl;
-  cout<<"int numbRecoGenNotMatchedMiss "<<numbRecoGenNotMatchedMiss<<" int numbRecoGenNotMatchedFake "<<numbRecoGenNotMatchedFake<<endl;
-
   //////////////////////
   /* Loop Data */
   /////////////////////
 
-
+  Long64_t nbytes = 0, nb = 0;
   int numbOfEventsInData=0;
   fChain = tree_fB;
   Init (fChain);        
@@ -623,7 +472,7 @@ void UnfoldingVJets2011::LoopVJets (int numbOfJetsSelected,string whichtype, str
 
     if (Jet_multiplicity > 10) continue;
 
- //if ((fabs(e1_eta)>1.442 && fabs(e1_eta)<1.566) || (fabs(e2_eta)>1.442 && fabs(e2_eta)<1.566))  continue;
+    //if ((fabs(e1_eta)>1.442 && fabs(e1_eta)<1.566) || (fabs(e2_eta)>1.442 && fabs(e2_eta)<1.566))  continue;
     //if ((fabs(e1_eta)>2.0) || (fabs(e2_eta)>2.0))  continue;
 
     //When you test pythia or identity, this dataset becomes a MC one... So it requires some more gym
@@ -652,17 +501,254 @@ void UnfoldingVJets2011::LoopVJets (int numbOfJetsSelected,string whichtype, str
 
       if (verifyAcceptance(whichtype,jet_Obs,jet_Obs_pt,jet_Obs_multi, jet_Obs_eta,numbOfJetsSelected)) jData->Fill(jet_Obs,evWeightSherpa);
       if (verifyAcceptance(whichtype,jet_Obs_gen_abs,jet_Obs_pt_gen_abs,jet_Obs_multi_gen_abs, jet_Obs_eta_gen_abs,numbOfJetsSelected)) jTruePythia->Fill (jet_Obs_gen_abs,evWeightSherpa);
-     }
+    }
   }
   cout<<"Area PRE-Unfolding "<<jData->Integral()<<endl;
   cout<<"Recorded "<<numbOfEventsInData<<" events as Data"<<endl;
 
-  ////////////////////////
-  /// Background Sub
-  /////////////////////////
+  ///////////////////////////////
+  /* Loop Montecarlo */
+  /////////////////////////////////
 
-  if (correctForBkg) correctForBackground(numbOfJetsSelected,whichtype,jData,true); //bool -> activate verbosity
+  cout<<"Weights(before loop):"<<endl;
+  jWeight->Print("all");
 
+  for (int iter=0; iter<=nMaxiterations; iter++){
+
+    fChain = tree_fA;             
+    Init (fChain);
+  
+    int numberOfInversion=0;
+    int numberOfInversionDenominator=0;
+    Long64_t nentries = fChain->GetEntriesFast ();
+
+    int inTheGap=0; int recoButPtLow=0; int recoButEtaHigh=0; int recoButInvMassOut=0; int recoButNotGenerated=0; int genButNotReco=0; int recostructedEvents=0; int genOutsideTheLimits=0; int notGenNotReco=0; int recoinTheGap=0; int genRecoAfterGenCorr=0; int noGenRecoAfterGenCorr=0; int genNoRecoAfterGenCorr=0;//Simpatici counter 
+  
+    double PUreweightArea=0;
+    int PUreweightEvents=0;
+
+    if (splitCheck) {
+      cout<<"Entries before split check test "<<nentries<<endl;
+      nentries=(int) 50.0*(nentries/100.);
+      cout<<"Splitcheck is active, so Dataset A (MC) has now "<<nentries<<endl;
+    }
+
+    if (fChain == 0) return; if (!doUnfold) nentries=0;
+
+    int aaa=0; int bbb=0; int numbRecoGen=0; int numbRecoNotGen=0; int numbNotRecoGen=0; int numbRecoGenMatched=0; int numbRecoGenNotMatchedMiss=0; int numbRecoGenNotMatchedFake=0;
+
+    for (Long64_t jentry = 0; jentry < nentries; jentry++)
+      {
+	Long64_t ientry = LoadTree (jentry);
+
+	if (ientry < 0) break;
+	nb = fChain->GetEntry (jentry);
+	nbytes += nb;
+	jet_Obs_gen_abs=0;
+	jet_Obs_gen=0;
+	jet_Obs=0;
+
+	//isAnyJetTooCloseToLepton
+
+	if (Jet_multiplicity > 10 || Jet_multiplicity_gen > 10 ) continue;     
+	//In this way, jets with more than 25 GeV are accounted!! --> getNumberOfValidJets to change it offline..
+	//int ValidGenJets=Jet_multiplicity_gen;//getNumberOfValidJets(Jet_multiplicity_gen, 30.0, threshEta, jet1_pt_gen, jet2_pt_gen, jet3_pt_gen, jet4_pt_gen, jet5_pt_gen, jet6_pt_gen, jet1_eta_gen, jet2_eta_gen, jet3_eta_gen, jet4_eta_gen, jet5_eta_gen, jet6_eta_gen);
+
+	int ValidGenJets=getNumberOfValidJets(Jet_multiplicity_gen, 30, 2.4, jet1_pt_gen, jet2_pt_gen, jet3_pt_gen, jet4_pt_gen, jet5_pt_gen, jet6_pt_gen, jet1_eta_gen, jet2_eta_gen, jet3_eta_gen, jet4_eta_gen, jet5_eta_gen, jet6_eta_gen);
+	int ValidRecoJets=Jet_multiplicity;
+ 
+	//Extra control on DR lepton-jet arisen during Approval
+	//bool resu=setRecoVariablesFilteringDRLeptons( e1_eta,  e2_eta,  e1_phi,  e2_phi,  jet1_pt,  jet2_pt,  jet3_pt,  jet4_pt,   jet5_pt,   jet6_pt,  jet1_eta,  jet2_eta,  jet3_eta,  jet4_eta,  jet5_eta,  jet6_eta,   jet1_phi,  jet2_phi,  jet3_phi,  jet4_phi,   jet5_phi,  jet6_phi, Jet_multiplicity);
+      
+	// Initialize the Observables
+	setObservablesMC(numbOfJetsSelected, whichtype, jet1_pt_gen, jet2_pt_gen, jet3_pt_gen, jet4_pt_gen,  jet5_pt_gen,  jet6_pt_gen, jet1_eta_gen, jet2_eta_gen, jet3_eta_gen, jet4_eta_gen, jet5_eta_gen, jet6_eta_gen, ValidGenJets, jet1_pt, jet2_pt, jet3_pt, jet4_pt,  jet5_pt,  jet6_pt, jet1_eta, jet2_eta, jet3_eta, jet4_eta, jet5_eta, jet6_eta,ValidRecoJets,jet1_pt_gen_abs, jet2_pt_gen_abs, jet3_pt_gen_abs, jet4_pt_gen_abs,  jet5_pt_gen_abs,  jet6_pt_gen_abs, jet1_eta_gen_abs, jet2_eta_gen_abs, jet3_eta_gen_abs, jet4_eta_gen_abs, jet5_eta_gen_abs, jet6_eta_gen_abs);
+
+	//Eta Case...by default, events missed can be =0, removed by hands
+	if (jet_Obs==0 && whichtype=="Eta") {
+	  ///et_Obs=-9999;
+	} 
+
+	if (jet_Obs_gen==0 && whichtype=="Eta") {
+	  //jet_Obs_gen=-9999;
+	} 
+
+	if (ValidGenJets<numbOfJetsSelected &&  ValidRecoJets<numbOfJetsSelected) continue; //-------------> Occhio all'IDENTITY CHECK con questo
+	aaa++;
+      
+	//PU
+	double PU=1.00;
+	if (!extraTests && !pythiaCheck && !identityCheck) PU=evWeight;
+	PUreweightArea+=PU;
+	PUreweightEvents++;
+	if (unfoldWithSherpa || pythiaCheck) PU=PU*evWeightSherpa;
+	//cout<<evWeightSherpa<<endl;
+
+	//Rescale for rematching weights
+	double weightsReweightMCreco=1.00;
+	int binNumberForReweight=0;
+	if (!iterativeReweight) binNumberForReweight=jWeight->GetXaxis()->FindBin(jet_Obs);
+	if (iterativeReweight) binNumberForReweight=jWeight->GetXaxis()->FindBin(jet_Obs_gen);
+	weightsReweightMCreco=jWeight->GetBinContent(binNumberForReweight);
+	
+	//double weightsReweightMCreco=jWeight->GetXaxis()->FindBin(jet_Obs_gen); //iterative way... SMP-13-013 Double differential CS
+	PU=PU*weightsReweightMCreco;
+
+	// Get Efficiency
+	double effcorrmc=1.00;
+	if (correctForEff) {
+	  if (isMu) {
+	    //------------> bool is2011A=false;
+	    if (recoZInAcceptance && numberOfVertices<numbOfVerticesForSeparation) effcorrmc=PU*getSfMuonPOG(false, e1_pt ,e1_eta, e2_pt ,e2_eta);
+	    if (recoZInAcceptance && numberOfVertices>=numbOfVerticesForSeparation) effcorrmc=PU*getSfMuonPOG(true, e1_pt ,e1_eta, e2_pt ,e2_eta);
+	  }
+	  if (!isMu) {
+	    double SF=getSfEGammaPOG(e1_pt ,e1_eta, e2_pt , e2_eta,false,false)*getScaleFactorPtUsingElectron(fAeff, e1_pt , e1_eta, e2_pt, e2_eta);
+	    if (recoZInAcceptance) effcorrmc=PU*(SF);
+	  }
+	}
+	efficiencycorrectionsmc->Fill(effcorrmc);
+
+	//////////////////////////////////
+	// Gen Level Correction
+	//////////////////////////////////
+
+	if (jet_Obs_gen==0 && jet_Obs==0) {  continue;}
+      
+	//std::vector<double> binRanges;
+	//binRanges.push_back(30.0);binRanges.push_back(100.0);binRanges.push_back(300.0);binRanges.push_back(800.0);
+	//int asymmetricbin=returnBinInAsymmetricBinRange(binRanges, jet1_pt);
+	
+
+	if (genZInAcceptance && recoZInAcceptance) {
+	  //printObservables( jet1_pt_gen,  jet2_pt_gen,  jet3_pt_gen,  jet4_pt_gen,   jet5_pt_gen,   jet6_pt_gen,  jet1_eta_gen,  jet2_eta_gen,  jet3_eta_gen,  jet4_eta_gen,  jet5_eta_gen,  jet6_eta_gen,  Jet_multiplicity_gen,  jet1_pt,  jet2_pt,  jet3_pt,  jet4_pt,   jet5_pt,   jet6_pt,  jet1_eta,  jet2_eta,  jet3_eta,  jet4_eta,  jet5_eta,  jet6_eta, Jet_multiplicity,  jet_Obs, jet_Obs_gen);
+	  //cout<<"Reco and Gen. ";
+	  numbRecoGen++;
+	  //MCrco e JTrue rimepite sempre
+	  if (verifyAcceptance(whichtype,jet_Obs_gen_abs,jet_Obs_pt_gen_abs,jet_Obs_multi_gen_abs, jet_Obs_eta_gen_abs,numbOfJetsSelected))jTrue->Fill (jet_Obs_gen_abs,PU);
+	  if (verifyAcceptance(whichtype,jet_Obs,jet_Obs_pt,jet_Obs_multi, jet_Obs_eta,numbOfJetsSelected)) jMCreco->Fill (jet_Obs,effcorrmc);
+	    
+	  //Matching RECO-GEN (Our method)
+	  if ( verifyMatching(whichtype, jet_Obs_gen, jet_Obs, jet_Obs_pt_gen, jet_Obs_pt,jet_Obs_eta_gen, jet_Obs_multi, jet_Obs_multi_gen,numbOfJetsSelected) ){
+	    //cout<<" matched ";
+	    if ( verifyAcceptance(whichtype,jet_Obs_gen,jet_Obs_pt_gen,jet_Obs_multi_gen, jet_Obs_eta_gen,numbOfJetsSelected) && (verifyAcceptance(whichtype,jet_Obs,jet_Obs_pt,jet_Obs_multi, jet_Obs_eta_gen,numbOfJetsSelected))){
+	      jMatxlong->Fill (jet_Obs, jet_Obs_gen,effcorrmc); 
+	      jMatx->Fill (jet_Obs, jet_Obs_gen,effcorrmc);
+	      jTrueMatched->Fill (jet_Obs_gen,effcorrmc); 
+	      numbRecoGenMatched++;
+	      //cout<<" whithin acceptances"<<endl;
+	    }
+	  }
+	
+	  //Matching RECO-GEN (Anne Marie Method)
+	  if (extraTests){
+	    if ( verifyMatching(whichtype, jet_Obs_gen, jet_Obs, jet_Obs_pt_gen, jet_Obs_pt,jet_Obs_eta_gen, jet_Obs_multi, jet_Obs_multi_gen,numbOfJetsSelected) ){
+	    
+	      if ( verifyAcceptance(whichtype,jet_Obs_gen_abs,jet_Obs_pt_gen_abs,jet_Obs_multi_gen_abs, jet_Obs_eta_gen_abs,numbOfJetsSelected) &&  verifyAcceptance(whichtype,jet_Obs,jet_Obs_pt,jet_Obs_multi, jet_Obs_eta_gen,numbOfJetsSelected) ){
+		jMatxAnneMarie->Fill (jet_Obs, jet_Obs_gen_abs,effcorrmc);
+	      }
+	    }
+	  }
+	
+	  continue;
+	}
+	if (genZInAcceptance && !recoZInAcceptance) {
+	  numbNotRecoGen++;
+	  if (verifyAcceptance(whichtype,jet_Obs_gen_abs,jet_Obs_pt_gen_abs,jet_Obs_multi_gen_abs, jet_Obs_eta_gen_abs,numbOfJetsSelected)) jTrue->Fill (jet_Obs_gen_abs,PU);
+	  continue;
+	}
+	if (!genZInAcceptance && recoZInAcceptance) {
+	  if (verifyAcceptance(whichtype,jet_Obs,jet_Obs_pt,jet_Obs_multi, jet_Obs_eta,numbOfJetsSelected)) jMCreco->Fill (jet_Obs,effcorrmc);
+	  continue;
+	}
+      } 
+ 
+    //Rescaling for non unitariety of the PU reweighting...
+    double PUscaleFactor=PUreweightArea/PUreweightEvents;
+    cout<<"PUscaleFactor "<<PUscaleFactor<<endl;
+    jMCreco->Scale(1./PUscaleFactor);
+    jTrue->Scale(1./PUscaleFactor);
+    jTrueMatched->Scale(1./PUscaleFactor);
+    jMatx->Scale(1./PUscaleFactor);
+    jMatxAnneMarie->Scale(1./PUscaleFactor);
+
+    cout<<"aaa is "<<aaa<<" and bbb "<<bbb<<endl;
+    //Numbers for debug.. Output in our code
+    cout<<"Total Number of events inside the rootupla==>"<<nentries<<endl;
+    cout<<"Generated Outside the detector limits=>"<<genOutsideTheLimits<<", of which "<<recoButNotGenerated<<" reconstructed."<<"So,"<<notGenNotReco<<" not reco not gen. Filling gap for ele with "<<inTheGap<<endl;
+    cout<<"<Reconstructed events==>"<<recostructedEvents<<". Reco but gen in the gap=>"<<recoinTheGap<<" gen low pt=>"<<recoButPtLow<<" gen high eta=>"<<recoButEtaHigh<<" gen outInvMass=>"<<recoButInvMassOut<<" recoNotGen=>"<<recoButNotGenerated<<" genNotReco=>"<<genButNotReco<<endl;
+    cout<<"Gen & Reco after GEN Level Correction=>"<<genRecoAfterGenCorr<<"Gen & !Reco=>"<<genNoRecoAfterGenCorr<<"!Gen & Reco=>"<<noGenRecoAfterGenCorr<<endl;
+    cout<<"Inversion ->"<<numberOfInversion<<" out of->"<<numberOfInversionDenominator<<endl;
+    cout<<"numbRecoGen "<<numbRecoGen<<" (matched "<<numbRecoGenMatched<<") numbRecoNotGen "<<numbRecoNotGen<<" numbNotRecoGen "<<numbNotRecoGen<<endl;
+    cout<<"int numbRecoGenNotMatchedMiss "<<numbRecoGenNotMatchedMiss<<" int numbRecoGenNotMatchedFake "<<numbRecoGenNotMatchedFake<<endl;
+
+
+    ////////////////////////
+    /// Background Sub
+    //////+///////////////////
+
+    if (correctForBkg && iter==0) correctForBackground(numbOfJetsSelected,whichtype,jData,true); //bool -> activate verbosity
+
+    //////////////////////
+    //  reweight spectrum
+    //////////////////////
+
+    cout<<"============================+++++++++++++========================"<<endl;
+    cout<<"iteration number "<<iter<<endl;
+    jMCreco->Print("all");
+    cout<<"MC reco Integral "<<jMCreco->Integral(1,jMCreco->GetXaxis()->GetNbins())<<endl;
+    jTrue->Print("all");
+    cout<<"MC truth Integral "<<jTrue->Integral(1,jTrue->GetXaxis()->GetNbins())<<endl;
+    cout<<"============================+++++++++++++========================"<<endl;
+
+    jDataForReweight=(TH1D*) jData->Clone("jData");
+    jDataForReweight->SetName("jDataForReweight");
+
+    jMCrecoForReweight=(TH1D*) jMCreco->Clone("jMCreco");
+    jMCrecoForReweight->SetName("jMCrecoForReweight");
+
+    //rapporto DATA/MCRECO
+    double weightArea=0.0;
+    jDataForReweight->Scale(1./jData->Integral(1,jDataForReweight->GetXaxis()->GetNbins()));
+    jMCrecoForReweight->Scale(1./jMCreco->Integral(1,jMCrecoForReweight->GetXaxis()->GetNbins()));
+    jDataForReweight->Divide(jMCrecoForReweight);
+    jWeight=(TH1D*) jDataForReweight->Clone("jDataForReweight");
+    jWeight->SetBinContent(0,1);
+    jWeight->SetBinContent(jDataForReweight->GetXaxis()->GetNbins()+1,1);
+    cout<<"Weights:"<<endl;
+    jWeight->Print("all");
+    //loop over weights
+    //for (int w=1; w<=jDataForReweight->GetXaxis()->GetNbins();w++){
+    //weightArea+=jDataForReweight->GetBinContent(w);
+    //}
+    //    cout<<"Weight Area "<<weightArea<<endl;
+    // Aree normalizz Weights
+    // Azzero e ririempio gli istogrammi
+    //jDataForReweight->Print("all");
+    TH1D *jMCrecoCloneN2=(TH1D*) jMCreco->Clone("jMCreco");
+    jMCrecoCloneN2->SetName("jMCrecoCloneN2");
+    //jMCrecoCloneN2->Multiply(jDataForReweight);
+    //cout<<"area MCreco dopo di moltiplicare"<<jMCrecoCloneN2->Integral(1,jMCreco->GetXaxis()->GetNbins())<<endl;
+    jMCrecoCloneN2->Divide(jData);
+    jMCrecoCloneN2->Print("all");
+
+    if (iter<nMaxiterations){
+      //Reset the histograms and repeat!
+      jTrue->Reset(); 
+      jTrueMatched->Reset(); 
+      jTruePythia->Reset(); 
+      jReco ->Reset(); 
+      jRecoMatched ->Reset(); 
+      jRecoAnne ->Reset(); 
+      jMatx ->Reset(); 
+      jMatxAnneMarie->Reset(); 
+      jMatxlong ->Reset(); 
+      jMCreco->Reset(); 
+      PUreweightArea=0.0;
+      PUreweightEvents=0;
+      jDataForReweight->Reset();
+      jMCrecoForReweight->Reset();
+    }
+  }
   //////////////////////////////
   ///
   ///     Unfolding Core
@@ -721,19 +807,19 @@ void UnfoldingVJets2011::LoopVJets (int numbOfJetsSelected,string whichtype, str
   
   for (int k=kmin; k< kmax; k++){
     int myNumber=k; num<<myNumber;
-      string title="Data unfolding "+method+" method with K="+num.str();
-      std::string title2="Jet pT diff xsec distribution. "+title;
-      if (doUnfold) {
-	if (identityCheck) jReco=performUnfolding(whichalgo, k, jData, jTrue,response_j, jMCreco,jMatx, numbOfJetsSelected, whichtype);
-	if (extraTests) jRecoMatched=performUnfolding(whichalgo, k, jData, jTrueMatched,response_jMatched, jMCreco,jMatx, numbOfJetsSelected, whichtype);
-	if (extraTests) jRecoAnne=performUnfolding(whichalgo, k, jData, jTrue,response_jMethod3, jMCreco,jMatx, numbOfJetsSelected, whichtype);
-	if (!identityCheck) jReco=performUnfolding(whichalgo, k, jData, jTrue,response_j, jMCreco,jMatx, numbOfJetsSelected, whichtype);
-      }
-      else{
+    string title="Data unfolding "+method+" method with K="+num.str();
+    std::string title2="Jet pT diff xsec distribution. "+title;
+    if (doUnfold) {
+      if (identityCheck) jReco=performUnfolding(whichalgo, k, jData, jTrue,response_j, jMCreco,jMatx, numbOfJetsSelected, whichtype);
+      if (extraTests) jRecoMatched=performUnfolding(whichalgo, k, jData, jTrueMatched,response_jMatched, jMCreco,jMatx, numbOfJetsSelected, whichtype);
+      if (extraTests) jRecoAnne=performUnfolding(whichalgo, k, jData, jTrue,response_jMethod3, jMCreco,jMatx, numbOfJetsSelected, whichtype);
+      if (!identityCheck) jReco=performUnfolding(whichalgo, k, jData, jTrue,response_j, jMCreco,jMatx, numbOfJetsSelected, whichtype);
+    }
+    else{
       jReco=(TH1D*) jData->Clone("jData");
       jReco->SetName("jReco");
-      }
-      num.str("");
+    }
+    num.str("");
   } 
 
   TH1D *jReco2=(TH1D*) jDataSwap->Clone("jDataSwap"); 
@@ -787,8 +873,8 @@ void UnfoldingVJets2011::LoopVJets (int numbOfJetsSelected,string whichtype, str
   cout<<"Your unfolding has an integral value of "<<unfarea<<endl;
   cout<<(jReco->GetBinContent(1)+jReco->GetBinContent(2)+jReco->GetBinContent(3)+jReco->GetBinContent(4)+jReco->GetBinContent(5)+jReco->GetBinContent(6))/4890.0<<endl;
   cout<<(jReco->GetBinContent(2)+jReco->GetBinContent(3)+jReco->GetBinContent(4)+jReco->GetBinContent(5)+jReco->GetBinContent(6))/4890.<<endl;
-cout<<(jReco->GetBinContent(3)+jReco->GetBinContent(4)+jReco->GetBinContent(5)+jReco->GetBinContent(6))/4890.0<<endl;
-cout<<(jReco->GetBinContent(4)+jReco->GetBinContent(5)+jReco->GetBinContent(6))/4890.0<<endl;
+  cout<<(jReco->GetBinContent(3)+jReco->GetBinContent(4)+jReco->GetBinContent(5)+jReco->GetBinContent(6))/4890.0<<endl;
+  cout<<(jReco->GetBinContent(4)+jReco->GetBinContent(5)+jReco->GetBinContent(6))/4890.0<<endl;
 
   cout<<"Manual area counting"<<endl;
   double areaFinale=0;

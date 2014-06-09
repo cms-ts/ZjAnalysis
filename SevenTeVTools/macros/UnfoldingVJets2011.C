@@ -60,19 +60,27 @@ bool unfoldWithAsymmetricBins=true;
 string smc="/gpfs/cms/data/2011/jet/jetValidation_zjets_magd_2011Mu_v2_58.root"; //V45 was the default one
 string sdata="/gpfs/cms/data/2011/jet/jetValidation_DATA_2011"+version;
 //string smcpythia="/gpfs/cms/data/2011/jet/jetValidation_zjets_sherpa_2011_v2_32.root";
-string smcpythia="/gpfs/cms/data/2011/jet/jetValidation_zjets_sherpa_2011Mu_v2_58.root";
-
-bool unfoldWithSherpa=true;
+//string smcpythia="/gpfs/cms/data/2011/jet/jetValidation_zjets_sherpa_2011Mu_v2_58.root";
+string smcpythia="/scratch/cms/users/marone/Sherpav58temp/jetValidation_zjets_sherpa_2011Mu_v2_58.root";
+bool unfoldWithSherpa=false;
 
 //Normalizations...
 // The choice of the K value can affect the normalization. The following list of XS supersede the one in data
-bool activateXSSuperseding=true;
-double XSMuon[4]={61.349,12.834,2.476,0.462};                    //<============= V57
-double XSElectron[4]={61.289,12.871,2.515,0.485};        //<============= V57
+bool activateXSSuperseding=false;
+
+double XSMuon[4]={61.435,12.8521,2.47787,0.462911};                    //<============= V58 post CWR
+double XSElectron[4]={61.4212,12.8897,2.51636,0.486612};        //<============= V58 post CWR
+
+//double XSMuon[4]={61.349,12.834,2.476,0.462};                    //<============= V58 pre CWR
+//double XSElectron[4]={61.289,12.871,2.515,0.485};        //<============= V58 pre CWR
 
 //For gen Jet
 double threshPt=30;
 double threshEta=2.4;
+
+bool iterativeReweight=false; //choose the method to reweith the spectra 0-> with reco pt 1-> gen pt
+int nMaxiterations=0; //for the unfolduing... rematching MCreco over data
+
 
 TFile *fA;
 TFile *fB;
@@ -92,7 +100,7 @@ bool extraTests=false; //to perform several cross checks
 bool saveFile=true; //saveFile True, it will save the rootfile. Switch it, when you are sure!
 string direct="/gpfs/cms/data/2011/Unfolding/";
 //string filename="/tmp/pippo";
-string filename=direct+"UnfoldingOfficialV58_Sherpa";
+string filename=direct+"UnfoldingOfficialV58_finalCWRJECUP";
 
 // Efficiency corrections
 bool correctForEff=true; // If true, it will take the correction factor from outside
@@ -111,7 +119,7 @@ bool correctForBkg=true;
 int smearingJERSyst=0; //==>0 Apply JER, ==>1 JER UP, ==> -1 JER Down, ==>-9999 deactivate JER smearing
 
 // Scaling JEC
-int scalingJEC=0; //==>0 Apply JER, ==>1 JER UP, ==> -1 JER Down
+int scalingJEC=1; //==>0 Apply JER, ==>1 JER UP, ==> -1 JER Down
 
 //Activate PU systematics  Uncertainties evaluation
 
@@ -207,7 +215,7 @@ void UnfoldingVJets2011::Loop()
   setTDRStyle();
 
   int numbOfJetsForLoop=1;
-  string whichtype="Pt";
+  string whichtype="Multiplicity";
   string whichalgo="SVD";
   LoopVJets(numbOfJetsForLoop,whichtype, whichalgo);
 
