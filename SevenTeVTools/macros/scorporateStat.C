@@ -35,7 +35,7 @@ scorporateStat(int whichobservable, int whichjet, int lepton)
 {
 
   string fileSystematics; 
-  string suffix="/gpfs/cms/data/2011/Systematics/postApproval_v58/";
+  string suffix="/gpfs/cms/data/2011/Systematics/postApproval_v58_3/";
   if (lepton==1) suffix=suffix+"ele/";
   if (lepton==2) suffix=suffix+"muo/";
 
@@ -46,17 +46,25 @@ scorporateStat(int whichobservable, int whichjet, int lepton)
   string version = "_v2_32";
   //string s = "/home/schizzi/CMSSW_4_4_2/src/Histo/HistoAnalyzer/macros/plotArticleEle" + version + "/";
   string s = "/tmp/";
-  string plotpath = "/gpfs/cms/data/2011/Systematics/postApproval/";
-  if (lepton == 1) plotpath = "/gpfs/cms/data/2011/Systematics/ele/";
-  if (lepton == 2) plotpath = "/gpfs/cms/data/2011/Systematics/muo/";
-  if (lepton == 3) plotpath = "/gpfs/cms/data/2011/Systematics/combination/";
+  string plotpath = "/gpfs/cms/data/2011/Systematics/postApproval_v58_3/";
 
-  string pathFile="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV57_3NewUnfSystNoProtectionNoToy.roota";
-  string pathFilea2="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV57_3NewUnfSystNoProtectionYesToy.roota";
+  //pLOTPATH IS WHERE THE MCToy is...
+  //if (lepton == 1) plotpath = "/gpfs/cms/data/2011/Systematics/ele/";
+  //if (lepton == 2) plotpath = "/gpfs/cms/data/2011/Systematics/muo/";
+  //if (lepton == 3) plotpath = "/gpfs/cms/data/2011/Systematics/combination/";
+
+  if (lepton == 1) plotpath = "/gpfs/cms/data/2011/Systematics/postApproval_v58_3/ele/";
+  if (lepton == 2) plotpath = "/gpfs/cms/data/2011/Systematics/postApproval_v58_3/muo/";
+  if (lepton == 3) plotpath = "/gpfs/cms/data/2011/Systematics/postApproval_v58_3/combination/";
+                               
+  cout<<plotpath<<endl;
+
+  string pathFile="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV57_3NewUnfSystNoProtectionNoToy.root";
+  string pathFilea2="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV57_3NewUnfSystNoProtectionYesToy.root";
 
   if (lepton ==2){
-  pathFile="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV57_3NewUnfSystNoProtectionNoToyMu.roota";
-  pathFilea2="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV57_3NewUnfSystNoProtectionYesToyMu.roota";
+  pathFile="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV57_3NewUnfSystNoProtectionNoToyMu.root";
+  pathFilea2="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV57_3NewUnfSystNoProtectionYesToyMu.root";
   }
 
   gStyle->SetOptStat (0);

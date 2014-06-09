@@ -34,7 +34,8 @@ bool WholeStat= true;                // if true, reweing on RunA lumi, if false,
 bool RunA= true;                // if true, reweing on RunA lumi, if false, on RunB
 bool lumiPixel = true;           // if true, Lumi estimated using pixel, else with HF
 
-bool isMu=true;
+bool isPull=false;                // Plot the pulls in tyhe MC ratio
+bool isMu=false;
 
 // flag for labels and style: is not preliminary use paper style
 bool isPreliminary=false;
@@ -133,7 +134,7 @@ void DrawComparisonJetMCData(void){
 
   fzj = new TFile(bkg.c_str(), "RECREATE");
   
-plotpath		="/tmp/cossutti/"; //put here the path where you want the plots
+plotpath		="/tmp/marone/"; //put here the path where you want the plots
 datafile		="/gpfs/cms/data/2011/jet/jetValidation_DATA_2011"+version;
  mcfile                ="/gpfs/cms/data/2011/jet/jetValidation_zjets_magd_2011Mu_v2_58.root";
 
@@ -542,6 +543,8 @@ void comparisonJetMCData(string plot,int rebin){
       data->GetYaxis()->SetNdivisions(4);
     }
 
+    if (str.Contains("Jet_multi")) data->SetNdivisions(8);
+    if (str.Contains("Jet_multiIncl")) data->SetNdivisions(8);
     data->Draw("E1");
 
 
@@ -688,7 +691,7 @@ void comparisonJetMCData(string plot,int rebin){
       if(lumiweights==0) ttbar->Draw("HISTO SAMES");
       hsum->Rebin(rebin);
       hsum->Add(ttbar);
-      if(lumiweights==1)legend->AddEntry(ttbar,"ttbar","f");
+      if(lumiweights==1)legend->AddEntry(ttbar,"t#bar{t}+jets","f");
 
       //////////
       //Storing the bckgrounds!
@@ -757,7 +760,6 @@ void comparisonJetMCData(string plot,int rebin){
       if(lumiweights==0) w->Draw("HISTO SAMES");
       hsum->Rebin(rebin);
       hsum->Add(w);
-      if(lumiweights==1)legend->AddEntry(w,"W+jets","f");
     }
 
     //======================
@@ -942,7 +944,6 @@ void comparisonJetMCData(string plot,int rebin){
       if(lumiweights==0) ww->Draw("HISTO SAMES");
       hsum->Rebin(rebin);
       hsum->Add(ww);
-      legend->AddEntry(ww,"WW+jets","f");
 
       //////////
       //Storing the bckgrounds!
@@ -1014,7 +1015,8 @@ void comparisonJetMCData(string plot,int rebin){
       //tau->Scale(1./1000.); //aaaaaaa
       hsum->Add(tau);
       legend->AddEntry(tau,"#tau#tau+jets","f");
-
+      legend->AddEntry(ww,"WW+jets","f");
+      legend->AddEntry(w,"W+jets","f");
       //////////
       //Storing the bckgrounds!
       //////////
@@ -1218,8 +1220,17 @@ void comparisonJetMCData(string plot,int rebin){
  
    sumMC=(TH1F*) hs->GetHistogram();
     cout<<sumMC->GetEntries()<<endl;
-    ratio->Divide(data,hsum,1.,1.);
-    ratio->GetYaxis()->SetRangeUser(0.5,1.5);
+    if (!isPull) ratio->Divide(data,hsum,1.,1.);
+    if (isPull){
+      int totalbin=data->GetNbinsX();
+      for(int j=1;j<= totalbin;j++){
+	ratio->SetBinContent(j,(data->GetBinContent(j)-hsum->GetBinContent(j))/sqrt(pow(data->GetBinError(j),2)+pow(hsum->GetBinError(j),2)+pow(0.05*+hsum->GetBinContent(j),2))  );
+	cout<<"data "<<data->GetBinContent(j)<<" mc "<<hsum->GetBinContent(j)<<" ERROR data "<<data->GetBinError(j)<<" ERROR MC "<<hsum->GetBinError(j)<<endl;
+      }
+    }
+    ratio->GetYaxis()->SetRangeUser(0.0,2);
+    //gPad->SetLogy(1);
+    if (isPull) ratio->GetYaxis()->SetRangeUser(-5,5);
     ratio->SetMarkerSize(0.8);
     //pad2->SetTopMargin(1);
 
@@ -1241,7 +1252,7 @@ void comparisonJetMCData(string plot,int rebin){
       ratio->GetYaxis()->SetTitle("data/MC");   
     }
 
-    ratio->Draw("E1");
+    ratio->Draw("E0");
 		
     TLine *OLine = new TLine(ratio->GetXaxis()->GetXmin(),1.,ratio->GetXaxis()->GetXmax(),1.);
     OLine->SetLineColor(kBlack);

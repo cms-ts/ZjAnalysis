@@ -157,7 +157,7 @@ void diow(const char* inpath=".", const char* outputFile="index.html")
    std::vector<std::string> files;
    diowGenerator::listdir(inpath, files);
    std::sort(files.begin(),files.end());
-   std::string extensions[3] = {".jpg",".png",".gif"};
+   std::string extensions[4] = {".jpg",".png",".gif",".pdf"};
    for(std::vector<std::string>::const_iterator file = files.begin(); file<files.end(); ++file) {
       // we use the extension to identify pictures... not very elegant.
       // look for *.jpg, *.png, *.gif

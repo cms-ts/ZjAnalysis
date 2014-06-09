@@ -114,8 +114,8 @@ makeEleMuComparisonPlots (int whichobservable, int whichjet, int whichlepton)
 {
   //Open the file and form the name
   string fileSystematics; 
-  string suffix="/gpfs/cms/data/2011/Systematics/postApproval_v58/";
-  //string suffix="/tmp/";
+  //string suffix="/gpfs/cms/data/2011/Systematics/postApproval_v58_CWR/";
+  string suffix="/tmp/";
 
   if (whichlepton==1) suffix=suffix+"ele/";
   if (whichlepton==2) suffix=suffix+"muo/";
@@ -134,7 +134,8 @@ makeEleMuComparisonPlots (int whichobservable, int whichjet, int whichlepton)
   string version = "_v2_32";
 
   //string s         = "/afs/infn.it/ts/user/marone/html/ZJets/FinalPlotsForAN/v41/SVDBayes/";
-  string s="/afs/infn.it/ts/user/marone/html/ZJets/FinalPlotsForAN/v58_3/UnfoldingSyst/ele/";
+  string s="/afs/infn.it/ts/user/marone/html/ZJets/FinalPlotsForAN/v58_CWR/UnfoldingSyst/ele/";
+  string s="/tmp/";
   //  string s         = "/gpfs/cms/users/schizzi/EleMuComparisonPlots/PostUnfolding/";
   string  eleplotpath = "/gpfs/cms/users/schizzi/Systematics/ele/";
   string  muoplotpath = "/gpfs/cms/users/schizzi/Systematics/muo/";
@@ -146,13 +147,14 @@ makeEleMuComparisonPlots (int whichobservable, int whichjet, int whichlepton)
   //DATA:
   //string elepathFile   ="/gpfs/cms/data/2011/Unfolding/testReferenceMu.root";
   //string muopathFile   ="/gpfs/cms/data/2011/Unfolding/testMu.root";
-  string elepathFile   ="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV57_3Sherpa.root";
-  string muopathFile   ="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV57_3.root";
+  string elepathFile   ="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV58_JECUP.root";
+  string muopathFile   ="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV58_finalCWRJECUP.root";
 
   if (whichlepton==2){
-  elepathFile   ="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV58_SherpaMu.root";
-  muopathFile   ="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV58_BinWidthMu.root";
-  s="/afs/infn.it/ts/user/marone/html/ZJets/FinalPlotsForAN/v58/UnfoldingSyst/muo/";
+  elepathFile   ="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV58_JECUPMuroot";
+  muopathFile   ="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV58_finalCWRJECUPMu.root";
+  s="/afs/infn.it/ts/user/marone/html/ZJets/FinalPlotsForAN/v58_CWR/UnfoldingSyst/mu/";
+  s="/tmp";
   }
   //string elepathFile   ="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV57_3NoSQRT.root";
   //string muopathFile   ="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV57_3NoMCToy.root";
@@ -182,7 +184,7 @@ makeEleMuComparisonPlots (int whichobservable, int whichjet, int whichlepton)
 	  stringmatch = "JetMultiplicityUnfolded";
 	  systPathFile = eleplotpath + "systematicsEff_jetMult" + version + ".txt";
 	  systPathFileMuo = muoplotpath + "systematicsEff_jetMult" + version + ".txt";
-	  fileSystematics = suffix+"systematicsUnfMCToy_jetMult" + version + ".txt"; 
+	  fileSystematics = suffix+"systematicsUnfReweight_jetMult" + version + ".txt"; 
 	}
 
       if (use_case == 2) 
@@ -192,7 +194,7 @@ makeEleMuComparisonPlots (int whichobservable, int whichjet, int whichlepton)
 	      stringmatch = "jReco_leading";
 	      systPathFile = eleplotpath + "systematicsEff_jet1Pt" + version + ".txt";
 	      systPathFileMuo = muoplotpath + "systematicsEff_jet1Pt" + version + ".txt";
-	      fileSystematics = suffix+"systematicsUnfMCToy_jet1Pt" + version + ".txt"; 
+	      fileSystematics = suffix+"systematicsUnfReweight_jet1Pt" + version + ".txt"; 
 	    }
 	  
 	  if (whichjet == 2)
@@ -200,7 +202,7 @@ makeEleMuComparisonPlots (int whichobservable, int whichjet, int whichlepton)
 	      stringmatch = "jReco_subleading";
 	      systPathFile = eleplotpath + "systematicsEff_jet2Pt" + version + ".txt";
 	      systPathFileMuo = muoplotpath + "systematicsEff_jet2Pt" + version + ".txt";
-	      fileSystematics = suffix+"systematicsUnfMCToy_jet2Pt" + version + ".txt"; 
+	      fileSystematics = suffix+"systematicsUnfReweight_jet2Pt" + version + ".txt"; 
 	    }
 	  
 	  if (whichjet == 3)
@@ -208,7 +210,7 @@ makeEleMuComparisonPlots (int whichobservable, int whichjet, int whichlepton)
 	      stringmatch = "jReco_subsubleading";
 	      systPathFile = eleplotpath + "systematicsEff_jet3Pt" + version + ".txt";
 	      systPathFileMuo = muoplotpath + "systematicsEff_jet3Pt" + version + ".txt";
-	      fileSystematics = suffix+"systematicsUnfMCToy_jet3Pt" + version + ".txt"; 
+	      fileSystematics = suffix+"systematicsUnfReweight_jet3Pt" + version + ".txt"; 
 	    }
 	  
 	  if (whichjet == 4)
@@ -216,7 +218,7 @@ makeEleMuComparisonPlots (int whichobservable, int whichjet, int whichlepton)
 	      stringmatch = "jReco_subsubsubleading";
 	      systPathFile = eleplotpath + "systematicsEff_jet4Pt" + version + ".txt";
 	      systPathFileMuo = muoplotpath + "systematicsEff_jet4Pt" + version + ".txt";
-	      fileSystematics = suffix+"systematicsUnfMCToy_jet4Pt" + version + ".txt"; 
+	      fileSystematics = suffix+"systematicsUnfReweight_jet4Pt" + version + ".txt"; 
 	    }
 	}
       
@@ -226,7 +228,7 @@ makeEleMuComparisonPlots (int whichobservable, int whichjet, int whichlepton)
 	    stringmatch = "jReco_leadingeta";
 	    systPathFile = eleplotpath + "systematicsEff_jet1Eta" + version + ".txt";
 	    systPathFileMuo = muoplotpath + "systematicsEff_jet1Eta" + version + ".txt";
-	    fileSystematics = suffix+"systematicsUnfMCToy_jet1Eta" + version + ".txt"; 
+	    fileSystematics = suffix+"systematicsUnfReweight_jet1Eta" + version + ".txt"; 
 	  }
 	
 	if (whichjet == 2)
@@ -234,7 +236,7 @@ makeEleMuComparisonPlots (int whichobservable, int whichjet, int whichlepton)
 	    stringmatch = "jReco_subleadingeta";
 	    systPathFile = eleplotpath + "systematicsEff_jet2Eta" + version + ".txt";
 	    systPathFileMuo = muoplotpath + "systematicsEff_jet2Eta" + version + ".txt";
-	    fileSystematics = suffix+"systematicsUnfMCToy_jet2Eta" + version + ".txt"; 
+	    fileSystematics = suffix+"systematicsUnfReweight_jet2Eta" + version + ".txt"; 
 	  }
 
 	if (whichjet == 3)
@@ -242,7 +244,7 @@ makeEleMuComparisonPlots (int whichobservable, int whichjet, int whichlepton)
 	    stringmatch = "jReco_subsubleadingeta";
 	    systPathFile = eleplotpath + "systematicsEff_jet3Eta" + version + ".txt";
 	    systPathFileMuo = muoplotpath + "systematicsEff_jet3Eta" + version + ".txt";
-	    fileSystematics = suffix+"systematicsUnfMCToy_jet3Eta" + version + ".txt"; 
+	    fileSystematics = suffix+"systematicsUnfReweight_jet3Eta" + version + ".txt"; 
 	  }
 	
 	if (whichjet == 4)
@@ -250,7 +252,7 @@ makeEleMuComparisonPlots (int whichobservable, int whichjet, int whichlepton)
 	    stringmatch = "jReco_subsubsubleadingeta";
 	    systPathFile = eleplotpath + "systematicsEff_jet4Eta" + version + ".txt";
 	    systPathFileMuo = muoplotpath + "systematicsEff_jet4Eta" + version + ".txt";
-	    fileSystematics = suffix+"systematicsUnfMCToy_jet4Eta" + version + ".txt"; 
+	    fileSystematics = suffix+"systematicsUnfReweight_jet4Eta" + version + ".txt"; 
 	  }
       }
       
@@ -260,14 +262,14 @@ makeEleMuComparisonPlots (int whichobservable, int whichjet, int whichlepton)
 	    stringmatch = "HReco_leading";
 	    systPathFile = eleplotpath + "systematicsEff_jet1Ht" + version + ".txt";
 	    systPathFileMuo = muoplotpath + "systematicsEff_jet1Ht" + version + ".txt";
-	    fileSystematics = suffix+"systematicsUnfMCToy_jet1Ht" + version + ".txt"; 
+	    fileSystematics = suffix+"systematicsUnfReweight_jet1Ht" + version + ".txt"; 
 	  }
 	if (whichjet == 2)
 	  {
 	    stringmatch = "HReco_subleading";
 	    systPathFile = eleplotpath + "systematicsEff_jet2Ht" + version + ".txt";
 	    systPathFileMuo = muoplotpath + "systematicsEff_jet2Ht" + version + ".txt";
-	    fileSystematics = suffix+"systematicsUnfMCToy_jet2Ht" + version + ".txt"; 
+	    fileSystematics = suffix+"systematicsUnfReweight_jet2Ht" + version + ".txt"; 
 	  }
 	
 	if (whichjet == 3)
@@ -275,13 +277,13 @@ makeEleMuComparisonPlots (int whichobservable, int whichjet, int whichlepton)
 	    stringmatch = "HReco_subsubleading";
 	    systPathFile = eleplotpath + "systematicsEff_jet3Ht" + version + ".txt";
 	    systPathFileMuo = muoplotpath + "systematicsEff_jet3Ht" + version + ".txt";
-	    fileSystematics = suffix+"systematicsUnfMCToy_jet3Ht" + version + ".txt"; 
+	    fileSystematics = suffix+"systematicsUnfReweight_jet3Ht" + version + ".txt"; 
 	  }
 
 	if (whichjet == 4)
 	  {
 	    stringmatch = "HReco_subsubsubleading";
-	    fileSystematics = suffix+"systematicsUnfMCToy_jet4Ht" + version + ".txt"; 
+	    fileSystematics = suffix+"systematicsUnfReweight_jet4Ht" + version + ".txt"; 
 	    systPathFile = eleplotpath + "systematicsEff_jet4Ht" + version + ".txt";
 	    systPathFileMuo = muoplotpath + "systematicsEff_jet4Ht" + version + ".txt";
 	  }
