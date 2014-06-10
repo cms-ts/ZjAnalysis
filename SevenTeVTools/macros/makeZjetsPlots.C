@@ -94,9 +94,16 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
   TFile dumphistos_file("data_rivet_histos.root","UPDATE");
 
   //DATA:
-  string           pathFile ="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV58_BinWidth.root";
-  if (lepton == 2) pathFile ="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV58_BinWidthMu.root";
-  if (lepton == 3) pathFile ="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV58_BinWidthCombined.root";
+
+  // CWR version
+
+  /* string           pathFile ="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV58_BinWidth.root"; */
+  /* if (lepton == 2) pathFile ="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV58_BinWidthMu.root"; */
+  /* if (lepton == 3) pathFile ="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV58_BinWidthCombined.root"; */
+
+  string           pathFile ="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV58_finalCWR.root";
+  if (lepton == 2) pathFile ="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV58_finalCWRMu.root";
+  if (lepton == 3) pathFile ="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV58_finalCWRCombined.root";
 
   //RIVET:
   /* string rivetPathPlot1           ="/gpfs/cms/data/2011/Rivet/FinalDatasets/Sherpa/CentralSherpa/out.root"; */
