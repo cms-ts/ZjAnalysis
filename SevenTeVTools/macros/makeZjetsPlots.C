@@ -54,7 +54,7 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
 
   bool absoluteNormalization=true;
   int lepton=whichlepton; //1 -> electron,  2-> muon , 3 -> combined reults!
-  bool addLumiUncertainties=true; double lumiError=0.025;
+  bool addLumiUncertainties=true; double lumiError=0.022;
   bool incMultiplicity = inclusiveMultiplicity;
   bool etaFolded = true;
 
