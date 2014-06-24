@@ -584,7 +584,8 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
         leadingSystematics->SetLineWidth (0.);
         leadingSystematics->SetMarkerStyle (20);
         leadingSystematics->SetFillColor (12);
-        leadingSystematics->SetFillStyle (3004);
+        gStyle->SetHatchesSpacing(1.);
+        leadingSystematics->SetFillStyle (3354);
         leadingSystematics->SetMarkerColor (kBlack);
 
         leadingSystematics->GetXaxis()->SetTitleOffset (2.);
@@ -628,7 +629,8 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
         leading->SetFillStyle (3001);
         leading->SetMarkerColor (kBlack);
         leading->SetLineColor (kBlack);
-        leading->SetLineWidth (0.);
+        //        leading->SetLineWidth (0.);
+        leading->SetLineWidth (1.);
         leading->SetMarkerStyle (20);
         leading->Draw ("E1SAME");
 	
