@@ -30,7 +30,7 @@ double qcdBC817Xsect = 898200.0 * 0.0105;double qcdBC817Nevts = 1082691; // /QCD
 double WZXsect= 18.2; double zwjetsNevts=4265243;
 double ZZXsect= 5.9; double zzjetsNevts=4191045;
 double WWXsect= 43.0; double wwjetsNevts=4225916;
-
+double stXsect = 7.46;	double stNevts = 3701947; // /TTJets_TuneZ2_7TeV-madgraph-tauola/Summer11-PU_S4_START42_V11-v1/AODSIM
 
 //======================================//
 //		Calc ratios		//

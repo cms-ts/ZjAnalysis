@@ -58,7 +58,7 @@ std::endl;
 
 //Andrea: ele girati con 2_28 , mu girati con 2_33 MU
 bool activateScaleFactors=true;  // Correct for the difference MC/Data in the background
-bool isMu=true;
+bool isMu=false;
 bool combineChannel=false;
 
 //string efffile="/gpfs/cms/data/2011/TaP/efficiencies_2011Mu_v2_30.root";
@@ -75,15 +75,15 @@ double jetThreshold=30.0;
 bool evalDiffCS=false; // if false it does not divide for # of Zs
 
 // Files to be saved
-string dir="/gpfs/cms/data/2011/Observables/Approval/";
+string dir="/gpfs/cms/data/2011/Observables/CWR_2/";
 //string dir="/tmp/";
 
 const double asymmetricRangeLeadingJetPt[18]={30,50,70,90,110,130,150,170,190,210,230,250,280,310,350,400,500,700};
 
 TFile *w;
 //List of observables to show
-TH1F *NData             = new TH1F ("Jet_multi", "Jet_multi", 8, 0.5, 8.5);
-TH1F *NDataIncl             = new TH1F ("Jet_multiIncl", "Jet_multiIncl", 8, 0.5, 8.5);
+TH1F *NData             = new TH1F ("Jet_multi", "Jet_multi", 7, 0.5, 7.5);
+TH1F *NDataIncl             = new TH1F ("Jet_multiIncl", "Jet_multiIncl", 7, 0.5, 7.5);
 TH1F *Ht                = new TH1F ("HT", "HT", 47, 30, 500);
 TH1F *Ht_1j                = new TH1F ("HT_1j", "HT_1j", 17, 30, 710);
 TH1F *Ht_2j                = new TH1F ("HT_2j", "HT_2j", 13, 60, 710);
@@ -173,7 +173,6 @@ Observables::Loop()
 TFile *fAeff = new TFile (efffile.c_str());// WHY 2 FILES? DEBUG!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 TFile *fBeff = new TFile (efffile.c_str()); 
 
-
 string szj=dir+"MC_zjets"+versionMu;
 string swj=dir+"MC_wjets"+versionMu;
 string stt=dir+"MC_ttbar"+versionMu;
@@ -183,6 +182,8 @@ string sWZ=dir+"MC_diWZ"+versionMu;
 string sda=dir+"DATA"+versionMu;
 string szjtau=dir+"MC_zjetstau"+versionMu;
 
+string sst=dir+"MC_singlet"+versionMu;
+
 TFile* fzj = new TFile(szj.c_str(), "RECREATE");
 TFile* fwj = new TFile(swj.c_str(), "RECREATE");
 TFile* ftt = new TFile(stt.c_str(), "RECREATE");
@@ -191,23 +192,25 @@ TFile* fZZ = new TFile(sZZ.c_str(), "RECREATE");
 TFile* fWZ = new TFile(sWZ.c_str(), "RECREATE");
 TFile* fda = new TFile(sda.c_str(), "RECREATE");
 TFile* fzjtau = new TFile(szjtau.c_str(), "RECREATE");
+TFile* fst = new TFile(sst.c_str(), "RECREATE");
 
  string dirvalidation="validationJEC";
  if (isMu && !combineChannel) dirvalidation="validationJECmu";
-
  
  TDirectory *validationJECz=fzj->mkdir(dirvalidation.c_str());
  TDirectory *validationJECw=fwj->mkdir(dirvalidation.c_str());
-TDirectory *validationJECtt=ftt->mkdir(dirvalidation.c_str());
+ TDirectory *validationJECtt=ftt->mkdir(dirvalidation.c_str());
  TDirectory *validationJECWW=fWW->mkdir(dirvalidation.c_str());
-TDirectory *validationJECZZ=fZZ->mkdir(dirvalidation.c_str());
-TDirectory *validationJECWZ=fWZ->mkdir(dirvalidation.c_str());
-TDirectory *validationJECda=fda->mkdir(dirvalidation.c_str());
+ TDirectory *validationJECZZ=fZZ->mkdir(dirvalidation.c_str());
+ TDirectory *validationJECWZ=fWZ->mkdir(dirvalidation.c_str());
+ TDirectory *validationJECda=fda->mkdir(dirvalidation.c_str());
  TDirectory *validationJECztau=fzjtau->mkdir(dirvalidation.c_str());
+ TDirectory *validationJECst=fst->mkdir(dirvalidation.c_str());
 //FIles do be opened
 
 string diropen="/gpfs/cms/data/2011/jet/jetValidation_";
- string sozj=diropen+"zjets_magd_2011Mu_v2_58.root";
+//string sozj=diropen+"zjets_magd_2011Mu_v2_58.root";
+string sozj="dataset/jetValidation_DATA_2011Mu_v2_58.root";
 string sowj=diropen+"w_2011Mu"+"_v2_33.root";//+version;
 string soda=diropen+"DATA_2011"+versionMu;
 
@@ -216,6 +219,7 @@ string sott=diropen+"ttbar_2011Mu_v2_58.root";
 string soWW=diropen+"ww_2011Mu_v2_58.root";
 string soZZ=diropen+"zz_2011Mu_v2_58.root";
 string soWZ=diropen+"wz_2011Mu_v2_58.root";
+string sost=diropen+"singlet_2011Mu_v2_58.root";
 
 //string sott=diropen+"ttbar_2011Mu_v2_32.root";                                                                                                                         
 //string soWW=diropen+"ww_2011Mu_v2_32.root";                                                                                                                            
@@ -234,6 +238,7 @@ string soWZ=diropen+"wz_2011Mu_v2_58.root";
  string sodWZ=soWZ+":/EPTmuoReco_MC";
  string sodda=soda+":/validationJEC";
  string sodzjtau=sozjtau+":/EPTmuoReco_MC";
+ string sodst=sost+":/EPTmuoReco_MC";
 
  if (isMu) sodda=soda+":/EPTmuoReco";
 
@@ -245,7 +250,8 @@ TFile *FWW = new TFile (soWW.c_str());
 TFile *FWZ = new TFile (soWZ.c_str());
 TFile *FZZ = new TFile (soZZ.c_str());
 TFile *Fzjtau = new TFile (sozjtau.c_str());
- 
+TFile *Fst = new TFile (sost.c_str()); 
+
  cout<<"-----------Directories------------------"<<endl;
  cout<<sodda<<endl;
  cout<<sodzj<<endl;
@@ -255,10 +261,12 @@ TFile *Fzjtau = new TFile (sozjtau.c_str());
  cout<<sodZZ<<endl;
  cout<<sodwj<<endl;
  cout<<sodzjtau<<endl;
+ cout<<sodst<<endl;
 
   cout<<"If you see an unexpected crash, control in which gDyrectory the tree treeUN has been stored.."<<endl;
   //DATA
-  for(int i=0; i<8; i++){
+  for(int i=0; i<1; i++){
+    
     if (i==0) fda->cd (sodda.c_str());
     if (i==1) fzj->cd (sodzj.c_str());
     if (i==2) ftt->cd (sodtt.c_str());
@@ -267,6 +275,7 @@ TFile *Fzjtau = new TFile (sozjtau.c_str());
     if (i==5) fZZ->cd (sodZZ.c_str());
     if (i==6) fwj->cd (sodwj.c_str());
     if (i==7) fzjtau->cd (sodzjtau.c_str());
+    if (i==8) fst->cd (sodst.c_str());
 
     cout<<"Act #"<<i<<endl;
 
@@ -285,6 +294,7 @@ TFile *Fzjtau = new TFile (sozjtau.c_str());
       //if (i==5) tree_fB = (TTree *) gDirectory->Get ("treeUN_");
       if (i==6) tree_fB = (TTree *) gDirectory->Get ("treeValidationJEC_");      
       if (i==7)tree_fB = (TTree *) gDirectory->Get ("treeValidationJEC_");      
+      if (i==8) tree_fB = (TTree *) gDirectory->Get ("treeValidationJEC_");      
     }
     else{
       if (i==0)tree_fB = (TTree *) gDirectory->Get ("treeValidationJEC_");     
@@ -297,8 +307,9 @@ TFile *Fzjtau = new TFile (sozjtau.c_str());
       if (i==5 && isMu)tree_fB = (TTree *) gDirectory->Get ("treeValidationJECMu_");
       if (i==6 && isMu)tree_fB = (TTree *) gDirectory->Get ("treeValidationJECMu_");
       if (i==7 && isMu)tree_fB = (TTree *) gDirectory->Get ("treeValidationJECMu_");
+      if (i==8 && isMu)tree_fB = (TTree *) gDirectory->Get ("treeValidationJECMu_");
     }
-    
+
 
     fChain = tree_fB;		/* Loop RunA */
     Init (fChain); 
@@ -568,7 +579,7 @@ TFile *Fzjtau = new TFile (sozjtau.c_str());
       }
     
     //Get the number of Z bosons in data
-    if (i<8)  {
+    if (i<9)  {
       numbOfZ = NData->GetEntries();
       cout<<"Data contains # Z ->"<<numbOfZ<<endl;
       numbOfZPlus1 = NData->GetBinContent(2)+NData->GetBinContent(3)+NData->GetBinContent(4)+NData->GetBinContent(5)+NData->GetBinContent(6)+NData->GetBinContent(7)+NData->GetBinContent(8)+NData->GetBinContent(9);
@@ -737,6 +748,10 @@ TFile *Fzjtau = new TFile (sozjtau.c_str());
     if(i==7){
       fzjtau->cd();
       validationJECztau->cd();
+    }
+    if(i==8){
+      fst->cd();
+      validationJECst->cd();
     }
 
     

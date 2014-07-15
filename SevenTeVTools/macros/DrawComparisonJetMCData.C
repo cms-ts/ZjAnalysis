@@ -35,7 +35,7 @@ bool RunA= true;                // if true, reweing on RunA lumi, if false, on R
 bool lumiPixel = true;           // if true, Lumi estimated using pixel, else with HF
 
 bool isPull=false;                // Plot the pulls in tyhe MC ratio
-bool isMu=false;
+bool isMu=true;
 
 // flag for labels and style: is not preliminary use paper style
 bool isPreliminary=false;
@@ -46,6 +46,7 @@ string mcfile;
 string mcfiletau;
 
 string back_ttbar;
+string back_st;
 string back_w;
 
 string qcd23bc;
@@ -67,6 +68,7 @@ double ttwemean=140.;
 double wzwemean=120;
 double zzwemean=120;
 double wwwemean=120;
+double stwemean=140.;
 
 double dataNumEvents=-999;
 double zNumEvents=-999; //lo definisco globale anche se non Ã¨ la cosa piÃ¹ bella da fare
@@ -75,6 +77,7 @@ double wNumEvents=-999; //al momento non l'ho fatto perchÃ© passano 0 eventi e
 double wzEvents=-999; 
 double zzEvents=-999; 
 double wwEvents=-999; 
+double stNumEvents=-999; //questo lavoro andrebbe fatto anche per i qcd... 
 
 TFile *fzj;
 //Tree to store vthe values
@@ -153,6 +156,7 @@ ZZ               ="/gpfs/cms/data/2011/jet/jetValidation_zz_2011"+versionMu;
 WW               ="/gpfs/cms/data/2011/jet/jetValidation_ww_2011"+versionMu;
 
  mcfiletau                ="/gpfs/cms/data/2011/jet/jetValidation_zjets_magd_2011"+versionMu;
+back_st	="/gpfs/cms/data/2011/jet/jetValidation_singlet_2011"+versionMu;
 
 // if (isMu) datafile      ="/gpfs/cms/data/2011/jet/jetValidation_DATA_2011Mu_v2_28.root";
 //if (isMu) mcfile        ="/gpfs/cms/data/2011/jet/jetValidation_zjets_magd_2011Mu_v2_28.root";
@@ -189,9 +193,10 @@ WW               ="/gpfs/cms/data/2011/jet/jetValidation_ww_2011"+versionMu;
   wzEvents = numEventsPerStep(WZ, "demo"); 
   zzEvents = numEventsPerStep(ZZ, "demo"); 
   wwEvents = numEventsPerStep(WW, "demo"); 
+  stNumEvents = numEventsPerStep(back_st, "demo"); 
   // ---------------------------------------------------
 
-  string direc="/gpfs/cms/data/2011/Observables/Approval/";
+  string direc="/gpfs/cms/data/2011/Observables/CWR/";
 
   if (isAngularAnalysis){
     mcfile=direc+"MC_zjets"+version;
@@ -202,6 +207,7 @@ WW               ="/gpfs/cms/data/2011/jet/jetValidation_ww_2011"+versionMu;
     WZ=direc+"MC_diWZ"+version;
     datafile=direc+"DATA"+version;
     mcfiletau=direc+"MC_zjetstau"+version;
+    back_st=direc+"MC_singlet"+version;
   }
   
   TFile *mcf = TFile::Open(mcfile.c_str()); //MC file
@@ -250,6 +256,7 @@ WW               ="/gpfs/cms/data/2011/jet/jetValidation_ww_2011"+versionMu;
       TFile *wzf = TFile::Open(WZ.c_str());
       TFile *zzf = TFile::Open(ZZ.c_str());
       TFile *wwf = TFile::Open(WW.c_str());
+      TFile *stf = TFile::Open(back_st.c_str()); 
     
       TCanvas * Canvweight = new TCanvas("Canvweight","Canvweight",0,0,800,600);
       //if (Canv) delete Canv;
@@ -299,6 +306,26 @@ WW               ="/gpfs/cms/data/2011/jet/jetValidation_ww_2011"+versionMu;
 	ttbar->Draw();
 	ttwemean = ttbar->GetMean();
 	tmpname=plotpath+name+"-ttbar.pdf";
+	Canvweight->Print(tmpname.c_str());
+      }
+
+      //---- weights single top
+      stf->cd("validationJEC");
+      if (isMu) stf->cd("validationJECmu/");
+
+      if (isAngularAnalysis) {
+        if (!isMu) stf->cd("validationJEC/");
+	if (isMu) stf->cd("validationJECmu/");
+      }
+     
+      TH1F* st;
+      gDirectory->GetObject(name.c_str(),st);
+      if(st){
+	st->SetFillColor(kViolet+2);
+	st->GetXaxis()->SetRangeUser(0.,12.);
+	st->Draw();
+	stwemean = st->GetMean();
+	tmpname=plotpath+name+"-singlet.pdf";
 	Canvweight->Print(tmpname.c_str());
       }
 
@@ -414,6 +441,9 @@ WW               ="/gpfs/cms/data/2011/jet/jetValidation_ww_2011"+versionMu;
   if(wwEvents<0.) cout << "ATTENZIONE: HAI FALLITO LA NORMALIZZAZIONE DEL W+JETS, quindi ho normalizzato sugli eventi totali del campione\n";
   else cout << "Il numero di eventi di WW+jets " << wwEvents << "\n";
 
+if(stNumEvents<0.) cout << "ATTENZIONE: HAI FALLITO LA NORMALIZZAZIONE DEL singlet+JETS, quindi ho normalizzato sugli eventi totali del campione\n";
+  else cout << "Il numero di eventi di singlett+jets " << stNumEvents << "\n";
+
   return;
 }
 
@@ -425,7 +455,7 @@ WW               ="/gpfs/cms/data/2011/jet/jetValidation_ww_2011"+versionMu;
 void comparisonJetMCData(string plot,int rebin){
   string tmp;
 
-  string dir="/gpfs/cms/data/2011/Observables/Approval/";
+  string dir="/gpfs/cms/data/2011/Observables/CWR/";
 	
   if (isAngularAnalysis){
     mcfile=dir+"MC_zjets"+version;
@@ -436,6 +466,7 @@ void comparisonJetMCData(string plot,int rebin){
     WZ=dir+"MC_diWZ"+version;
     datafile=dir+"DATA"+version;
     mcfiletau=dir+"MC_zjetstau"+version;
+    back_st=dir+"MC_singlet"+version;
   }
   // List of files
 
@@ -444,7 +475,7 @@ void comparisonJetMCData(string plot,int rebin){
   TFile *mcftau = TFile::Open(mcfiletau.c_str()); //MC file
   TFile *ttbarf = TFile::Open(back_ttbar.c_str()); //MC background file
   TFile *wf = TFile::Open(back_w.c_str());
-
+  TFile *stf = TFile::Open(back_st.c_str()); //MC background file
 
   TFile *qcd23emf = TFile::Open(qcd23em.c_str());
   TFile *qcd38emf = TFile::Open(qcd38em.c_str());
@@ -545,6 +576,9 @@ void comparisonJetMCData(string plot,int rebin){
 
     if (str.Contains("Jet_multi")) data->SetNdivisions(8);
     if (str.Contains("Jet_multiIncl")) data->SetNdivisions(8);
+    if (str.Contains("Jet_multi")) data->GetXaxis()->SetRangeUser(0,7);
+    if (str.Contains("Jet_multi")) data->GetYaxis()->SetRangeUser(4,350000);
+    if (str.Contains("Jet_multiIncl")) data->GetXaxis()->SetRangeUser(0,7);
     data->Draw("E1");
 
 
@@ -646,8 +680,10 @@ void comparisonJetMCData(string plot,int rebin){
       legend->AddEntry(mc,"Z+jets","f");
     }
 
+
     //======================
     // ttbar
+
     ttbarf->cd("validationJEC");
     if (isMu) ttbarf->cd("validationJECmu/");
 
@@ -713,6 +749,78 @@ void comparisonJetMCData(string plot,int rebin){
       if(str=="HT_3j") evaluateAndFillBackgrounds(ttbar,"HT3");
       if(str=="HT_4j") evaluateAndFillBackgrounds(ttbar,"HT4");
       if(str=="Phi_star") evaluateAndFillBackgrounds(ttbar,"PhiStar");
+      }
+    }
+
+
+    ////////////////////
+    // single top
+    /////////////////
+
+    stf->cd("validationJEC");
+    if (isMu) stf->cd("validationJECmu/");
+
+    if (isAngularAnalysis) {
+      stf->cd("validationJEC/");
+      if (isMu) stf->cd("validationJECmu/");
+    }
+    TH1F* st;
+    gDirectory->GetObject(plot.c_str(),st);
+
+    if (st){
+      st->SetFillColor(kViolet+2);
+      st->Sumw2();
+
+      if(stNumEvents>0.){
+	if(lumiweights==1) {
+	  if (WholeStat){
+	    if (lumiPixel) st->Scale( dataLumi2011pix / (stNumEvents / stXsect));
+	    else st->Scale( dataLumi2011 / (stNumEvents / stXsect));
+	  }
+	  else{
+	    if (RunA){
+	      if (lumiPixel) st->Scale( dataLumi2011Apix / (stNumEvents / stXsect));
+	      else st->Scale( dataLumi2011A / (stNumEvents / stXsect));
+	    }
+	    if (!RunA){
+	      if (lumiPixel) st->Scale( dataLumi2011Bpix / (stNumEvents / stXsect));
+	      else st->Scale( dataLumi2011B / (stNumEvents / stXsect));
+	    }
+	  }
+	}
+      }
+      else {
+	if(lumiweights==1) st->Scale(stwemean);
+      }
+      // fin qui
+		
+      if(lumiweights==1) st->Scale(1./stwemean);  // perche' i Weights non fanno 1...
+      st->Rebin(rebin);
+      if(lumiweights==0) st->Draw("HISTO SAMES");
+      hsum->Rebin(rebin);
+      hsum->Add(st);
+      //if(lumiweights==1)legend->AddEntry(st,"singlet+jets","f");
+
+      //////////
+      //Storing the bckgrounds!
+      //////////
+      cout<<str<<endl;
+      if (isAngularAnalysis){
+      if(str=="jet_pT") evaluateAndFillBackgrounds(st,"jet_pT");
+      if(str=="jet_pT2") evaluateAndFillBackgrounds(st,"jet_pT2");
+      if(str=="jet_pT3") evaluateAndFillBackgrounds(st,"jet_pT3");
+      if(str=="jet_pT4") evaluateAndFillBackgrounds(st,"jet_pT4");
+      if(str=="Jet_multi") evaluateAndFillBackgrounds(st,"jet_Multiplicity");
+      if(str=="jet_eta") evaluateAndFillBackgrounds(st,"jet_eta");
+      if(str=="jet_eta2") evaluateAndFillBackgrounds(st,"jet_eta2");
+      if(str=="jet_eta3") evaluateAndFillBackgrounds(st,"jet_eta3");
+      if(str=="jet_eta4") evaluateAndFillBackgrounds(st,"jet_eta4");
+      if(str=="HT") evaluateAndFillBackgrounds(st,"HT");
+      if(str=="HT_1j") evaluateAndFillBackgrounds(st,"HT1");
+      if(str=="HT_2j") evaluateAndFillBackgrounds(st,"HT2");
+      if(str=="HT_3j") evaluateAndFillBackgrounds(st,"HT3");
+      if(str=="HT_4j") evaluateAndFillBackgrounds(st,"HT4");
+      if(str=="Phi_star") evaluateAndFillBackgrounds(st,"PhiStar");
       }
     }
 
@@ -806,7 +914,8 @@ void comparisonJetMCData(string plot,int rebin){
       if(lumiweights==0) wz->Draw("HISTO SAMES");
       hsum->Rebin(rebin);
       hsum->Add(wz);
-      legend->AddEntry(wz,"WZ+jets","f");
+      //legend->AddEntry(wz,"WZ+jets","f");
+      legend->AddEntry(wz,"diboson","f");
 
 
       //////////
@@ -876,7 +985,7 @@ void comparisonJetMCData(string plot,int rebin){
       if(lumiweights==0) zz->Draw("HISTO SAMES");
       hsum->Rebin(rebin);
       hsum->Add(zz);
-      legend->AddEntry(zz,"ZZ+jets","f");
+      //legend->AddEntry(zz,"ZZ+jets","f");
 
       //////////
       //Storing the bckgrounds!
@@ -1015,8 +1124,8 @@ void comparisonJetMCData(string plot,int rebin){
       //tau->Scale(1./1000.); //aaaaaaa
       hsum->Add(tau);
       legend->AddEntry(tau,"#tau#tau+jets","f");
-      legend->AddEntry(ww,"WW+jets","f");
-      legend->AddEntry(w,"W+jets","f");
+      //legend->AddEntry(ww,"WW+jets","f");
+      legend->AddEntry(w,"W/Wt","f");
       //////////
       //Storing the bckgrounds!
       //////////
@@ -1143,10 +1252,14 @@ void comparisonJetMCData(string plot,int rebin){
     //if(qcd23em) 	hs->Add(qcdTotEM);
  
    if(!qcdbcempty) 	hs->Add(qcdTotBC);
-    if(w)  	        hs->Add(w);
-    if (ww)         hs->Add(ww);
+   //if(w)  	        hs->Add(w);
+   st->Add(w);
+    if (st)	hs->Add(st);
+    //if (ww)         hs->Add(ww);
     if(tau)		hs->Add(tau); //Z+Jets 
-    if (zz)         hs->Add(zz);
+    //if (zz)         hs->Add(zz);
+    wz->Add(zz);
+    wz->Add(ww);
     if (wz)         hs->Add(wz);
     if (ttbar)	hs->Add(ttbar);
     if(mc)		hs->Add(mc); //Z+Jets
@@ -1281,7 +1394,7 @@ void comparisonJetMCData(string plot,int rebin){
     //double ymean = ratio->GetMean(2);
     stringstream sYmean;
     sYmean << ymean;
-    string labeltext=sYmean.str()+" mean Y";
+    string labelatext=sYmean.str()+" mean Y";
     //label->AddEntry((TObject*)0,labeltext.c_str(),""); // mean on Y
     //label->Draw();
 		
@@ -1357,6 +1470,7 @@ void comparisonJetMCData(string plot,int rebin){
   dataf->Close();
   mcf->Close();
   ttbarf->Close();
+  stf->Close();
   wf->Close();
   qcd23emf->Close();
   qcd38emf->Close();
