@@ -54,7 +54,7 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
 
   bool absoluteNormalization=true;
   int lepton=whichlepton; //1 -> electron,  2-> muon , 3 -> combined reults!
-  bool addLumiUncertainties=true; double lumiError=0.025;
+  bool addLumiUncertainties=true; double lumiError=0.022;
   bool incMultiplicity = inclusiveMultiplicity;
   bool etaFolded = true;
 
@@ -94,9 +94,16 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
   TFile dumphistos_file("data_rivet_histos.root","UPDATE");
 
   //DATA:
-  string           pathFile ="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV58_BinWidth.root";
-  if (lepton == 2) pathFile ="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV58_BinWidthMu.root";
-  if (lepton == 3) pathFile ="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV58_BinWidthCombined.root";
+
+  // CWR version
+
+  /* string           pathFile ="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV58_BinWidth.root"; */
+  /* if (lepton == 2) pathFile ="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV58_BinWidthMu.root"; */
+  /* if (lepton == 3) pathFile ="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV58_BinWidthCombined.root"; */
+
+  string           pathFile ="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV58_finalCWR.root";
+  if (lepton == 2) pathFile ="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV58_finalCWRMu.root";
+  if (lepton == 3) pathFile ="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV58_finalCWRCombined.root";
 
   //RIVET:
   /* string rivetPathPlot1           ="/gpfs/cms/data/2011/Rivet/FinalDatasets/Sherpa/CentralSherpa/out.root"; */
@@ -577,7 +584,8 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
         leadingSystematics->SetLineWidth (0.);
         leadingSystematics->SetMarkerStyle (20);
         leadingSystematics->SetFillColor (12);
-        leadingSystematics->SetFillStyle (3004);
+        gStyle->SetHatchesSpacing(1.);
+        leadingSystematics->SetFillStyle (3354);
         leadingSystematics->SetMarkerColor (kBlack);
 
         leadingSystematics->GetXaxis()->SetTitleOffset (2.);
@@ -621,7 +629,8 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
         leading->SetFillStyle (3001);
         leading->SetMarkerColor (kBlack);
         leading->SetLineColor (kBlack);
-        leading->SetLineWidth (0.);
+        //        leading->SetLineWidth (0.);
+        leading->SetLineWidth (1.);
         leading->SetMarkerStyle (20);
         leading->Draw ("E1SAME");
 	
