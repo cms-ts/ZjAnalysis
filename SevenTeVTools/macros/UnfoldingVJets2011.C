@@ -50,7 +50,7 @@ using std::endl;
 //#endif
 
 string version="_v2_58.root";
-bool isMu=false;  
+bool isMu=true;  
 bool isEle=!isMu;
 bool makeSecondaryPlots=true;
 bool correctForSecondaryMigrations=true;
@@ -66,7 +66,7 @@ bool unfoldWithSherpa=false;
 
 //Normalizations...
 // The choice of the K value can affect the normalization. The following list of XS supersede the one in data
-bool activateXSSuperseding=false;
+bool activateXSSuperseding=true;
 
 double XSMuon[4]={61.435,12.8521,2.47787,0.462911};                    //<============= V58 post CWR
 double XSElectron[4]={61.4212,12.8897,2.51636,0.486612};        //<============= V58 post CWR
@@ -97,10 +97,10 @@ bool extraTests=false; //to perform several cross checks
  string s = "/afs/infn.it/ts/user/marone/html/ZJets/Unfolding/DATA_New2/";
 
 //SAVE histos to be used afterward
-bool saveFile=true; //saveFile True, it will save the rootfile. Switch it, when you are sure!
+bool saveFile=false; //saveFile True, it will save the rootfile. Switch it, when you are sure!
 string direct="/gpfs/cms/data/2011/Unfolding/";
-//string filename="/tmp/pippo";
-string filename=direct+"UnfoldingOfficialV58_finalCWRJECUP";
+//string filename="/tmp/pippo.root";
+string filename=direct+"UnfoldingOfficialV58_panictest";
 
 // Efficiency corrections
 bool correctForEff=true; // If true, it will take the correction factor from outside
@@ -119,7 +119,7 @@ bool correctForBkg=true;
 int smearingJERSyst=0; //==>0 Apply JER, ==>1 JER UP, ==> -1 JER Down, ==>-9999 deactivate JER smearing
 
 // Scaling JEC
-int scalingJEC=1; //==>0 Apply JER, ==>1 JER UP, ==> -1 JER Down
+int scalingJEC=0; //==>0 Apply JER, ==>1 JER UP, ==> -1 JER Down
 
 //Activate PU systematics  Uncertainties evaluation
 
@@ -214,8 +214,8 @@ void UnfoldingVJets2011::Loop()
 
   setTDRStyle();
 
-  int numbOfJetsForLoop=1;
-  string whichtype="Multiplicity";
+  int numbOfJetsForLoop=4;
+  string whichtype="Pt";
   string whichalgo="SVD";
   LoopVJets(numbOfJetsForLoop,whichtype, whichalgo);
 
