@@ -29,7 +29,7 @@
 #include "THStack.h"
 #include "TLatex.h"
 #include <string.h>
-
+#include "CMS_lumi.C"
 
 void
 makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusiveMultiplicity, bool isPDFComparison)
@@ -576,6 +576,8 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
           if ( whichjet == 4 ) leadingSystematics->SetMaximum(0.75*leadingSystematics->GetMaximum());
         }
         if (use_case ==4){
+          if ( whichjet == 1 ) leadingSystematics->SetMinimum(0.5*leadingSystematics->GetMinimum());
+          if ( whichjet == 2 ) leadingSystematics->SetMinimum(0.5*leadingSystematics->GetMinimum());
           if ( whichjet == 3 ) leadingSystematics->SetMaximum(2.5*leadingSystematics->GetMaximum());
           if ( whichjet == 4 ) leadingSystematics->SetMaximum(4.*leadingSystematics->GetMaximum());
         }
@@ -584,6 +586,7 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
         leadingSystematics->SetLineWidth (0.);
         leadingSystematics->SetMarkerStyle (20);
         leadingSystematics->SetFillColor (12);
+        //        gStyle->SetHatchesLineWidth(0.1);
         gStyle->SetHatchesSpacing(1.);
         leadingSystematics->SetFillStyle (3354);
         leadingSystematics->SetMarkerColor (kBlack);
@@ -1186,6 +1189,19 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
         if (lepton ==1) latexLabel = CMSFinal (4.890, "Z/#gamma*#rightarrow ee selection", 0.20, 0.19);
         if (lepton ==2) latexLabel = CMSFinal (4.890, "Z/#gamma*#rightarrow #mu#mu selection", 0.20, 0.19);
         if (lepton ==3) latexLabel = CMSFinal (4.890, "Z/#gamma*#rightarrow ll selection", 0.20, 0.19);
+
+        // New style from Gauthier, remove the corresponding title from the CMSFinal function
+
+        lumi_7TeV  = "4.9 fb^{-1}";  // default is "5.1 fb^{-1}"
+        int iPeriod = 1;    // 1=7TeV, 2=8TeV, 3=7+8TeV, 7=7+8+13TeV 
+        // second parameter in example_plot is iPos, which drives the position of the CMS logo in the plot
+        // iPos=11 : top-left, left-aligned
+        // iPos=33 : top-right, right-aligned
+        // iPos=22 : center, centered
+        // mode generally : 
+        //   iPos = 10*(alignement 1/2/3) + position (1/2/3 = left/center/right)
+        int iPos = 0;
+        CMS_lumi(pad1,  iPeriod, iPos);
 
         leadingSystematics->SetMarkerColor(kBlack);
         leadingSystematics->SetMarkerSize(0.8);

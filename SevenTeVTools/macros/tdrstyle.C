@@ -2,16 +2,15 @@
 
 // tdrGrid: Turns the grid lines on (true) or off (false)
 
-
-//void tdrGrid(bool gridOn) {
-//tdrStyle->SetPadGridX(gridOn);
-//tdrStyle->SetPadGridY(gridOn);
-//}
+void tdrGrid(bool gridOn) {
+  tdrStyle->SetPadGridX(gridOn);
+  tdrStyle->SetPadGridY(gridOn);
+}
 
 // fixOverlay: Redraws the axis
 
 void fixOverlay() {
-  //  gPad->RedrawAxis();
+  gPad->RedrawAxis();
 }
 
 void setTDRStyle() {
@@ -43,22 +42,22 @@ void setTDRStyle() {
   tdrStyle->SetFrameLineColor(1);
   tdrStyle->SetFrameLineStyle(1);
   tdrStyle->SetFrameLineWidth(1);
-
+  
 // For the histo:
   // tdrStyle->SetHistFillColor(1);
   // tdrStyle->SetHistFillStyle(0);
-  tdrStyle->SetHistLineColor(0);
+  tdrStyle->SetHistLineColor(1);
   tdrStyle->SetHistLineStyle(0);
   tdrStyle->SetHistLineWidth(1);
   // tdrStyle->SetLegoInnerR(Float_t rad = 0.5);
   // tdrStyle->SetNumberContours(Int_t number = 20);
 
   tdrStyle->SetEndErrorSize(2);
-//  tdrStyle->SetErrorMarker(20);
+  // tdrStyle->SetErrorMarker(20);
   //tdrStyle->SetErrorX(0.);
   
   tdrStyle->SetMarkerStyle(20);
-
+  
 //For the fit/function:
   tdrStyle->SetOptFit(1);
   tdrStyle->SetFitFormat("5.4g");
@@ -73,7 +72,7 @@ void setTDRStyle() {
 
 // For the statistics box:
   tdrStyle->SetOptFile(0);
-  tdrStyle->SetOptStat("emr"); // To display the mean and RMS:   SetOptStat("mr");
+  tdrStyle->SetOptStat(0); // To display the mean and RMS:   SetOptStat("mr");
   tdrStyle->SetStatColor(kWhite);
   tdrStyle->SetStatFont(42);
   tdrStyle->SetStatFontSize(0.025);
@@ -92,8 +91,9 @@ void setTDRStyle() {
   tdrStyle->SetPadLeftMargin(0.16);
   tdrStyle->SetPadRightMargin(0.02);
 
-// For the Global title
-  tdrStyle->SetOptTitle(1);
+// For the Global title:
+
+  tdrStyle->SetOptTitle(0);
   tdrStyle->SetTitleFont(42);
   tdrStyle->SetTitleColor(1);
   tdrStyle->SetTitleTextColor(1);
@@ -101,7 +101,7 @@ void setTDRStyle() {
   tdrStyle->SetTitleFontSize(0.05);
   // tdrStyle->SetTitleH(0); // Set the height of the title box
   // tdrStyle->SetTitleW(0); // Set the width of the title box
-  tdrStyle->SetTitleX(0.2); // Set the position of the title box
+  // tdrStyle->SetTitleX(0); // Set the position of the title box
   // tdrStyle->SetTitleY(0.985); // Set the position of the title box
   // tdrStyle->SetTitleStyle(Style_t style = 1001);
   // tdrStyle->SetTitleBorderSize(2);
@@ -152,7 +152,9 @@ void setTDRStyle() {
   // tdrStyle->SetTimeOffset(Double_t toffset);
   // tdrStyle->SetHistMinimumZero(kTRUE);
 
+  //  tdrStyle->SetHatchesLineWidth(5);
+  //  tdrStyle->SetHatchesSpacing(0.05);
+
   tdrStyle->cd();
 
 }
-

@@ -25,6 +25,7 @@
 //#include "lumi_scale_factorsLO.h"
 
 #include "MakePlotLumiLabel.C"
+#include "CMS_lumi.C"
 
 bool isAngularAnalysis= true;  // If true it will produce the plots connected to the differential and angular analysis. If false the usual control plots
 //NB: Backgrounds are ONLY estimated when this flag is true!!!
@@ -137,7 +138,8 @@ void DrawComparisonJetMCData(void){
 
   fzj = new TFile(bkg.c_str(), "RECREATE");
   
-plotpath		="/tmp/marone/"; //put here the path where you want the plots
+plotpath		="/tmp/cossutti/"; //put here the path where you want the plots
+plotpath		="/afs/infn.it/ts/project/cms/users/cossutti/Analysis/zjets/slc6/macro/CMSSW_5_3_16/work/BeforeUnfolding/tmp/"; //put here the path where you want the plots
 datafile		="/gpfs/cms/data/2011/jet/jetValidation_DATA_2011"+version;
  mcfile                ="/gpfs/cms/data/2011/jet/jetValidation_zjets_magd_2011Mu_v2_58.root";
 
@@ -1298,6 +1300,19 @@ void comparisonJetMCData(string plot,int rebin){
     else latexLabel=CMSFinal1(4.9,channel,0.45,0.8); // make fancy label
     latexLabel->Draw("same");
 
+    // New style from Gauthier, remove the corresponding title from the CMSFinal1 function
+    
+    lumi_7TeV  = "4.9 fb^{-1}";  // default is "5.1 fb^{-1}"
+    int iPeriod = 1;    // 1=7TeV, 2=8TeV, 3=7+8TeV, 7=7+8+13TeV 
+    // second parameter in example_plot is iPos, which drives the position of the CMS logo in the plot
+    // iPos=11 : top-left, left-aligned
+    // iPos=33 : top-right, right-aligned
+    // iPos=22 : center, centered
+    // mode generally : 
+    //   iPos = 10*(alignement 1/2/3) + position (1/2/3 = left/center/right)
+    int iPos = 0;
+    CMS_lumi(pad1,  iPeriod, iPos);
+    
     CanvPlot->Update();
 
 	
@@ -1309,8 +1324,9 @@ void comparisonJetMCData(string plot,int rebin){
     CanvPlot->cd();
     TPad *pad2 = new TPad("pad2","pad2",0.01,0.01,0.99,0.32);
     pad2->Draw();
-    pad2->cd();
-    pad2->SetTopMargin(0.01);
+    pad2->cd();  
+    //    pad2->SetTopMargin(0.01);
+    pad2->SetTopMargin(0.045);
     pad2->SetBottomMargin(0.3);
     pad2->SetRightMargin(0.1);
     pad2->SetFillStyle(0);
@@ -1367,11 +1383,12 @@ void comparisonJetMCData(string plot,int rebin){
 
     ratio->Draw("E0");
 		
-    TLine *OLine = new TLine(ratio->GetXaxis()->GetXmin(),1.,ratio->GetXaxis()->GetXmax(),1.);
+    //    TLine *OLine = new TLine(ratio->GetXaxis()->GetXmin(),1.,ratio->GetXaxis()->GetXmax(),1.);
+    TLine *OLine = new TLine(ratio->GetXaxis()->GetXmin(),1.,ratio->GetXaxis()->GetXmax()-1.,1.);
     OLine->SetLineColor(kBlack);
     OLine->SetLineStyle(2);
     OLine->Draw();
- 
+
     TLegend* label = new TLegend(0.60,0.9,0.50,0.95);
     label->SetFillColor(0);
     label->SetFillStyle(0);
