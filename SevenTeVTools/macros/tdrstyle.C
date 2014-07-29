@@ -2,15 +2,15 @@
 
 // tdrGrid: Turns the grid lines on (true) or off (false)
 
-void tdrGrid(bool gridOn) {
-  tdrStyle->SetPadGridX(gridOn);
-  tdrStyle->SetPadGridY(gridOn);
-}
+//void tdrGrid(bool gridOn) {
+//  tdrStyle->SetPadGridX(gridOn);
+//  tdrStyle->SetPadGridY(gridOn);
+//}
 
 // fixOverlay: Redraws the axis
 
 void fixOverlay() {
-  gPad->RedrawAxis();
+  //  gPad->RedrawAxis();
 }
 
 void setTDRStyle() {
