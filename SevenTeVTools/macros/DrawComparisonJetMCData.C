@@ -647,6 +647,7 @@ void comparisonJetMCData(string plot,int rebin){
 
       Double_t mcint = mc->Integral();
       mc->SetFillColor(kRed);
+      mc->SetFillStyle(3005);
       mc->Sumw2();
       if(lumiweights==0) mc->Scale(dataint/mcint);
 		
@@ -699,6 +700,7 @@ void comparisonJetMCData(string plot,int rebin){
 	
     if(ttbar){
       ttbar->SetFillColor(kBlue);
+      ttbar->SetFillStyle(3444);
       ttbar->Sumw2();
 
       if(ttNumEvents>0.){
@@ -771,6 +773,7 @@ void comparisonJetMCData(string plot,int rebin){
 
     if (st){
       st->SetFillColor(kViolet+2);
+      st->SetFillStyle(3544);
       st->Sumw2();
 
       if(stNumEvents>0.){
@@ -840,6 +843,7 @@ void comparisonJetMCData(string plot,int rebin){
     if(w){
 
       w->SetFillColor(kViolet+2);
+      w->SetFillStyle(3544);
       w->Sumw2();
 
       if(wNumEvents>0.){
@@ -886,6 +890,7 @@ void comparisonJetMCData(string plot,int rebin){
     gDirectory->GetObject(plot.c_str(),wz);
     if(wz){
       wz->SetFillColor(kYellow+2);
+      wz->SetFillStyle(3004);
       wz->Sumw2();
 
       if(wzEvents>0.){
@@ -1095,6 +1100,7 @@ void comparisonJetMCData(string plot,int rebin){
     cout<<"number of taus..."<<tau->GetEntries()<<endl;
     if(tau){
       tau->SetFillColor(kGreen);
+      tau->SetFillStyle(3001);
       tau->Sumw2();
       if(zNumEvents>0.){
 	if(lumiweights==1) {

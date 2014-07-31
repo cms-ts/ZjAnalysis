@@ -585,7 +585,7 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
         leadingSystematics->SetLineColor (kBlack);
         leadingSystematics->SetLineWidth (0.);
         leadingSystematics->SetMarkerStyle (20);
-        leadingSystematics->SetFillColor (12);
+        leadingSystematics->SetFillColor (14);
         //        gStyle->SetHatchesLineWidth(0.1);
         gStyle->SetHatchesSpacing(1.);
         leadingSystematics->SetFillStyle (3354);
