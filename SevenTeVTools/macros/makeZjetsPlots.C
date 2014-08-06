@@ -140,38 +140,38 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
   /* string rivetPathVariationPDF_NNPDF_up="/gpfs/cms/data/2011/Rivet/FinalDatasets/Sherpa/NNPDF/NNPDFDownUp/Observables_NNPDF21_up.root"; */
 
 
-  string rivetPathPlot1           ="/gpfs/cms/users/cossutti/ZjAnalysis/2011/Rivet/20140306/Sherpa/CentralSherpa/out.root";
+  string rivetPathPlot1           ="/afs/infn.it/ts/project/cms/users/cossutti/Analysis/ZjAnalysis/2011/Rivet/20140306/Sherpa/CentralSherpa/out.root";
 
-  string rivetPathPlot1UP         ="/gpfs/cms/users/cossutti/ZjAnalysis/2011/Rivet/20140306/Sherpa/FRUp/out.root";
-  string rivetPathPlot1DOWN       ="/gpfs/cms/users/cossutti/ZjAnalysis/2011/Rivet/20140306/Sherpa/FRDown/out.root";
+  string rivetPathPlot1UP         ="/afs/infn.it/ts/project/cms/users/cossutti/Analysis/ZjAnalysis/2011/Rivet/20140306/Sherpa/FRUp/out.root";
+  string rivetPathPlot1DOWN       ="/afs/infn.it/ts/project/cms/users/cossutti/Analysis/ZjAnalysis/2011/Rivet/20140306/Sherpa/FRDown/out.root";
 
-  string  rivetPathPlot1QUP        ="/gpfs/cms/users/cossutti/ZjAnalysis/2011/Rivet/20140306/Sherpa/QUp/out.root";
-  string  rivetPathPlot1QDOWN      ="/gpfs/cms/users/cossutti/ZjAnalysis/2011/Rivet/20140306/Sherpa/QDown/out.root";
-  string  rivetPathPlot1QcutUP     ="/gpfs/cms/users/cossutti/ZjAnalysis/2011/Rivet/20140306/Sherpa/QCutUp/out.root";
-  string  rivetPathPlot1QcutDOWN   ="/gpfs/cms/users/cossutti/ZjAnalysis/2011/Rivet/20140306/Sherpa/QCutDown/out.root";
+  string  rivetPathPlot1QUP        ="/afs/infn.it/ts/project/cms/users/cossutti/Analysis/ZjAnalysis/2011/Rivet/20140306/Sherpa/QUp/out.root";
+  string  rivetPathPlot1QDOWN      ="/afs/infn.it/ts/project/cms/users/cossutti/Analysis/ZjAnalysis/2011/Rivet/20140306/Sherpa/QDown/out.root";
+  string  rivetPathPlot1QcutUP     ="/afs/infn.it/ts/project/cms/users/cossutti/Analysis/ZjAnalysis/2011/Rivet/20140306/Sherpa/QCutUp/out.root";
+  string  rivetPathPlot1QcutDOWN   ="/afs/infn.it/ts/project/cms/users/cossutti/Analysis/ZjAnalysis/2011/Rivet/20140306/Sherpa/QCutDown/out.root";
   
-  string  rivetPathPlot1MSTW       ="/gpfs/cms/users/cossutti/ZjAnalysis/2011/Rivet/20140306/Sherpa/MSTW/out.root";
-  string  rivetPathPlot1NNPDF      ="/gpfs/cms/users/cossutti/ZjAnalysis/2011/Rivet/20140306/Sherpa/NNPDF/out.root";
+  string  rivetPathPlot1MSTW       ="/afs/infn.it/ts/project/cms/users/cossutti/Analysis/ZjAnalysis/2011/Rivet/20140306/Sherpa/MSTW/out.root";
+  string  rivetPathPlot1NNPDF      ="/afs/infn.it/ts/project/cms/users/cossutti/Analysis/ZjAnalysis/2011/Rivet/20140306/Sherpa/NNPDF/out.root";
   
-  string rivetPathPlot3         ="/gpfs/cms/users/cossutti/ZjAnalysis/2011/Rivet/20140306/Madgraph/CentralMadgraph/DYToLL.root";
-  string rivetPathPlot3UP       ="/gpfs/cms/users/cossutti/ZjAnalysis/2011/Rivet/20140306/Madgraph/CentralMadgraph/DYToLL.root";
-  string rivetPathPlot3DOWN     ="/gpfs/cms/users/cossutti/ZjAnalysis/2011/Rivet/20140306/Madgraph/CentralMadgraph/DYToLL.root";
+  string rivetPathPlot3         ="/afs/infn.it/ts/project/cms/users/cossutti/Analysis/ZjAnalysis/2011/Rivet/20140306/Madgraph/CentralMadgraph/DYToLL.root";
+  string rivetPathPlot3UP       ="/afs/infn.it/ts/project/cms/users/cossutti/Analysis/ZjAnalysis/2011/Rivet/20140306/Madgraph/CentralMadgraph/DYToLL.root";
+  string rivetPathPlot3DOWN     ="/afs/infn.it/ts/project/cms/users/cossutti/Analysis/ZjAnalysis/2011/Rivet/20140306/Madgraph/CentralMadgraph/DYToLL.root";
 
-  string rivetPathPlot2           ="/gpfs/cms/users/cossutti/ZjAnalysis/2011/Rivet/20140306/Powheg/CentralPowheg/scaleorig.root";
-  string rivetPathPlot2UP         ="/gpfs/cms/users/cossutti/ZjAnalysis/2011/Rivet/20140306/Powheg/PowhegScaleUp/scaleup.root";
-  string rivetPathPlot2DOWN       ="/gpfs/cms/users/cossutti/ZjAnalysis/2011/Rivet/20140306/Powheg/PowhegScaleDown/scaledown.root";  
+  string rivetPathPlot2           ="/afs/infn.it/ts/project/cms/users/cossutti/Analysis/ZjAnalysis/2011/Rivet/20140306/Powheg/CentralPowheg/scaleorig.root";
+  string rivetPathPlot2UP         ="/afs/infn.it/ts/project/cms/users/cossutti/Analysis/ZjAnalysis/2011/Rivet/20140306/Powheg/PowhegScaleUp/scaleup.root";
+  string rivetPathPlot2DOWN       ="/afs/infn.it/ts/project/cms/users/cossutti/Analysis/ZjAnalysis/2011/Rivet/20140306/Powheg/PowhegScaleDown/scaledown.root";  
 
-  string rivetPathAlphaStrongUpVersusCT10="/gpfs/cms/users/cossutti/ZjAnalysis/2011/Rivet/20140306/Sherpa/AsUp/out.root";
-  string rivetPathAlphaStrongDownVersusCT10="/gpfs/cms/users/cossutti/ZjAnalysis/2011/Rivet/20140306/Sherpa/AsDown/out.root";
+  string rivetPathAlphaStrongUpVersusCT10="/afs/infn.it/ts/project/cms/users/cossutti/Analysis/ZjAnalysis/2011/Rivet/20140306/Sherpa/AsUp/out.root";
+  string rivetPathAlphaStrongDownVersusCT10="/afs/infn.it/ts/project/cms/users/cossutti/Analysis/ZjAnalysis/2011/Rivet/20140306/Sherpa/AsDown/out.root";
 
-  string rivetPathVariationPDF_CT10_down="/gpfs/cms/users/cossutti/ZjAnalysis/2011/Rivet/20140306/Sherpa/CT10/CT10DownUp/Observables_CT10_down.root";
-  string rivetPathVariationPDF_CT10_up="/gpfs/cms/users/cossutti/ZjAnalysis/2011/Rivet/20140306/Sherpa/CT10/CT10DownUp/Observables_CT10_up.root";
+  string rivetPathVariationPDF_CT10_down="/afs/infn.it/ts/project/cms/users/cossutti/Analysis/ZjAnalysis/2011/Rivet/20140306/Sherpa/CT10/CT10DownUp/Observables_CT10_down.root";
+  string rivetPathVariationPDF_CT10_up="/afs/infn.it/ts/project/cms/users/cossutti/Analysis/ZjAnalysis/2011/Rivet/20140306/Sherpa/CT10/CT10DownUp/Observables_CT10_up.root";
 
-  string rivetPathVariationPDF_MSTW_down="/gpfs/cms/users/cossutti/ZjAnalysis/2011/Rivet/20140306/Sherpa/MSTW/MSTWDownUp/Observables_MSTW2008_down.root";
-  string rivetPathVariationPDF_MSTW_up="/gpfs/cms/users/cossutti/ZjAnalysis/2011/Rivet/20140306/Sherpa/MSTW/MSTWDownUp/Observables_MSTW2008_up.root";
+  string rivetPathVariationPDF_MSTW_down="/afs/infn.it/ts/project/cms/users/cossutti/Analysis/ZjAnalysis/2011/Rivet/20140306/Sherpa/MSTW/MSTWDownUp/Observables_MSTW2008_down.root";
+  string rivetPathVariationPDF_MSTW_up="/afs/infn.it/ts/project/cms/users/cossutti/Analysis/ZjAnalysis/2011/Rivet/20140306/Sherpa/MSTW/MSTWDownUp/Observables_MSTW2008_up.root";
 
-  string rivetPathVariationPDF_NNPDF_down="/gpfs/cms/users/cossutti/ZjAnalysis/2011/Rivet/20140306/Sherpa/NNPDF/NNPDFDownUp/Observables_NNPDF21_down.root";
-  string rivetPathVariationPDF_NNPDF_up="/gpfs/cms/users/cossutti/ZjAnalysis/2011/Rivet/20140306/Sherpa/NNPDF/NNPDFDownUp/Observables_NNPDF21_up.root";
+  string rivetPathVariationPDF_NNPDF_down="/afs/infn.it/ts/project/cms/users/cossutti/Analysis/ZjAnalysis/2011/Rivet/20140306/Sherpa/NNPDF/NNPDFDownUp/Observables_NNPDF21_down.root";
+  string rivetPathVariationPDF_NNPDF_up="/afs/infn.it/ts/project/cms/users/cossutti/Analysis/ZjAnalysis/2011/Rivet/20140306/Sherpa/NNPDF/NNPDFDownUp/Observables_NNPDF21_up.root";
 
   //Switchjing paths when we compare PDFs
   if (isPDFComparison){
