@@ -361,10 +361,15 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
             for (int ff=dd; ff<=leading->GetNbinsX(); ff++) {
               inclusiveYield=inclusiveYield + leading->GetBinContent(ff);
               inclusiveYieldUnc=sqrt(inclusiveYieldUnc*inclusiveYieldUnc + leading->GetBinError(ff)*leading->GetBinError(ff));
+              // approximation: assume uncorrelated, neglect covariance matrix from unfolding
+              //              std::cout << "Bin " << ff << " stat = " << inclusiveYieldUnc << " " << inclusiveYield << std::endl;
             }
             leading->SetBinContent(dd,inclusiveYield);
+            leading->SetBinError(dd,inclusiveYieldUnc);
           }
         }
+        std::cout << "Statistical uncertainty" << std::endl;
+        leading->Print("ALL");
 
 
         // CIUSKI in order to fold ETA distributions
@@ -401,11 +406,13 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
         inM.open (systPathFile.c_str ());
         //int l2 =0;
         std::vector < double >systTmpM;
+        std::vector < double >systTmpMnoLumi;
         while (1)
           {
             inM >> dat;
             if (!inM.good ())
               break;
+            systTmpMnoLumi.push_back(dat);
             if (addLumiUncertainties) {
               dat=pow(dat*dat+lumiError*lumiError,0.5);
             }
@@ -508,21 +515,58 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
                     / (leading->GetBinContent(mdm) + leading->GetBinContent(leading->GetNbinsX()-mdm+1));
                   err = sqrt (pow (leading->GetBinError(mdm), 2) + pow (wmeanstat*leadingSystematics->GetBinContent(mdm), 2));
                   leadingSystematics->SetBinError(mdm,err);
+                  if ( i == 0 ) {
+                    std::cout << "Bin " << mdm 
+                              << " cont = " << std::setfill(' ') << std::setw(9) << std::setprecision(5) << std::fixed << leadingSystematics->GetBinContent(mdm) 
+                              << " sta% = " << std::setfill(' ') << std::setw(9) << std::setprecision(5) << std::fixed << leading->GetBinError(mdm)/leading->GetBinContent(mdm) 
+                              << " sys% = " << std::setfill(' ') << std::setw(9) << std::setprecision(5) << std::fixed << wmeanstat
+                              << " abs tot = " << std::setfill(' ') << std::setw(9) << std::setprecision(5) << std::fixed << err 
+                              << " abs sta = " << std::setfill(' ') << std::setw(9) << std::setprecision(5) << std::fixed << leading->GetBinError(mdm) 
+                              << " abs sys = " << std::setfill(' ') << std::setw(9) << std::setprecision(5) << std::fixed << wmeanstat*leadingSystematics->GetBinContent(mdm) << std::endl;
+                  }
                 }
               } else {
                 err = sqrt (pow (leading->GetBinError (i + 1), 2) + pow (systTmpM[i] * leadingSystematics->GetBinContent (i + 1), 2));
                 leadingSystematics->SetBinError (i + 1, err);
+                std::cout << "Bin " << i+1 
+                          << " cont = " << std::setfill(' ') << std::setw(9) << std::setprecision(5) << std::fixed << leadingSystematics->GetBinContent(i+1) 
+                          << " sta% = " << std::setfill(' ') << std::setw(9) << std::setprecision(5) << std::fixed << leading->GetBinError(i+1)/leading->GetBinContent(i+1) 
+                          << " sys% = " << std::setfill(' ') << std::setw(9) << std::setprecision(5) << std::fixed << systTmpM[i] 
+                          << " abs tot = " << std::setfill(' ') << std::setw(9) << std::setprecision(5) << std::fixed << err    
+                          << " abs sta = " << std::setfill(' ') << std::setw(9) << std::setprecision(5) << std::fixed << leading->GetBinError(i+1) 
+                          << " abs sys = " << std::setfill(' ') << std::setw(9) << std::setprecision(5) << std::fixed << systTmpM[i]*leadingSystematics->GetBinContent(i+1) << std::endl;
               }
             }
         } else {
+          std::cout << "Inclusive mu
+ltiplicity" << std::endl;
           for (int i = 0; i < leadingSystematics->GetNbinsX (); i++)
             {
               double temperr = 0.0;
               for (int cc = i; cc < leadingSystematics->GetNbinsX (); cc++) {
                 temperr = sqrt(pow(temperr,2) + pow(systTmpM[cc]*leadingSystematics->GetBinContent(cc + 1),2));
               }
+              double tmpSyst = 0.0;
+              // assume fully correlated systematic uncertainties
+              for ( int k = i ; k < leadingSystematics->GetNbinsX(); k++ ) {
+                for ( int l = i ; l < leadingSystematics->GetNbinsX(); l++ ) {
+                  tmpSyst = tmpSyst + systTmpMnoLumi[k]*systTmpMnoLumi[l]*leadingSystematics->GetBinContent(k+1)*leadingSystematics->GetBinContent(l+1);
+                }
+              }
+              tmpSyst = sqrt( tmpSyst + pow(lumiError*leadingSystematics->GetBinContent(i+1),2));
+              double errTot = sqrt (pow (leading->GetBinError (i + 1), 2) + pow (tmpSyst, 2));
               double err = sqrt (pow (leading->GetBinError (i + 1), 2) + pow (temperr, 2));
               leadingSystematics->SetBinError (i + 1, err);
+              std::cout << "Bin " << i+1 << " error      = " << std::setfill(' ') << std::setw(9) << std::setprecision(5) << std::fixed << err    
+                        << " stat = " << std::setfill(' ') << std::setw(9) << std::setprecision(5) << std::fixed << leading->GetBinError(i+1) 
+                        << " syst = " << std::setfill(' ') << std::setw(9) << std::setprecision(5) << std::fixed << temperr << std::endl;
+              std::cout << "Bin " << i+1 
+                        << " cont = " << std::setfill(' ') << std::setw(9) << std::setprecision(5) << std::fixed << leadingSystematics->GetBinContent(i+1) 
+                        << " sta% = " << std::setfill(' ') << std::setw(9) << std::setprecision(5) << std::fixed << leading->GetBinError(i+1)/leading->GetBinContent(i+1) 
+                        << " sys% = " << std::setfill(' ') << std::setw(9) << std::setprecision(5) << std::fixed << systTmpMnoLumi[i] 
+                        << " abs tot = " << std::setfill(' ') << std::setw(9) << std::setprecision(5) << std::fixed << errTot 
+                        << " abs sta = " << std::setfill(' ') << std::setw(9) << std::setprecision(5) << std::fixed << leading->GetBinError(i+1) 
+                        << " abs sys = " << std::setfill(' ') << std::setw(9) << std::setprecision(5) << std::fixed << tmpSyst << std::endl;
             }
 
         }
@@ -1619,8 +1663,10 @@ makeZjetsPlots (int whichobservable, int whichjet, int whichlepton, bool inclusi
         dumphistos_file.cd();
         if (etaFolded && use_case==3) {
           leadingSystematicsEta->Write();
+          leadingSystematicsEta->Print("ALL");
         } else {
           leadingSystematics->Write();
+          leadingSystematics->Print("ALL");
         }	  
         return;
       }
