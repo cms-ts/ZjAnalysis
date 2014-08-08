@@ -6,7 +6,7 @@
 #include <fstream>
 #include "JERCorrection.h"
 #include <fstream>
-
+#include <iomanip>
 using namespace std;
 
 /*Initialize Variables*/
@@ -47,6 +47,61 @@ string titleCovToy;
 string titleCovToySumUp;
 string titleCovToySumUpRatio;
 TH1D *jDataPreUnf;
+TH2D *StoreCovMatrix;
+
+///////////////////////////////////
+
+void computeCorr(TH2D * covMat,string pathname) {
+  ofstream myfile;
+  myfile.open (pathname.c_str());
+
+  int nx = covMat->GetNbinsX();
+  int ny = covMat->GetNbinsY();
+
+  if ( nx != ny ) {
+    std::cout << "Non square covariance matrix, aborting" << std::endl;
+    return;
+  }
+  //covMat->Print("ALL");
+
+  std::vector<double> sigma(nx,0.);
+
+  for ( int k = 1; k <= nx ; k++ ) {
+    for ( int l = 1; l <= ny; l++ ) {
+      if ( k == l ) { 
+        //corrMat->SetBinContent(k,l,1.); 
+        sigma[k] = std::sqrt(covMat->GetBinContent(k,l));
+	std::cout << "Bin = " << k << " " << l << " sigma = " << sigma[k] << std::endl;
+      }
+    }
+  }
+
+  for ( int k = 1; k <= nx ; k++ ) {
+    for ( int l = 1; l <= ny; l++ ) {
+      //if ( k != l ) { 
+        if ( sigma[k] > 0. && sigma[l] > 0. ) {
+          double corre = (double) covMat->GetBinContent(k,l)/sigma[k]/sigma[l];
+          if ( std::fabs(corre) > 1. ) {
+            std::cout << "Warning: element " << k << " " << l << " with correlation > 1, rescaling" << std::endl;
+            corre = ( (corre > 0. ) ? 1. : -1. );
+          }
+          //corrMat->SetBinContent(k,l,corre);
+	  std::cout << "Bin = " << k << " " << l << " Corr = " << corre  << std::endl;
+	  myfile << std::fixed<<setprecision(2)<<corre;
+	  if (l != ny) {
+	    if (corre>=0) myfile<<setw(8);
+	    else myfile<<setw(9);
+	  }
+	}
+    }
+    myfile<<endl;
+  }
+  
+  return;
+
+}
+
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 TH1D* dividePlotsForBinWidth(TH1D* histold){
@@ -135,6 +190,18 @@ void DivideTwoMatrixes(TMatrixD matrix, TMatrixD matrix2, int divPlot2)
   return ;
 }
 
+void saveTH2DInFile(string path, TH2D *histo){
+  ofstream myfile;
+  myfile.open (path.c_str());
+  for (int x=1;x<=histo->GetNbinsX();x++){
+    for (int y=1;y<=histo->GetNbinsX();y++){
+      cout<<histo->GetBinContent(x,y)<<" ";
+    }
+    cout<<endl;
+  }
+  return;
+}
+
 TH1D* performUnfolding(string whichalgo, int kvalue, TH1D *jData, TH1D *jTrue, RooUnfoldResponse response_j, TH1D* jMCreco, TH2D* jMatx, int numbOfJetsSelected, string whichtype) //Specify which algo
 {
   string whichjet="";
@@ -208,8 +275,16 @@ TH1D* performUnfolding(string whichalgo, int kvalue, TH1D *jData, TH1D *jTrue, R
     covMatExp->GetYaxis()->SetTitle("Observable");
     covMatExp->SetTitle("Covariance Matrix");
     covMatExp->Draw("TEXT");
+    StoreCovMatrix=covMatExp;
     covMatExperim->Print(titleCov.c_str());
-    
+
+    string pathname="/gpfs/cms/data/2011/Matrixes/";
+    if (isMu) pathname=pathname+"muo/";
+    else pathname=pathname+"ele/";
+    pathname=pathname+whichjet+whichtype+".txt";
+    //Store it as a correlation max
+    computeCorr(covMatExp,pathname);
+
     //Print the matrix from toy
     TCanvas *covMatExperimToy= new TCanvas ("covMatExperimToy", "covMatExperimToy", 1000, 700);
     covMatExperimToy->cd ();
@@ -406,7 +481,13 @@ void UnfoldingVJets2011::LoopVJets (int numbOfJetsSelected,string whichtype, str
   gDirectory->ls("tree*");
   TTree *tree_fA= (TTree *) gDirectory->Get ("treeValidationJEC_");
   if (isMu) tree_fA= (TTree *) gDirectory->Get ("treeValidationJECMu_");
-  
+
+  if (scalingPU==1) tree_fA= (TTree *) gDirectory->Get ("treeXSScaleUp_");
+  if (scalingPU==-1) tree_fA= (TTree *) gDirectory->Get ("treeXSScaleDown_");
+
+  if (scalingPU==1 && isMu) tree_fA= (TTree *) gDirectory->Get ("treeXSScaleUpMu_");
+  if (scalingPU==1 && isMu) tree_fA= (TTree *) gDirectory->Get ("treeXSScaleDownMu_");
+
   fB->cd (sdatadir.c_str());
   gDirectory->ls("tree*");
 
@@ -906,7 +987,7 @@ void UnfoldingVJets2011::LoopVJets (int numbOfJetsSelected,string whichtype, str
   jRecoBinWidth->Sumw2();
   loopAndDumpEntries(jRecoBinWidth);
 
-  if (saveFile) saveIntoFile(numbOfJetsSelected, whichtype, jRecoBinWidth, jTrue, jMatx, jMCreco, jData);
+  if (saveFile) saveIntoFile(numbOfJetsSelected, whichtype, jRecoBinWidth, jTrue, jMatx, jMCreco, jData, StoreCovMatrix);
 
 
   delete relativebkg;
