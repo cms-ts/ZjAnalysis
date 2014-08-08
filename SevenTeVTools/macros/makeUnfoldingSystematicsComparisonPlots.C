@@ -27,6 +27,21 @@
 ofstream myfile;
 TH1D *leadingRatio;
 
+TH1D* turnExclusiveHistoInInclusive(TH1D* exclusive){
+  TH1D *auxPlot = (TH1D *) exclusive->Clone ("exclusive");
+
+  for (int nnbins=1;nnbins<=exclusive->GetNbinsX ();nnbins++) {
+    double value=0;
+    for (int nnbins2=nnbins;nnbins2<=exclusive->GetNbinsX (); nnbins2++){
+      value+=exclusive->GetBinContent(nnbins2);
+    }
+    auxPlot->SetBinContent(nnbins,value);
+    double corr=auxPlot->GetBinContent(nnbins)/exclusive->GetBinContent(nnbins);
+    auxPlot->SetBinError(nnbins,exclusive->GetBinError(nnbins)*corr);
+  }
+  return auxPlot;
+}
+
 
 void correctTheErrorsForDataStatContribution(TH1D* absolutedistr,TH1D *ratio){
 
@@ -110,11 +125,11 @@ void loopAndDumpEntries(TH1D *jData, TH1D *leading){
 }
 
 void
-makeUnfoldingSystematicsComparisonPlots (int whichobservable, int whichjet, int whichlepton)
+makeUnfoldingSystematicsComparisonPlots (int whichobservable, int whichjet, int whichlepton, int inclusive)
 {
   //Open the file and form the name
   string fileSystematics; 
-  string suffix="/gpfs/cms/data/2011/Systematics/postApproval_v58_CWR/";
+  string suffix="/gpfs/cms/data/2011/Systematics/postApproval_v58_Journal/";
   //string suffix="/tmp/";
 
   if (whichlepton==1) suffix=suffix+"ele/";
@@ -134,7 +149,7 @@ makeUnfoldingSystematicsComparisonPlots (int whichobservable, int whichjet, int 
   string version = "_v2_32";
 
   //string s         = "/afs/infn.it/ts/user/marone/html/ZJets/FinalPlotsForAN/v41/SVDBayes/";
-  string s="/afs/infn.it/ts/user/marone/html/ZJets/FinalPlotsForAN/v58_CWR/UnfoldingSyst/ele/";
+  string s="/afs/infn.it/ts/user/marone/html/ZJets/FinalPlotsForAN/v58_Journal/UnfoldingSyst/ele/";
   //  string s         = "/gpfs/cms/users/schizzi/EleMuComparisonPlots/PostUnfolding/";
   string  eleplotpath = "/gpfs/cms/users/schizzi/Systematics/ele/";
   string  muoplotpath = "/gpfs/cms/users/schizzi/Systematics/muo/";
@@ -154,7 +169,7 @@ makeUnfoldingSystematicsComparisonPlots (int whichobservable, int whichjet, int 
   elepathFile   ="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV58_afterCWRMu.root";
   muopathFile   ="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV58_BinWidthMu.root";
 thirdpathFile   ="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV58_SherpaV2Mu.root";
-  s="/afs/infn.it/ts/user/marone/html/ZJets/FinalPlotsForAN/v58_CWR/UnfoldingSyst/mu/";
+  s="/afs/infn.it/ts/user/marone/html/ZJets/FinalPlotsForAN/v58_Journal/UnfoldingSyst/muo/";
   }
   //string elepathFile   ="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV57_3NoSQRT.root";
   //string muopathFile   ="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV57_3NoMCToy.root";
@@ -321,8 +336,15 @@ thirdpathFile   ="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV58_SherpaV2Mu.
 	gDirectory->GetObject (name.c_str (), leadingthird);
 	leadingmuo->SetMarkerSize(0.9);
 	leadingmuo->Sumw2();
-
-
+	
+	if (inclusive==1){
+	  TH1D* leadingIncl=turnExclusiveHistoInInclusive(leading);
+	  TH1D* leadingmuoIncl=turnExclusiveHistoInInclusive(leadingmuo);
+	  TH1D* leadingthirdIncl=turnExclusiveHistoInInclusive(leadingthird);
+	  leading=leadingIncl;
+	  leadingmuo=leadingmuoIncl;
+	  leadingthird=leadingthirdIncl;
+	}
 	//	/// EFFICIENCY Systematics:
 	//	for (int nnbins=1;nnbins<=leading->GetNbinsX ();nnbins++) {
 	  //	  cout << fabs(leading->GetBinContent(nnbins)-leadingmuo->GetBinContent(nnbins))/(2*leading->GetBinContent(nnbins)) << endl;

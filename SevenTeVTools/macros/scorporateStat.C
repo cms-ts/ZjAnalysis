@@ -30,12 +30,26 @@
 
 ofstream myfile;
 
+TH1D* turnExclusiveHistoInInclusive(TH1D* exclusive){
+  TH1D *auxPlot = (TH1D *) exclusive->Clone ("exclusive");
+
+  for (int nnbins=1;nnbins<=exclusive->GetNbinsX ();nnbins++) {
+    double value=0;
+    for (int nnbins2=nnbins;nnbins2<=exclusive->GetNbinsX (); nnbins2++){
+      value+=exclusive->GetBinContent(nnbins2);
+    }
+    auxPlot->SetBinContent(nnbins,value);  
+  }
+  return auxPlot;
+}
+
+
 void
-scorporateStat(int whichobservable, int whichjet, int lepton)
+scorporateStat(int whichobservable, int whichjet, int lepton, int inclusive)
 {
 
   string fileSystematics; 
-  string suffix="/gpfs/cms/data/2011/Systematics/postApproval_v58_3/";
+  string suffix="/gpfs/cms/data/2011/Systematics/postApproval_v58_Journal/";
   if (lepton==1) suffix=suffix+"ele/";
   if (lepton==2) suffix=suffix+"muo/";
 
@@ -46,16 +60,16 @@ scorporateStat(int whichobservable, int whichjet, int lepton)
   string version = "_v2_32";
   //string s = "/home/schizzi/CMSSW_4_4_2/src/Histo/HistoAnalyzer/macros/plotArticleEle" + version + "/";
   string s = "/tmp/";
-  string plotpath = "/gpfs/cms/data/2011/Systematics/postApproval_v58_3/";
+  string plotpath = "/gpfs/cms/data/2011/Systematics/postApproval_v58_Journal/";
 
   //pLOTPATH IS WHERE THE MCToy is...
   //if (lepton == 1) plotpath = "/gpfs/cms/data/2011/Systematics/ele/";
   //if (lepton == 2) plotpath = "/gpfs/cms/data/2011/Systematics/muo/";
   //if (lepton == 3) plotpath = "/gpfs/cms/data/2011/Systematics/combination/";
 
-  if (lepton == 1) plotpath = "/gpfs/cms/data/2011/Systematics/postApproval_v58_3/ele/";
-  if (lepton == 2) plotpath = "/gpfs/cms/data/2011/Systematics/postApproval_v58_3/muo/";
-  if (lepton == 3) plotpath = "/gpfs/cms/data/2011/Systematics/postApproval_v58_3/combination/";
+  if (lepton == 1) plotpath = "/gpfs/cms/data/2011/Systematics/postApproval_v58_Journal/ele/";
+  if (lepton == 2) plotpath = "/gpfs/cms/data/2011/Systematics/postApproval_v58_Journal/muo/";
+  if (lepton == 3) plotpath = "/gpfs/cms/data/2011/Systematics/postApproval_v58_Journal/combination/";
                                
   cout<<plotpath<<endl;
 
