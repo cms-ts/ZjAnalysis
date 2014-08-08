@@ -30,12 +30,26 @@
 
 ofstream myfile;
 
+TH1D* turnExclusiveHistoInInclusive(TH1D* exclusive){
+  TH1D *auxPlot = (TH1D *) exclusive->Clone ("exclusive");
+
+  for (int nnbins=1;nnbins<=exclusive->GetNbinsX ();nnbins++) {
+    double value=0;
+    for (int nnbins2=nnbins;nnbins2<=exclusive->GetNbinsX (); nnbins2++){
+      value+=exclusive->GetBinContent(nnbins2);
+    }
+    auxPlot->SetBinContent(nnbins,value);  
+  }
+  return auxPlot;
+}
+
+
 void
-evaluateNewJEC(int whichobservable, int whichjet, int lepton)
+evaluateNewJEC(int whichobservable, int whichjet, int lepton, int inclusive)
 {
 
   string fileSystematics; 
-  string suffix="/gpfs/cms/data/2011/Systematics/";
+  string suffix="/gpfs/cms/data/2011/Systematics/postApproval_v58_Journal/";
   if (lepton==1) suffix=suffix+"ele/";
   if (lepton==2) suffix=suffix+"muo/";
 
@@ -51,14 +65,13 @@ evaluateNewJEC(int whichobservable, int whichjet, int lepton)
   if (lepton == 2) plotpath = "/gpfs/cms/data/2011/Systematics/muo/";
   if (lepton == 3) plotpath = "/gpfs/cms/data/2011/Systematics/combination/";
 
-  string pathFile="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV57_3PostApproval_JEC_Central.root";
-  string pathFilea2="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV57_3PostApproval_JEC_Up.root";
-  string pathFilea3="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV57_3PostApproval_JEC_Down.root";
-
+  string pathFile="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV58.root";
+  string pathFilea2="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV58_JECUP.root";
+  string pathFilea3="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV58_JECDOWN.root";
   if (lepton ==2){
-  pathFile="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV57_3PostApproval_JEC_CentralMu.root";
-  pathFilea2="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV57_3PostApproval_JEC_UpMu.root";
-  pathFilea3="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV57_3PostApproval_JEC_DownMu.root";
+    string pathFile="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV58Mu.root";
+    string pathFilea2="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV58_JECUPMu.root";
+    string pathFilea3="/gpfs/cms/data/2011/Unfolding/UnfoldingOfficialV58_JECDOWNMu.root";
   }
 
   gStyle->SetOptStat (0);
@@ -192,7 +205,19 @@ evaluateNewJEC(int whichobservable, int whichjet, int lepton)
      gDirectory->GetObject(name.c_str (), leading3);
    }
    
+
     }
+
+  if (inclusive==1){
+    TH1D* leadingIncl=turnExclusiveHistoInInclusive(leading);
+    TH1D* leadingmuoIncl=turnExclusiveHistoInInclusive(leading2);
+    TH1D* leadingthirdIncl=turnExclusiveHistoInInclusive(leading3);
+    leading=leadingIncl;
+    leading2=leadingmuoIncl;
+    leading3=leadingthirdIncl;
+  }
+
+
   
   myfile.open (fileSystematics.c_str());
   cout<<"TXT file saved in "<<fileSystematics<<endl;
@@ -206,7 +231,6 @@ evaluateNewJEC(int whichobservable, int whichjet, int lepton)
   
   for (int j=1; j<=leading->GetNbinsX(); j++){
     cout<<"central "<<leading->GetBinContent(j)<<" up "<<leading2->GetBinContent(j)<<" down "<<leading3->GetBinContent(j)<<endl;
-    cout<<leadingRatioUp->GetBinContent(j)<<" "<<leadingRatioDown->GetBinContent(j)<<endl;
     double syst=TMath::Max(leadingRatioUp->GetBinContent(j),1-leadingRatioDown->GetBinContent(j));
     cout<<syst<<endl;
     myfile<<syst<<endl;
